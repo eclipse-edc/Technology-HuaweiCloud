@@ -1,0 +1,45 @@
+---
+## This is a master test workflow that runs all subsequent workflows
+name: "Run All Tests"
+
+on:
+  push:
+    branches:
+      - main
+      - releases
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  # cancel older running jobs on the same branch
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  verify:
+    uses: ./.github/workflows/verify.yaml
+    secrets: inherit
+
+  unit-tests:
+    uses: ./.github/workflows/unit-tests.yaml
+    secrets: inherit
+
+  integration-tests:
+    uses: ./.github/workflows/integration-tests.yaml
+    secrets: inherit
+
+  # this job really serves no other purpose than waiting for the other two test workflows
+  # in future iterations, this could be used as a choke point to collect test data, etc.
+  summary:
+    needs:
+      - verify
+      - unit-tests
+      - integration-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Master test job'
+        run: echo "all test jobs have run by now"
+
