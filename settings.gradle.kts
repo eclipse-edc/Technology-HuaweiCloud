@@ -21,4 +21,8 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "components"
-include("src")
+include(":launchers")
+include(":extensions")
+include(":extensions:control-plane:provision-obs")
+include(":extensions:data-plane:data-plane-obs")
+include(":e2e-tests")

@@ -14,4 +14,4 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
       - name: Log Message
-        run: echo "Run integration tests here"
+        run: ./gradlew test -DincludeTags="EndToEndTest" -PverboseTest=true
