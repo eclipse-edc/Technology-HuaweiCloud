@@ -1,35 +1,122 @@
-/*
- *
- *   Copyright (c) 2023 Bayerische Motoren Werke Aktiengesellschaft
- *
- *   See the NOTICE file(s) distributed with this work for additional
- *   information regarding copyright ownership.
- *
- *   This program and the accompanying materials are made available under the
- *   terms of the Apache License, Version 2.0 which is available at
- *   https://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *   WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- *   License for the specific language governing permissions and limitations
- *   under the License.
- *
- *   SPDX-License-Identifier: Apache-2.0
- *
- */
-
 package com.huawei.cloud.transfer.obs;
 
-import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSink;
+import com.obs.services.ObsClient;
+import com.obs.services.exception.ObsException;
+import com.obs.services.model.CompleteMultipartUploadRequest;
+import com.obs.services.model.InitiateMultipartUploadRequest;
+import com.obs.services.model.PartEtag;
+import com.obs.services.model.UploadPartRequest;
 import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSource;
 import org.eclipse.edc.connector.dataplane.spi.pipeline.StreamResult;
+import org.eclipse.edc.connector.dataplane.util.sink.ParallelSink;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.CompletableFuture;
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-public class ObsDataSink implements DataSink {
+import static java.lang.String.format;
+
+public class ObsDataSink extends ParallelSink {
+
+    private String bucketName;
+    private String objectName;
+    private int chunkSize;
+    private ObsClient obsClient;
+
     @Override
-    public CompletableFuture<StreamResult<Void>> transfer(DataSource source) {
-        return null;
+    protected StreamResult<Object> transferParts(List<DataSource.Part> parts) {
+        for (var part : parts) {
+            var partNumber = 1;
+            var bytesTransferred = 0L;
+            try (var input = part.openStream()) {
+                var completedParts = new ArrayList<PartEtag>();
+                var request = new InitiateMultipartUploadRequest(bucketName, objectName);
+                var uploadId = obsClient.initiateMultipartUpload(request).getUploadId();
+                //todo: parallelize? It is supported by OBS: https://support.huaweicloud.com/eu/sdk-java-devg-obs/obs_21_0607.html#section3
+                while (true) {
+                    var bytesChunk = input.readNBytes(chunkSize);
+
+                    if (bytesChunk.length < 1) {
+                        break;
+                    }
+                    var uploadRequest = new UploadPartRequest(bucketName, objectName);
+                    uploadRequest.setUploadId(uploadId);
+                    uploadRequest.setPartNumber(partNumber);
+                    uploadRequest.setPartSize((long) bytesChunk.length);
+                    uploadRequest.setOffset(bytesTransferred);
+                    uploadRequest.setInput(new ByteArrayInputStream(bytesChunk));
+
+                    var uploadResult = obsClient.uploadPart(uploadRequest);
+
+                    bytesTransferred += bytesChunk.length;
+                    System.out.printf("transferred part %s, bytes: %s%n", partNumber, bytesTransferred);
+
+                    completedParts.add(new PartEtag(uploadResult.getEtag(), uploadResult.getPartNumber()));
+                    partNumber++;
+                }
+                var competeRequest = new CompleteMultipartUploadRequest(bucketName, objectName, uploadId, completedParts);
+                obsClient.completeMultipartUpload(competeRequest);
+            } catch (Exception e) {
+                return uploadFailure(e, objectName, partNumber);
+            }
+        }
+
+        return StreamResult.success();
+    }
+
+    @Override
+    protected StreamResult<Object> complete() {
+        return StreamResult.success();
+
+    }
+
+    @NotNull
+    private StreamResult<Object> uploadFailure(Exception e, String keyName, int partNumber) {
+        String msg = e instanceof ObsException ?
+                ((ObsException) e).getErrorMessage() :
+                e.getMessage();
+        var message = format("Error writing part %s of the %s object on the %s bucket: %s.", partNumber, keyName, bucketName, msg);
+        monitor.severe(message, e);
+        return StreamResult.error(message);
+    }
+
+    public static class Builder extends ParallelSink.Builder<Builder, ObsDataSink> {
+
+        private Builder() {
+            super(new ObsDataSink());
+        }
+
+        public static Builder newInstance() {
+            return new Builder();
+        }
+
+        public Builder client(ObsClient client) {
+            sink.obsClient = client;
+            return this;
+        }
+
+        public Builder bucketName(String bucketName) {
+            sink.bucketName = bucketName;
+            return this;
+        }
+
+        public Builder keyName(String keyName) {
+            sink.objectName = keyName;
+            return this;
+        }
+
+        public Builder chunkSizeBytes(int chunkSize) {
+            sink.chunkSize = chunkSize;
+            return this;
+        }
+
+        @Override
+        protected void validate() {
+            Objects.requireNonNull(sink.bucketName, "Must have a bucket name");
+            Objects.requireNonNull(sink.objectName, "Must have an object name");
+            Objects.requireNonNull(sink.obsClient, "Must have an obsClient");
+        }
     }
 }

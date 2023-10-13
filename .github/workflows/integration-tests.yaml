@@ -7,9 +7,11 @@ on:
   workflow_dispatch:
 
 jobs:
-
   test:
     runs-on: ubuntu-latest
+    env:
+      OBS_ACCESS_KEY_ID: ${{ secrets.obs_access_key_id }}
+      OBS_SECRET_ACCESS_KEY: ${{ secrets.obs_secret_key }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
