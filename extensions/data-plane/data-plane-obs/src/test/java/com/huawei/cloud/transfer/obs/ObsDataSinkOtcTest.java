@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestInfo;
 import java.util.UUID;
 
 @EndToEndTest
-public class ObsDataSinkOtcTest extends ObsDataSinkTestBase {
+class ObsDataSinkOtcTest extends ObsDataSinkTestBase {
 
     public static final String OTC_CLOUD_URL = "https://obs.eu-de.otc.t-systems.com";
     public static final String BUCKET_NAME = "obs-sink-itest-" + UUID.randomUUID();

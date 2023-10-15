@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 import static org.eclipse.edc.junit.assertions.AbstractResultAssert.assertThat;
 import static org.mockito.Mockito.mock;
 
-public abstract class ObsDataSinkTestBase {
+abstract class ObsDataSinkTestBase {
     private static final int SIZE_5MB = 1024 * 1024 * 5;
     protected static File testFile;
     public String bucketName;

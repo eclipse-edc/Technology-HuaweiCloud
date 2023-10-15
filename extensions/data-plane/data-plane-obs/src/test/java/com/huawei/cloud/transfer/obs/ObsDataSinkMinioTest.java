@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Testcontainers
 @EndToEndTest
-public class ObsDataSinkMinioTest extends ObsDataSinkTestBase {
+class ObsDataSinkMinioTest extends ObsDataSinkTestBase {
     public static final String MINIO_DOCKER_IMAGE = "bitnami/minio";
     public static final String USER = "USER";
     public static final String PASSWORD = "PASSWORD";

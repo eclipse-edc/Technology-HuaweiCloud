@@ -18,6 +18,10 @@ import java.util.Objects;
 
 import static java.lang.String.format;
 
+/**
+ * This class represents a data sink for uploading data to an OBS (Object Storage Service) bucket.
+ * It extends the ParallelSink class.
+ */
 public class ObsDataSink extends ParallelSink {
 
     private String bucketName;
