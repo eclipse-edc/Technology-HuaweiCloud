@@ -2,7 +2,7 @@ package com.huawei.cloud.tests;
 
 import com.huawei.cloud.fixtures.HuaweiParticipant;
 import com.huawei.cloud.obs.ObsBucketSchema;
-import com.huawei.cloud.transfer.obs.TestFunctions;
+import com.huawei.cloud.obs.TestFunctions;
 import com.obs.services.ObsClient;
 import io.restassured.http.ContentType;
 import org.eclipse.edc.junit.annotations.EndToEndTest;
@@ -107,7 +107,8 @@ public class ObsTransferEndToEndTest {
                 .body(flowRequest)
                 .post()
                 .then()
-                .statusCode(200);
+                .statusCode(200)
+                .log().all(true);
 
         await().pollInterval(Duration.ofSeconds(2))
                 .atMost(Duration.ofSeconds(60))
@@ -140,7 +141,8 @@ public class ObsTransferEndToEndTest {
                 .body(flowRequest)
                 .post()
                 .then()
-                .statusCode(200);
+                .statusCode(200)
+                .log().all(true);
 
         await().pollInterval(Duration.ofSeconds(2))
                 .atMost(Duration.ofSeconds(60))

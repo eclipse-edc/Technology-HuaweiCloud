@@ -3,7 +3,6 @@ package com.huawei.cloud.transfer.obs;
 import com.obs.services.ObsClient;
 import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSource;
 import org.eclipse.edc.connector.dataplane.spi.pipeline.StreamResult;
-import org.eclipse.edc.junit.annotations.EndToEndTest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.edc.junit.testfixtures.TestUtils.getFileFromResourceName;
 
 @SuppressWarnings("ALL") // try-with-resources is not needed here
-@EndToEndTest
 abstract class ObsDataSourceTestBase {
 
     private String bucketName;

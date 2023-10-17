@@ -16,12 +16,12 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import static com.huawei.cloud.transfer.obs.TestFunctions.VALID_ACCESS_KEY_ID;
-import static com.huawei.cloud.transfer.obs.TestFunctions.VALID_BUCKET_NAME;
-import static com.huawei.cloud.transfer.obs.TestFunctions.VALID_ENDPOINT;
-import static com.huawei.cloud.transfer.obs.TestFunctions.VALID_SECRET_ACCESS_KEY;
-import static com.huawei.cloud.transfer.obs.TestFunctions.dataAddressWithCredentials;
-import static com.huawei.cloud.transfer.obs.TestFunctions.dataAddressWithoutCredentials;
+import static com.huawei.cloud.obs.TestFunctions.VALID_ACCESS_KEY_ID;
+import static com.huawei.cloud.obs.TestFunctions.VALID_BUCKET_NAME;
+import static com.huawei.cloud.obs.TestFunctions.VALID_ENDPOINT;
+import static com.huawei.cloud.obs.TestFunctions.VALID_SECRET_ACCESS_KEY;
+import static com.huawei.cloud.obs.TestFunctions.dataAddressWithCredentials;
+import static com.huawei.cloud.obs.TestFunctions.dataAddressWithoutCredentials;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
@@ -94,6 +94,7 @@ class ObsDataSourceFactoryTest {
         var source = dataAddressWithoutCredentials();
         when(vault.resolveSecret("aKey")).thenReturn("""
                 {
+                  "edctype": "dataspaceconnector:obssecrettoken",
                   "ak": "test-ak",
                   "sk": "test-sk"
                 }

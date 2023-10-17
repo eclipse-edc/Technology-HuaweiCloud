@@ -1,11 +1,15 @@
-package com.huawei.cloud.transfer.obs;
+package com.huawei.cloud.obs;
 
-import com.huawei.cloud.obs.ObsBucketSchema;
+import com.huaweicloud.sdk.core.auth.GlobalCredentials;
+import com.huaweicloud.sdk.iam.v3.IamClient;
 import com.obs.services.BasicObsCredentialsProvider;
 import com.obs.services.EnvironmentVariableObsCredentialsProvider;
 import com.obs.services.ObsClient;
 import com.obs.services.ObsConfiguration;
 import org.eclipse.edc.spi.types.domain.DataAddress;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestFunctions {
     public static final String VALID_ENDPOINT = "https://foo.bar";
@@ -25,6 +29,12 @@ public class TestFunctions {
         return new ObsClient(new BasicObsCredentialsProvider(ak, sk), config);
     }
 
+    public static ObsClient createClient(ObsSecretToken secretToken, String endpoint) {
+        var config = createConfig(endpoint);
+
+        return new ObsClient(new BasicObsCredentialsProvider(secretToken.ak(), secretToken.sk(), secretToken.securityToken()), config);
+    }
+
     public static ObsConfiguration createConfig(String endpoint) {
         var config = new ObsConfiguration();
         config.setEndPoint(endpoint);
@@ -32,6 +42,11 @@ public class TestFunctions {
         config.setConnectionTimeout(30000);
         config.setPathStyle(true); //otherwise the bucketname gets prepended
         return config;
+    }
+
+    public static IamClient createIamClient(String ak, String sk, String endpoint) {
+        var endpoints = new ArrayList<>(List.of(endpoint));
+        return IamClient.newBuilder().withEndpoints(endpoints).withCredential(new GlobalCredentials().withAk(ak).withSk(sk)).build();
     }
 
     public static DataAddress dataAddressWithoutCredentials() {

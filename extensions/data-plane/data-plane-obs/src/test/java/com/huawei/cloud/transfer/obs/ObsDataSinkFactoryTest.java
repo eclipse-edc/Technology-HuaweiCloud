@@ -15,8 +15,8 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.huawei.cloud.transfer.obs.TestFunctions.dataAddressWithCredentials;
-import static com.huawei.cloud.transfer.obs.TestFunctions.dataAddressWithoutCredentials;
+import static com.huawei.cloud.obs.TestFunctions.dataAddressWithCredentials;
+import static com.huawei.cloud.obs.TestFunctions.dataAddressWithoutCredentials;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
@@ -102,6 +102,7 @@ class ObsDataSinkFactoryTest {
         var dest = dataAddressWithoutCredentials();
         when(vaultMock.resolveSecret("aKey")).thenReturn("""
                 {
+                  "edctype": "dataspaceconnector:obssecrettoken",
                   "ak": "test-ak",
                   "sk": "test-sk"
                 }

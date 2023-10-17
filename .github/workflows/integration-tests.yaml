@@ -7,7 +7,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  end-to-end-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-java
+      - name: End-To-End Tests
+        run: |
+          ./gradlew compileJava compileTestJava
+          ./gradlew test -DincludeTags="EndToEndTest" -PverboseTest=true
+  cloud-test:
     runs-on: ubuntu-latest
     env:
       OBS_ACCESS_KEY_ID: ${{ secrets.obs_access_key_id }}
@@ -15,5 +24,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
-      - name: Log Message
-        run: ./gradlew test -DincludeTags="EndToEndTest" -PverboseTest=true
+      - name: OTC Cloud Tests
+        run: ./gradlew test -DincludeTags="OtcTest" -PverboseTest=true

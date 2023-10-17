@@ -14,8 +14,8 @@ nimbus = "9.36"
 restAssured = "5.3.2"
 rsApi = "3.1.0"
 testcontainers = "1.19.1"
-huaweiobs = "3.23.9"
-
+huawei-obs = "3.23.9"
+huawei-iam = "3.1.61"
 
 [libraries]
 
@@ -98,7 +98,8 @@ nimbus-jwt = { module = "com.nimbusds:nimbus-jose-jwt", version.ref = "nimbus" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockito" }
 testcontainers-junit = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
-huawei-obs = { module = "com.huaweicloud:esdk-obs-java", version.ref = "huaweiobs" }
+huawei-obs = { module = "com.huaweicloud:esdk-obs-java", version.ref = "huawei-obs" }
+huawei-iam = { module = "com.huaweicloud.sdk:huaweicloud-sdk-iam", version.ref = "huawei-iam" }
 
 [bundles]
 edc-dpf = ["edc.dpf-transfer", "edc.dpf-selector-core", "edc.dpf-selector-client", "edc.spi-dataplane-selector"]

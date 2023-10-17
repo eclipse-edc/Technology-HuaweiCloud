@@ -1,6 +1,5 @@
 plugins {
     `java-library`
-    `java-test-fixtures`
 }
 
 dependencies {
@@ -13,5 +12,5 @@ dependencies {
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.assertj)
     testImplementation(libs.testcontainers.junit)
-
+    testImplementation(testFixtures(project(":extensions:common:obs:obs-core")))
 }

@@ -1,5 +1,6 @@
 package com.huawei.cloud.transfer.obs;
 
+import com.huawei.cloud.obs.TestFunctions;
 import com.obs.services.ObsClient;
 import org.eclipse.edc.junit.annotations.EndToEndTest;
 import org.jetbrains.annotations.NotNull;

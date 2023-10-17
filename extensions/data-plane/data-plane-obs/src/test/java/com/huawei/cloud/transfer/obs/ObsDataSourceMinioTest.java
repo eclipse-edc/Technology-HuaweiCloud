@@ -1,5 +1,6 @@
 package com.huawei.cloud.transfer.obs;
 
+import com.huawei.cloud.obs.TestFunctions;
 import com.obs.services.ObsClient;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.TestInfo;
