@@ -23,6 +23,7 @@ dependencyResolutionManagement {
 rootProject.name = "components"
 include(":launchers")
 include(":extensions")
+include(":extensions:common:obs:obs-core")
 include(":extensions:control-plane:provision-obs")
 include(":extensions:data-plane:data-plane-obs")
 include(":e2e-tests")

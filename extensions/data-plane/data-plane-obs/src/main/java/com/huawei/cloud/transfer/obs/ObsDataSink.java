@@ -25,7 +25,6 @@ import static java.lang.String.format;
 public class ObsDataSink extends ParallelSink {
 
     private String bucketName;
-    private String objectName;
     private int chunkSize;
     private ObsClient obsClient;
 
@@ -36,7 +35,7 @@ public class ObsDataSink extends ParallelSink {
             var bytesTransferred = 0L;
             try (var input = part.openStream()) {
                 var completedParts = new ArrayList<PartEtag>();
-                var request = new InitiateMultipartUploadRequest(bucketName, objectName);
+                var request = new InitiateMultipartUploadRequest(bucketName, part.name());
                 var uploadId = obsClient.initiateMultipartUpload(request).getUploadId();
                 //todo: parallelize? It is supported by OBS: https://support.huaweicloud.com/eu/sdk-java-devg-obs/obs_21_0607.html#section3
                 while (true) {
@@ -45,7 +44,7 @@ public class ObsDataSink extends ParallelSink {
                     if (bytesChunk.length < 1) {
                         break;
                     }
-                    var uploadRequest = new UploadPartRequest(bucketName, objectName);
+                    var uploadRequest = new UploadPartRequest(bucketName, part.name());
                     uploadRequest.setUploadId(uploadId);
                     uploadRequest.setPartNumber(partNumber);
                     uploadRequest.setPartSize((long) bytesChunk.length);
@@ -60,20 +59,14 @@ public class ObsDataSink extends ParallelSink {
                     completedParts.add(new PartEtag(uploadResult.getEtag(), uploadResult.getPartNumber()));
                     partNumber++;
                 }
-                var competeRequest = new CompleteMultipartUploadRequest(bucketName, objectName, uploadId, completedParts);
+                var competeRequest = new CompleteMultipartUploadRequest(bucketName, part.name(), uploadId, completedParts);
                 obsClient.completeMultipartUpload(competeRequest);
             } catch (Exception e) {
-                return uploadFailure(e, objectName, partNumber);
+                return uploadFailure(e, part.name(), partNumber);
             }
         }
 
         return StreamResult.success();
-    }
-
-    @Override
-    protected StreamResult<Object> complete() {
-        return StreamResult.success();
-
     }
 
     @NotNull
@@ -106,11 +99,6 @@ public class ObsDataSink extends ParallelSink {
             return this;
         }
 
-        public Builder keyName(String keyName) {
-            sink.objectName = keyName;
-            return this;
-        }
-
         public Builder chunkSizeBytes(int chunkSize) {
             sink.chunkSize = chunkSize;
             return this;
@@ -119,7 +107,6 @@ public class ObsDataSink extends ParallelSink {
         @Override
         protected void validate() {
             Objects.requireNonNull(sink.bucketName, "Must have a bucket name");
-            Objects.requireNonNull(sink.objectName, "Must have an object name");
             Objects.requireNonNull(sink.obsClient, "Must have an obsClient");
         }
     }

@@ -60,7 +60,6 @@ abstract class ObsDataSinkTestBase {
                 .client(getObsClient())
                 .bucketName(bucketName)
                 .chunkSizeBytes(1024 * 1024 * 10) // 10mb
-                .keyName(testFile.getName())
                 .requestId(UUID.randomUUID().toString())
                 .executorService(Executors.newFixedThreadPool(20))
                 .monitor(mock())
@@ -79,7 +78,6 @@ abstract class ObsDataSinkTestBase {
                 .client(getObsClient())
                 .bucketName(bucketName)
                 .chunkSizeBytes(1024 * 1024 * 10) // 10mb
-                .keyName(testFile.getName())
                 .requestId(UUID.randomUUID().toString())
                 .executorService(Executors.newFixedThreadPool(20))
                 .monitor(mock())
@@ -96,7 +94,6 @@ abstract class ObsDataSinkTestBase {
                 .client(getObsClient())
                 .bucketName(bucket)
                 .chunkSizeBytes(1024 * 1024 * 10) // 10mb
-                .keyName(testFile.getName())
                 .requestId(UUID.randomUUID().toString())
                 .executorService(Executors.newFixedThreadPool(20))
                 .monitor(mock())
@@ -120,7 +117,6 @@ abstract class ObsDataSinkTestBase {
                 .client(getObsClient())
                 .bucketName(bucketName)
                 .chunkSizeBytes(1024 * 1024 * 10) // 100mb
-                .keyName(file.getName())
                 .requestId(UUID.randomUUID().toString())
                 .executorService(Executors.newFixedThreadPool(20))
                 .monitor(mock())

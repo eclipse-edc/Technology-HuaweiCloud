@@ -18,7 +18,12 @@ import static org.eclipse.edc.spi.system.ServiceExtensionContext.PARTICIPANT_ID;
 public class HuaweiParticipant extends Participant {
 
     private static final Duration TIMEOUT = Duration.ofMillis(10000);
+    private Endpoint controlEndpoint;
     private String apiKey;
+
+    public Endpoint getControlEndpoint() {
+        return controlEndpoint;
+    }
 
     public Map<String, String> controlPlaneConfiguration() {
         return new HashMap<>() {
@@ -31,10 +36,13 @@ public class HuaweiParticipant extends Participant {
                 put("web.http.protocol.path", protocolEndpoint.getUrl().getPath());
                 put("web.http.management.port", String.valueOf(managementEndpoint.getUrl().getPort()));
                 put("web.http.management.path", managementEndpoint.getUrl().getPath());
-                put("web.http.control.port", String.valueOf(getFreePort()));
-                put("web.http.control.path", "/api/v1/control");
+                put("web.http.control.port", String.valueOf(controlEndpoint.getUrl().getPort()));
+                put("web.http.control.path", controlEndpoint.getUrl().getPath());
+                put("web.http.public.path", "/public");
+                put("web.http.public.port", String.valueOf(getFreePort()));
                 put("edc.dsp.callback.address", protocolEndpoint.getUrl().toString());
                 put("edc.connector.name", name);
+                put("edc.dataplane.token.validation.endpoint", "http://token-validation.com");
             }
         };
     }
@@ -79,6 +87,7 @@ public class HuaweiParticipant extends Participant {
             super.managementEndpoint(new Endpoint(URI.create("http://localhost:" + getFreePort() + "/api/management"), Map.of("X-Api-Key", participant.apiKey)));
             super.protocolEndpoint(new Endpoint(URI.create("http://localhost:" + getFreePort() + "/protocol")));
             super.build();
+            participant.controlEndpoint = new Endpoint(URI.create("http://localhost:" + getFreePort() + "/control"), Map.of());
             return participant;
         }
     }

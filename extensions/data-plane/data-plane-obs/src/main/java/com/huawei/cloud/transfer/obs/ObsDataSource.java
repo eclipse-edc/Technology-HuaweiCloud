@@ -27,14 +27,6 @@ import static org.eclipse.edc.connector.dataplane.spi.pipeline.StreamResult.succ
  * and creating {@code ObsPart} instances for each object. It also provides a way to close the
  * connection to the OBS.
  * <p>
- * Example usage:
- * ObsDataSource source = ObsDataSource.Builder.newInstance()
- * .client(obsClient)
- * .bucketName(bucketName)
- * .keyPrefix("prefix")
- * .build();
- * StreamResult<Stream<Part>> streamResult = source.openPartStream();
- * <p>
  * Note: The usage example assumes that there is a configured ObsClient, a valid bucketName,
  * and a optional prefix for the OBS objects.
  */
