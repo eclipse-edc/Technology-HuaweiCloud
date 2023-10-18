@@ -7,6 +7,20 @@ on:
   workflow_dispatch:
 
 jobs:
+
+  secret-presence:
+    runs-on: ubuntu-latest
+    outputs:
+      HAS_OTC_CRED: ${{ steps.secret-presence.outputs.HAS_OTC_CRED }}
+    steps:
+      - name: Check whether secrets exist
+        id: secret-presence
+        run: |
+          [ ! -z "${{ secrets.obs_access_key_id }}" ] && 
+          [ ! -z "${{ secrets.obs_secret_key }}" ] && 
+          echo "HAS_OTC_CRED=true" >> $GITHUB_OUTPUT
+          exit 0
+
   end-to-end-test:
     runs-on: ubuntu-latest
     steps:
@@ -18,6 +32,9 @@ jobs:
           ./gradlew test -DincludeTags="EndToEndTest" -PverboseTest=true
   cloud-test:
     runs-on: ubuntu-latest
+    needs: [  secret-presence ]
+    if: |
+      needs.secret-presence.outputs.HAS_OTC_CRED
     env:
       OBS_ACCESS_KEY_ID: ${{ secrets.obs_access_key_id }}
       OBS_SECRET_ACCESS_KEY: ${{ secrets.obs_secret_key }}
