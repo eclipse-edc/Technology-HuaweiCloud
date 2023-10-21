@@ -17,6 +17,8 @@ import static org.eclipse.edc.spi.system.ServiceExtensionContext.PARTICIPANT_ID;
 
 public class HuaweiParticipant extends Participant {
 
+    private static final String IAM_OTC_CLOUD_URL = "https://iam.eu-de.otc.t-systems.com";
+
     private static final Duration TIMEOUT = Duration.ofMillis(10000);
     private Endpoint controlEndpoint;
     private String apiKey;
@@ -43,6 +45,7 @@ public class HuaweiParticipant extends Participant {
                 put("edc.dsp.callback.address", protocolEndpoint.getUrl().toString());
                 put("edc.connector.name", name);
                 put("edc.dataplane.token.validation.endpoint", "http://token-validation.com");
+                put("edc.huawei.iam.endpoint", IAM_OTC_CLOUD_URL);
             }
         };
     }

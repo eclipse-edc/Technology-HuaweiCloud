@@ -36,7 +36,7 @@ public abstract class ObsFactory {
 
         if (secret != null) { // AK/SK was stored in vault ->interpret secret as JSON
             var token = typeManager.readValue(secret, ObsSecretToken.class);
-            provider = new BasicObsCredentialsProvider(token.ak(), token.sk());
+            provider = new BasicObsCredentialsProvider(token.ak(), token.sk(), token.securityToken());
         } else if (credentials.apply(dataAddress).succeeded()) { //AK and SK are stored directly on data address
             var ak = dataAddress.getStringProperty(ACCESS_KEY_ID);
             var sk = dataAddress.getStringProperty(SECRET_ACCESS_KEY);

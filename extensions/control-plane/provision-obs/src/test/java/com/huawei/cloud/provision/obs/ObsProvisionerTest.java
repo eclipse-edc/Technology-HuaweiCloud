@@ -50,14 +50,14 @@ import static org.mockito.Mockito.when;
 class ObsProvisionerTest {
 
     private final IamClient iamClient = mock(IamClient.class);
-    private final ObsClient s3Client = mock(ObsClient.class);
+    private final ObsClient obsClient = mock(ObsClient.class);
     private final ObsClientProvider clientProvider = mock(ObsClientProvider.class);
     private ObsProvisioner provisioner;
 
     @BeforeEach
     void setUp() {
         when(clientProvider.iamClient()).thenReturn(iamClient);
-        when(clientProvider.obsClient(anyString())).thenReturn(s3Client);
+        when(clientProvider.obsClient(anyString())).thenReturn(obsClient);
 
         provisioner = new ObsProvisioner(clientProvider, RetryPolicy.ofDefaults(), mock(Monitor.class), 900);
     }
@@ -76,7 +76,7 @@ class ObsProvisionerTest {
         var tokenResponse = new CreateTemporaryAccessKeyByTokenResponse().withCredential(credentials);
         var createBucketRequest = new CreateBucketRequest(bucket);
 
-        when(s3Client.createBucket(createBucketRequest)).thenReturn(createBucketResponse);
+        when(obsClient.createBucket(createBucketRequest)).thenReturn(createBucketResponse);
         when(iamClient.createTemporaryAccessKeyByToken(any())).thenReturn(tokenResponse);
 
         var definition = ObsResourceDefinition.Builder.newInstance()
@@ -96,7 +96,7 @@ class ObsProvisionerTest {
             assertThat(secretToken.securityToken()).isEqualTo("sessionToken");
         });
         verify(iamClient).createTemporaryAccessKeyByToken(any());
-        verify(s3Client).createBucket(isA(CreateBucketRequest.class));
+        verify(obsClient).createBucket(isA(CreateBucketRequest.class));
     }
 
     @Test
@@ -113,9 +113,9 @@ class ObsProvisionerTest {
                 .objectSummaries(List.of(object))
                 .builder();
 
-        when(s3Client.listObjects(bucket)).thenReturn(listing);
-        when(s3Client.deleteObjects(any())).thenReturn(new DeleteObjectsResult());
-        when(s3Client.deleteBucket(bucket)).thenReturn(new HeaderResponse());
+        when(obsClient.listObjects(bucket)).thenReturn(listing);
+        when(obsClient.deleteObjects(any())).thenReturn(new DeleteObjectsResult());
+        when(obsClient.deleteBucket(bucket)).thenReturn(new HeaderResponse());
 
         var provisionedResource = ObsProvisionedResource.Builder.newInstance()
                 .id("test")
@@ -131,9 +131,9 @@ class ObsProvisionerTest {
         var response = provisioner.deprovision(provisionedResource, policy).join().getContent();
 
         assertThat(response.isError()).isFalse();
-        verify(s3Client).listObjects(bucket);
-        verify(s3Client).deleteObjects(isA(DeleteObjectsRequest.class));
-        verify(s3Client).deleteBucket(bucket);
+        verify(obsClient).listObjects(bucket);
+        verify(obsClient).deleteObjects(isA(DeleteObjectsRequest.class));
+        verify(obsClient).deleteBucket(bucket);
     }
 
     @Test
@@ -149,8 +149,8 @@ class ObsProvisionerTest {
                 .objectSummaries(List.of(object))
                 .builder();
 
-        when(s3Client.listObjects(bucket)).thenReturn(listing);
-        when(s3Client.deleteObjects(any())).thenThrow(new ObsException("any"));
+        when(obsClient.listObjects(bucket)).thenReturn(listing);
+        when(obsClient.deleteObjects(any())).thenThrow(new ObsException("any"));
 
         var provisionedResource = ObsProvisionedResource.Builder.newInstance()
                 .id("test")
@@ -184,8 +184,8 @@ class ObsProvisionerTest {
                 .objectSummaries(List.of(object))
                 .builder();
 
-        when(s3Client.listObjects(bucket)).thenReturn(listing);
-        when(s3Client.deleteBucket(bucket)).thenThrow(new ObsException("any"));
+        when(obsClient.listObjects(bucket)).thenReturn(listing);
+        when(obsClient.deleteBucket(bucket)).thenThrow(new ObsException("any"));
 
         var provisionedResource = ObsProvisionedResource.Builder.newInstance()
                 .id("test")
@@ -211,7 +211,7 @@ class ObsProvisionerTest {
         var bucket = "test";
         var endpoint = "http://endpoint";
 
-        when(s3Client.listObjects(bucket)).thenThrow(new ObsException("any"));
+        when(obsClient.listObjects(bucket)).thenThrow(new ObsException("any"));
 
         var provisionedResource = ObsProvisionedResource.Builder.newInstance()
                 .id("test")
@@ -234,7 +234,7 @@ class ObsProvisionerTest {
 
     @Test
     void provision_should_return_failed_future_on_error() {
-        when(s3Client.createBucket(isA(CreateBucketRequest.class))).thenThrow(new ObsException("any"));
+        when(obsClient.createBucket(isA(CreateBucketRequest.class))).thenThrow(new ObsException("any"));
         var definition = ObsResourceDefinition.Builder.newInstance()
                 .id("test").endpoint("http://test")
                 .bucketName("test")

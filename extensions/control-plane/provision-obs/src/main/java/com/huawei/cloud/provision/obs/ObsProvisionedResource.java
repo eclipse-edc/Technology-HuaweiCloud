@@ -9,6 +9,7 @@ import org.eclipse.edc.connector.transfer.spi.types.ProvisionedDataDestinationRe
 
 import static com.huawei.cloud.obs.ObsBucketSchema.BUCKET_NAME;
 import static com.huawei.cloud.obs.ObsBucketSchema.ENDPOINT;
+import static org.eclipse.edc.spi.CoreConstants.EDC_NAMESPACE;
 
 
 @JsonDeserialize(builder = ObsProvisionedResource.Builder.class)
@@ -45,12 +46,12 @@ public class ObsProvisionedResource extends ProvisionedDataDestinationResource {
         }
 
         public Builder endpoint(String endpoint) {
-            dataAddressBuilder.property(ENDPOINT, endpoint);
+            dataAddressBuilder.property(EDC_NAMESPACE + ENDPOINT, endpoint);
             return this;
         }
 
         public Builder bucketName(String bucketName) {
-            dataAddressBuilder.property(BUCKET_NAME, bucketName);
+            dataAddressBuilder.property(EDC_NAMESPACE + BUCKET_NAME, bucketName);
             dataAddressBuilder.keyName("obs-temp-" + bucketName);
             return this;
         }
