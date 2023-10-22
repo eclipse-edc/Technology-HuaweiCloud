@@ -1,6 +1,7 @@
 package com.huawei.cloud.transfer.obs;
 
 import com.huawei.cloud.obs.ObsBucketSchema;
+import com.huawei.cloud.obs.ObsClientProvider;
 import org.eclipse.edc.junit.assertions.AbstractResultAssert;
 import org.eclipse.edc.spi.EdcException;
 import org.eclipse.edc.spi.security.Vault;
@@ -19,6 +20,8 @@ import static com.huawei.cloud.obs.TestFunctions.dataAddressWithCredentials;
 import static com.huawei.cloud.obs.TestFunctions.dataAddressWithoutCredentials;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -28,10 +31,12 @@ class ObsDataSinkFactoryTest {
 
     private final Vault vaultMock = mock();
     private final ExecutorService executor = Executors.newFixedThreadPool(1);
-    private final ObsDataSinkFactory factory = new ObsDataSinkFactory(vaultMock, new TypeManager(), mock(), executor);
+    private final ObsClientProvider obsClientProviderMock = mock();
+    private final ObsDataSinkFactory factory = new ObsDataSinkFactory(vaultMock, new TypeManager(), mock(), executor, obsClientProviderMock);
 
     @BeforeEach
     void setUp() {
+        when(obsClientProviderMock.obsClient(anyString(), any())).thenReturn(mock());
     }
 
     @Test

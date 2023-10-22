@@ -1,6 +1,7 @@
 package com.huawei.cloud.transfer.obs;
 
 import com.huawei.cloud.obs.ObsBucketSchema;
+import com.huawei.cloud.obs.ObsClientProvider;
 import com.huawei.cloud.transfer.obs.validation.ObsDataAddressValidationRule;
 import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSink;
 import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSinkFactory;
@@ -23,8 +24,8 @@ public class ObsDataSinkFactory extends ObsFactory implements DataSinkFactory {
     private final Monitor monitor;
     private final ExecutorService executorService;
 
-    public ObsDataSinkFactory(Vault vault, TypeManager typeManager, Monitor monitor, ExecutorService executorService) {
-        super(vault, typeManager);
+    public ObsDataSinkFactory(Vault vault, TypeManager typeManager, Monitor monitor, ExecutorService executorService, ObsClientProvider clientProvider) {
+        super(vault, typeManager, clientProvider);
         this.monitor = monitor;
         this.executorService = executorService;
     }

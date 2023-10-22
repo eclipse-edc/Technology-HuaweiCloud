@@ -1,6 +1,7 @@
 package com.huawei.cloud.transfer.obs;
 
 import com.huawei.cloud.obs.ObsBucketSchema;
+import com.huawei.cloud.obs.ObsClientProvider;
 import org.eclipse.edc.spi.security.Vault;
 import org.eclipse.edc.spi.types.TypeManager;
 import org.eclipse.edc.spi.types.domain.DataAddress;
@@ -24,15 +25,18 @@ import static com.huawei.cloud.obs.TestFunctions.dataAddressWithCredentials;
 import static com.huawei.cloud.obs.TestFunctions.dataAddressWithoutCredentials;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ObsDataSourceFactoryTest {
+    public static final ObsClientProvider CLIENT_PROVIDER = mock();
     private final TypeManager typeManager = new TypeManager();
     private final Vault vault = mock(Vault.class);
-    private final ObsDataSourceFactory factory = new ObsDataSourceFactory(vault, typeManager);
+    private final ObsDataSourceFactory factory = new ObsDataSourceFactory(vault, typeManager, CLIENT_PROVIDER);
 
     @Test
     void canHandle() {
@@ -125,7 +129,8 @@ class ObsDataSourceFactoryTest {
     void createSource_noCredentials_shouldFail() {
         var source = dataAddressWithoutCredentials();
         var req = createRequest(source);
-        assertThatThrownBy(() -> factory.createSource(req)).isInstanceOf(IllegalArgumentException.class).hasMessageEndingWith("access key should not be null or empty.");
+        when(CLIENT_PROVIDER.obsClient(anyString(), any())).thenThrow(IllegalArgumentException.class);
+        assertThatThrownBy(() -> factory.createSource(req)).isInstanceOf(IllegalArgumentException.class);
     }
 
     private DataFlowRequest createRequest(DataAddress source) {

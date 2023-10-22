@@ -1,6 +1,7 @@
 package com.huawei.cloud.transfer.obs;
 
 import com.huawei.cloud.obs.ObsBucketSchema;
+import com.huawei.cloud.obs.ObsClientProvider;
 import com.huawei.cloud.transfer.obs.validation.ObsDataAddressValidationRule;
 import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSource;
 import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSourceFactory;
@@ -20,8 +21,8 @@ public class ObsDataSourceFactory extends ObsFactory implements DataSourceFactor
 
     private final ValidationRule<DataAddress> validation = new ObsDataAddressValidationRule();
 
-    public ObsDataSourceFactory(Vault vault, TypeManager typeManager) {
-        super(vault, typeManager);
+    public ObsDataSourceFactory(Vault vault, TypeManager typeManager, ObsClientProvider clientProvider) {
+        super(vault, typeManager, clientProvider);
     }
 
     @Override

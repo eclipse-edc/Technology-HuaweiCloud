@@ -1,12 +1,12 @@
 package com.huawei.cloud.transfer.obs;
 
+import com.huawei.cloud.obs.ObsClientProvider;
 import com.huawei.cloud.obs.ObsSecretToken;
 import com.huawei.cloud.transfer.obs.validation.ObsDataAddressCredentialsValidationRule;
 import com.obs.services.BasicObsCredentialsProvider;
 import com.obs.services.EnvironmentVariableObsCredentialsProvider;
 import com.obs.services.IObsCredentialsProvider;
 import com.obs.services.ObsClient;
-import com.obs.services.ObsConfiguration;
 import org.eclipse.edc.connector.dataplane.util.validation.ValidationRule;
 import org.eclipse.edc.spi.security.Vault;
 import org.eclipse.edc.spi.types.TypeManager;
@@ -20,19 +20,18 @@ public abstract class ObsFactory {
     private final ValidationRule<DataAddress> credentials = new ObsDataAddressCredentialsValidationRule();
     private final Vault vault;
     private final TypeManager typeManager;
+    private final ObsClientProvider clientProvider;
 
-    protected ObsFactory(Vault vault, TypeManager typeManager) {
+    protected ObsFactory(Vault vault, TypeManager typeManager, ObsClientProvider clientProvider) {
         this.vault = vault;
         this.typeManager = typeManager;
+        this.clientProvider = clientProvider;
     }
 
     protected ObsClient createObsClient(DataAddress dataAddress) {
         var endpoint = dataAddress.getStringProperty(ENDPOINT);
         var secret = vault.resolveSecret(dataAddress.getKeyName());
         IObsCredentialsProvider provider;
-        var config = new ObsConfiguration();
-        config.setPathStyle(true); //otherwise the bucketname gets prepended
-        config.setEndPoint(endpoint);
 
         if (secret != null) { // AK/SK was stored in vault ->interpret secret as JSON
             var token = typeManager.readValue(secret, ObsSecretToken.class);
@@ -45,6 +44,6 @@ public abstract class ObsFactory {
             provider = new EnvironmentVariableObsCredentialsProvider();
         }
 
-        return new ObsClient(provider, config);
+        return clientProvider.obsClient(endpoint, provider);
     }
 }

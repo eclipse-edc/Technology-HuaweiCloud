@@ -1,5 +1,6 @@
 package com.huawei.cloud.transfer.obs;
 
+import com.huawei.cloud.obs.ObsClientProvider;
 import org.eclipse.edc.connector.dataplane.spi.pipeline.PipelineService;
 import org.eclipse.edc.runtime.metamodel.annotation.Extension;
 import org.eclipse.edc.runtime.metamodel.annotation.Inject;
@@ -21,15 +22,17 @@ public class ObsTransferExtension implements ServiceExtension {
     private TypeManager typeManager;
     @Inject
     private Vault vault;
+    @Inject
+    private ObsClientProvider clientProvider;
 
     @Override
     public void initialize(ServiceExtensionContext context) {
 
-        var sourceFactory = new ObsDataSourceFactory(vault, typeManager);
+        var sourceFactory = new ObsDataSourceFactory(vault, typeManager, clientProvider);
         pipelineService.registerFactory(sourceFactory);
 
         var executor = Executors.newFixedThreadPool(10);
-        var sinkFactory = new ObsDataSinkFactory(vault, typeManager, context.getMonitor(), executor);
+        var sinkFactory = new ObsDataSinkFactory(vault, typeManager, context.getMonitor(), executor, clientProvider);
         pipelineService.registerFactory(sinkFactory);
     }
 

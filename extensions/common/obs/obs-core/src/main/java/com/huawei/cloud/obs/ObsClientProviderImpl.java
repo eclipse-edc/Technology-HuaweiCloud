@@ -7,6 +7,7 @@ import com.obs.services.OBSCredentialsProviderChain;
 import com.obs.services.ObsClient;
 import com.obs.services.ObsConfiguration;
 import org.eclipse.edc.spi.monitor.Monitor;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,9 +30,23 @@ public class ObsClientProviderImpl implements ObsClientProvider {
         this.monitor = monitor;
     }
 
+    @NotNull
+    private static ObsConfiguration createObsConfiguration(String endpoint) {
+        var config = new ObsConfiguration();
+        config.setPathStyle(true); //otherwise the bucketname gets prepended
+        config.setEndPoint(endpoint);
+        return config;
+    }
+
     @Override
     public ObsClient obsClient(String endpoint) {
         return clients.computeIfAbsent(endpoint, this::createClient);
+    }
+
+    @Override
+    public ObsClient obsClient(String endpoint, IObsCredentialsProvider credentialsProvider) {
+        var config = createObsConfiguration(endpoint);
+        return new ObsClient(credentialsProvider, config);
     }
 
     @Override
@@ -50,9 +65,7 @@ public class ObsClientProviderImpl implements ObsClientProvider {
     }
 
     private ObsClient createClient(String endpoint) {
-        var config = new ObsConfiguration();
-        config.setPathStyle(true); //otherwise the bucketname gets prepended
-        config.setEndPoint(endpoint);
+        var config = createObsConfiguration(endpoint);
         return new ObsClient(configuration.getCredentialsProvider(), config);
     }
 
