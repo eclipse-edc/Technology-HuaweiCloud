@@ -2,22 +2,22 @@ package com.huawei.cloud.transfer.obs;
 
 import com.huawei.cloud.obs.ObsClientProvider;
 import com.huawei.cloud.obs.ObsSecretToken;
-import com.huawei.cloud.transfer.obs.validation.ObsDataAddressCredentialsValidationRule;
+import com.huawei.cloud.transfer.obs.validation.ObsDataAddressCredentialsValidator;
 import com.obs.services.BasicObsCredentialsProvider;
 import com.obs.services.EnvironmentVariableObsCredentialsProvider;
 import com.obs.services.IObsCredentialsProvider;
 import com.obs.services.ObsClient;
-import org.eclipse.edc.connector.dataplane.util.validation.ValidationRule;
 import org.eclipse.edc.spi.security.Vault;
 import org.eclipse.edc.spi.types.TypeManager;
 import org.eclipse.edc.spi.types.domain.DataAddress;
+import org.eclipse.edc.validator.spi.Validator;
 
 import static com.huawei.cloud.obs.ObsBucketSchema.ACCESS_KEY_ID;
 import static com.huawei.cloud.obs.ObsBucketSchema.ENDPOINT;
 import static com.huawei.cloud.obs.ObsBucketSchema.SECRET_ACCESS_KEY;
 
 public abstract class ObsFactory {
-    private final ValidationRule<DataAddress> credentials = new ObsDataAddressCredentialsValidationRule();
+    private final Validator<DataAddress> credentials = new ObsDataAddressCredentialsValidator();
     private final Vault vault;
     private final TypeManager typeManager;
     private final ObsClientProvider clientProvider;
@@ -36,7 +36,7 @@ public abstract class ObsFactory {
         if (secret != null) { // AK/SK was stored in vault ->interpret secret as JSON
             var token = typeManager.readValue(secret, ObsSecretToken.class);
             provider = new BasicObsCredentialsProvider(token.ak(), token.sk(), token.securityToken());
-        } else if (credentials.apply(dataAddress).succeeded()) { //AK and SK are stored directly on data address
+        } else if (credentials.validate(dataAddress).succeeded()) { //AK and SK are stored directly on data address
             var ak = dataAddress.getStringProperty(ACCESS_KEY_ID);
             var sk = dataAddress.getStringProperty(SECRET_ACCESS_KEY);
             provider = new BasicObsCredentialsProvider(ak, sk);

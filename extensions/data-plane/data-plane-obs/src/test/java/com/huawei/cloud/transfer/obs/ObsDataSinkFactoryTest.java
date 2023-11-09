@@ -68,7 +68,7 @@ class ObsDataSinkFactoryTest {
                 .build();
         AbstractResultAssert.assertThat(factory.validateRequest(createRequest(addr)))
                 .isFailed()
-                .detail().contains("Missing or invalid value for key %s".formatted(ObsBucketSchema.BUCKET_NAME));
+                .detail().contains("Must contain property 'bucketName'. Path: bucketName. Illegal value: null");
     }
 
     @Test
@@ -80,7 +80,7 @@ class ObsDataSinkFactoryTest {
                 .build();
         AbstractResultAssert.assertThat(factory.validateRequest(createRequest(addr)))
                 .isFailed()
-                .detail().contains("Missing or invalid value for key %s".formatted(ObsBucketSchema.ENDPOINT));
+                .detail().contains("Must contain property 'endpoint'. Path: endpoint. Illegal value: null");
     }
 
     @Test
@@ -91,7 +91,7 @@ class ObsDataSinkFactoryTest {
                 .property(ObsBucketSchema.BUCKET_NAME, "test-bucket")
                 .build();
         assertThatThrownBy(() -> factory.createSink(createRequest(addr))).isInstanceOf(EdcException.class)
-                .hasMessage("Missing or invalid value for key %s".formatted(ObsBucketSchema.ENDPOINT));
+                .hasMessage("Must contain property 'endpoint'. Path: endpoint. Illegal value: null");
     }
 
     @Test

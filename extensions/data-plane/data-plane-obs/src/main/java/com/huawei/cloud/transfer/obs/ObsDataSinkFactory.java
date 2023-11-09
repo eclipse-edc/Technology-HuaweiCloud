@@ -2,10 +2,9 @@ package com.huawei.cloud.transfer.obs;
 
 import com.huawei.cloud.obs.ObsBucketSchema;
 import com.huawei.cloud.obs.ObsClientProvider;
-import com.huawei.cloud.transfer.obs.validation.ObsDataAddressValidationRule;
+import com.huawei.cloud.transfer.obs.validation.ObsDataAddressValidator;
 import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSink;
 import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSinkFactory;
-import org.eclipse.edc.connector.dataplane.util.validation.ValidationRule;
 import org.eclipse.edc.spi.EdcException;
 import org.eclipse.edc.spi.monitor.Monitor;
 import org.eclipse.edc.spi.result.Result;
@@ -13,6 +12,7 @@ import org.eclipse.edc.spi.security.Vault;
 import org.eclipse.edc.spi.types.TypeManager;
 import org.eclipse.edc.spi.types.domain.DataAddress;
 import org.eclipse.edc.spi.types.domain.transfer.DataFlowRequest;
+import org.eclipse.edc.validator.spi.Validator;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ExecutorService;
@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutorService;
 public class ObsDataSinkFactory extends ObsFactory implements DataSinkFactory {
 
     private static final int CHUNK_SIZE_BYTES = 1024 * 1024 * 500; //transfer 500mb at a time
-    private final ValidationRule<DataAddress> validation = new ObsDataAddressValidationRule();
+    private final Validator<DataAddress> validation = new ObsDataAddressValidator();
     private final Monitor monitor;
     private final ExecutorService executorService;
 
@@ -57,7 +57,7 @@ public class ObsDataSinkFactory extends ObsFactory implements DataSinkFactory {
 
     @Override
     public @NotNull Result<Void> validateRequest(DataFlowRequest request) {
-        return validation.apply(request.getDestinationDataAddress());
+        return validation.validate(request.getDestinationDataAddress()).toResult();
     }
 
 
