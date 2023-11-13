@@ -12,7 +12,7 @@ import static org.eclipse.edc.util.configuration.ConfigurationFunctions.propOrEn
 public class GaussDbPostgresFunctions {
     private static final String PG_CONNECTION_STRING = "PG_CONNECTION_STRING";
 
-    private static final int TIMEOUT_SEC = 2;
+    private static final int TIMEOUT_SEC = 100;
 
     @NotNull
     private static DataSource createDatasource(String connectionString) {

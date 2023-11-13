@@ -30,6 +30,14 @@ public class GaussDbTestExtension implements BeforeAllCallback, BeforeEachCallba
     private DataSourceRegistry registry;
     private Connection connection;
 
+    public DataSourceRegistry getRegistry() {
+        return registry;
+    }
+
+    public TransactionContext getTransactionContext() {
+        return transactionContext;
+    }
+
     @Override
     public void beforeAll(ExtensionContext context) {
         dataSource = createDataSource();

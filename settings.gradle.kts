@@ -29,5 +29,6 @@ include(":extensions:data-plane:data-plane-obs")
 
 // GaussDB
 include(":extensions:control-plane:store:asset-index-gaussdb")
+include(":extensions:control-plane:store:contract-definition-store-gaussdb")
 include(":extensions:common:gaussdb:gaussdb-test")
 include(":e2e-tests")
