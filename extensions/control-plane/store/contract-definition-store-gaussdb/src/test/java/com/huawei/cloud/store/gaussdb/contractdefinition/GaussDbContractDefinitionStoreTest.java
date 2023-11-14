@@ -16,7 +16,7 @@ import org.eclipse.edc.spi.result.StoreFailure;
 import org.eclipse.edc.spi.types.TypeManager;
 import org.eclipse.edc.spi.types.domain.asset.Asset;
 import org.eclipse.edc.sql.QueryExecutor;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,15 +55,9 @@ class GaussDbContractDefinitionStoreTest {
 
         sqlContractDefinitionStore = new SqlContractDefinitionStore(extension.getRegistry(), DEFAULT_DATASOURCE_NAME,
                 extension.getTransactionContext(), SQL_STATEMENTS, typeManager.getMapper(), queryExecutor);
-        var schema = getResourceFileContentAsString("schema.sql");
-        helper.executeStatement(schema);
-    }
 
-    @AfterEach
-    void tearDown(GaussDbTestExtension.SqlHelper helper) {
-        helper.executeStatement("DROP TABLE " + SQL_STATEMENTS.getContractDefinitionTable() + " CASCADE");
+        helper.truncateTable(SQL_STATEMENTS.getContractDefinitionTable());
     }
-
 
     @Test
     @DisplayName("Save a single Contract Definition that doesn't already exist")
@@ -579,5 +573,11 @@ class GaussDbContractDefinitionStoreTest {
         definitions.forEach((it) -> {
             this.getContractDefinitionStore().save(it);
         });
+    }
+
+    @BeforeAll
+    static void createDatabase(GaussDbTestExtension.SqlHelper runner) {
+        var schema = getResourceFileContentAsString("schema.sql");
+        runner.executeStatement(schema);
     }
 }

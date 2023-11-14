@@ -1,8 +1,8 @@
 package org.eclipse.edc.azure.testfixtures;
 
+import com.huawei.gauss200.jdbc.ds.PGPoolingDataSource;
+import com.huawei.gauss200.jdbc.util.PSQLException;
 import org.jetbrains.annotations.NotNull;
-import org.postgresql.ds.PGPoolingDataSource;
-import org.postgresql.util.PSQLException;
 
 import java.util.Objects;
 import javax.sql.DataSource;
