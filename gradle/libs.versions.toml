@@ -15,7 +15,7 @@ restAssured = "5.3.2"
 rsApi = "3.1.0"
 testcontainers = "1.19.1"
 huawei-obs = "3.23.9.1"
-huawei-iam = "3.1.65"
+huawei-iam = "3.1.66"
 huawei-dws = "8.1.0"
 
 [libraries]
