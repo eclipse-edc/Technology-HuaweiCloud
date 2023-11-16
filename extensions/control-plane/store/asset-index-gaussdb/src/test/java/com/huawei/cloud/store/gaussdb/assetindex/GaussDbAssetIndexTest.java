@@ -21,12 +21,16 @@ import org.eclipse.edc.sql.QueryExecutor;
 import org.eclipse.edc.transaction.datasource.spi.DataSourceRegistry;
 import org.eclipse.edc.transaction.spi.TransactionContext;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Clock;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,7 +44,6 @@ import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.eclipse.edc.azure.testfixtures.GaussDbTestExtension.DEFAULT_DATASOURCE_NAME;
-import static org.eclipse.edc.junit.testfixtures.TestUtils.getResourceFileContentAsString;
 import static org.eclipse.edc.spi.CoreConstants.EDC_NAMESPACE;
 import static org.eclipse.edc.spi.query.Criterion.criterion;
 import static org.eclipse.edc.spi.result.StoreFailure.Reason.ALREADY_EXISTS;
@@ -580,7 +583,12 @@ class GaussDbAssetIndexTest {
     }
 
     @BeforeAll
-    static void prepare(GaussDbTestExtension.SqlHelper runner) {
-        runner.executeStatement(getResourceFileContentAsString("schema.sql"));
+    static void prepare(GaussDbTestExtension.SqlHelper runner) throws IOException {
+        runner.executeStatement(Files.readString(Paths.get("docs/schema.sql")));
+    }
+
+    @AfterAll
+    static void deleteTable(GaussDbTestExtension.SqlHelper runner) {
+        runner.dropTable(SQL_STATEMENTS.getAssetTable());
     }
 }

@@ -98,7 +98,13 @@ public class GaussDbTestExtension implements BeforeAllCallback, BeforeEachCallba
          * @param schema the SQL statement
          */
         public void executeStatement(String schema) {
-            transactionContext.execute(() -> queryExecutor.execute(connection, schema));
+            transactionContext.execute(() -> {
+                try {
+                    return connection.prepareStatement(schema).execute();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
 
         /**

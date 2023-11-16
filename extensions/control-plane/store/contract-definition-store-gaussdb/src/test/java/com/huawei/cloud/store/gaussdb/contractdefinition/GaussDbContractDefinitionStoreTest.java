@@ -16,6 +16,7 @@ import org.eclipse.edc.spi.result.StoreFailure;
 import org.eclipse.edc.spi.types.TypeManager;
 import org.eclipse.edc.spi.types.domain.asset.Asset;
 import org.eclipse.edc.sql.QueryExecutor;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +26,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +39,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.eclipse.edc.azure.testfixtures.GaussDbTestExtension.DEFAULT_DATASOURCE_NAME;
 import static org.eclipse.edc.connector.contract.spi.testfixtures.offer.store.TestFunctions.createContractDefinition;
 import static org.eclipse.edc.connector.contract.spi.testfixtures.offer.store.TestFunctions.createContractDefinitions;
-import static org.eclipse.edc.junit.testfixtures.TestUtils.getResourceFileContentAsString;
 import static org.eclipse.edc.spi.query.Criterion.criterion;
 import static org.eclipse.edc.spi.result.StoreFailure.Reason.ALREADY_EXISTS;
 import static org.eclipse.edc.spi.result.StoreFailure.Reason.NOT_FOUND;
@@ -576,8 +578,13 @@ class GaussDbContractDefinitionStoreTest {
     }
 
     @BeforeAll
-    static void createDatabase(GaussDbTestExtension.SqlHelper runner) {
-        var schema = getResourceFileContentAsString("schema.sql");
+    static void createDatabase(GaussDbTestExtension.SqlHelper runner) throws IOException {
+        var schema = Files.readString(Paths.get("docs/schema.sql"));
         runner.executeStatement(schema);
+    }
+
+    @AfterAll
+    static void deleteTable(GaussDbTestExtension.SqlHelper runner) {
+        runner.dropTable(SQL_STATEMENTS.getContractDefinitionTable());
     }
 }

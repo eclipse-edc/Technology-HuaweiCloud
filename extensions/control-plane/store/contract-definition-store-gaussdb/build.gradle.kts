@@ -6,6 +6,8 @@ dependencies {
     api(libs.edc.spi.core)
     api(libs.edc.util)
     api(libs.edc.sql.contractdefstore)
+    api(libs.huawei.dws.jdbc)
+
     implementation(libs.failsafe.core)
     implementation(libs.edc.sql.core)
 
