@@ -48,6 +48,13 @@ public class GaussDbTestExtension implements BeforeAllCallback, BeforeEachCallba
         }
     }
 
+    public Connection newConnection() {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
