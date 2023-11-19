@@ -17,6 +17,6 @@ dependencies {
     testImplementation(libs.assertj)
     testImplementation(libs.testcontainers.junit)
     testImplementation(testFixtures(libs.edc.spi.core))
-    testImplementation(testFixtures(project(":extensions:common:gaussdb:gaussdb-test")))
+    testImplementation(testFixtures(project(":extensions:common:gaussdb:gaussdb-core")))
 
 }

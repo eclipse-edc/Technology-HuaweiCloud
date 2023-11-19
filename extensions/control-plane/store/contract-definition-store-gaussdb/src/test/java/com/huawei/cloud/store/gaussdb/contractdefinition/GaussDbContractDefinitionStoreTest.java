@@ -1,8 +1,8 @@
 package com.huawei.cloud.store.gaussdb.contractdefinition;
 
+import com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension;
+import com.huawei.cloud.gaussdb.testfixtures.annotations.GaussDbTest;
 import org.assertj.core.api.Assertions;
-import org.eclipse.edc.azure.testfixtures.GaussDbTestExtension;
-import org.eclipse.edc.azure.testfixtures.annotations.GaussDbTest;
 import org.eclipse.edc.connector.contract.spi.offer.store.ContractDefinitionStore;
 import org.eclipse.edc.connector.contract.spi.types.offer.ContractDefinition;
 import org.eclipse.edc.connector.store.sql.contractdefinition.SqlContractDefinitionStore;
@@ -34,9 +34,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension.DEFAULT_DATASOURCE_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.eclipse.edc.azure.testfixtures.GaussDbTestExtension.DEFAULT_DATASOURCE_NAME;
 import static org.eclipse.edc.connector.contract.spi.testfixtures.offer.store.TestFunctions.createContractDefinition;
 import static org.eclipse.edc.connector.contract.spi.testfixtures.offer.store.TestFunctions.createContractDefinitions;
 import static org.eclipse.edc.spi.query.Criterion.criterion;

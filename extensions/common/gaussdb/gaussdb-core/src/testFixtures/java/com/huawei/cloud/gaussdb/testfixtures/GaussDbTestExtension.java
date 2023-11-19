@@ -1,4 +1,4 @@
-package org.eclipse.edc.azure.testfixtures;
+package com.huawei.cloud.gaussdb.testfixtures;
 
 import org.eclipse.edc.sql.QueryExecutor;
 import org.eclipse.edc.sql.SqlQueryExecutor;
@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.sql.DataSource;
 
-import static org.eclipse.edc.azure.testfixtures.GaussDbPostgresFunctions.createDataSource;
+import static com.huawei.cloud.gaussdb.testfixtures.GaussDbPostgresFunctions.createDataSource;
 
 public class GaussDbTestExtension implements BeforeAllCallback, BeforeEachCallback, AfterAllCallback, ParameterResolver {
 

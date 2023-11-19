@@ -1,7 +1,7 @@
 package com.huawei.cloud.store.gaussdb.contractnegotiationstore;
 
-import org.eclipse.edc.azure.testfixtures.GaussDbTestExtension;
-import org.eclipse.edc.azure.testfixtures.annotations.GaussDbTest;
+import com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension;
+import com.huawei.cloud.gaussdb.testfixtures.annotations.GaussDbTest;
 import org.eclipse.edc.connector.contract.spi.ContractOfferId;
 import org.eclipse.edc.connector.contract.spi.negotiation.store.ContractNegotiationStore;
 import org.eclipse.edc.connector.contract.spi.testfixtures.negotiation.store.TestFunctions;
@@ -45,10 +45,10 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension.DEFAULT_DATASOURCE_NAME;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.eclipse.edc.azure.testfixtures.GaussDbTestExtension.DEFAULT_DATASOURCE_NAME;
 import static org.eclipse.edc.connector.contract.spi.testfixtures.negotiation.store.TestFunctions.createContract;
 import static org.eclipse.edc.connector.contract.spi.testfixtures.negotiation.store.TestFunctions.createContractBuilder;
 import static org.eclipse.edc.connector.contract.spi.testfixtures.negotiation.store.TestFunctions.createNegotiation;
@@ -71,19 +71,6 @@ class GaussDbContractNegotiationStoreTest {
     protected final Clock clock = Clock.systemUTC();
     private LeaseUtil leaseUtil;
     private ContractNegotiationStore contractNegotiationStore;
-
-    @BeforeAll
-    static void createDatabase(GaussDbTestExtension.SqlHelper runner) throws IOException {
-        var schema = Files.readString(Paths.get("docs/schema.sql"));
-        runner.executeStatement(schema);
-    }
-
-    @AfterAll
-    static void deleteTable(GaussDbTestExtension.SqlHelper runner) {
-        runner.dropTable(SQL_STATEMENTS.getContractNegotiationTable());
-        runner.dropTable(SQL_STATEMENTS.getContractAgreementTable());
-        runner.dropTable(SQL_STATEMENTS.getLeaseTableName());
-    }
 
     @BeforeEach
     void setUp(GaussDbTestExtension extension, GaussDbTestExtension.SqlHelper helper, QueryExecutor queryExecutor) {
@@ -731,7 +718,7 @@ class GaussDbContractNegotiationStoreTest {
                 .state(REQUESTED.code())
                 .type(CONSUMER)
                 .build()).forEach(getContractNegotiationStore()::save);
-        var criteria = new Criterion[]{ hasState(REQUESTED.code()), new Criterion("type", "=", "CONSUMER") };
+        var criteria = new Criterion[] {hasState(REQUESTED.code()), new Criterion("type", "=", "CONSUMER")};
 
         var result = getContractNegotiationStore().nextNotLeased(10, criteria);
 
@@ -891,5 +878,18 @@ class GaussDbContractNegotiationStoreTest {
 
     protected boolean isLeasedBy(String negotiationId, String owner) {
         return leaseUtil.isLeased(negotiationId, owner);
+    }
+
+    @BeforeAll
+    static void createDatabase(GaussDbTestExtension.SqlHelper runner) throws IOException {
+        var schema = Files.readString(Paths.get("docs/schema.sql"));
+        runner.executeStatement(schema);
+    }
+
+    @AfterAll
+    static void deleteTable(GaussDbTestExtension.SqlHelper runner) {
+        runner.dropTable(SQL_STATEMENTS.getContractNegotiationTable());
+        runner.dropTable(SQL_STATEMENTS.getContractAgreementTable());
+        runner.dropTable(SQL_STATEMENTS.getLeaseTableName());
     }
 }

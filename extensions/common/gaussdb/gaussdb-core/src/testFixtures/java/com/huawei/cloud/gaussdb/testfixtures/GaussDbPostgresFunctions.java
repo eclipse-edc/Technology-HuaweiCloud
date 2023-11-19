@@ -1,4 +1,4 @@
-package org.eclipse.edc.azure.testfixtures;
+package com.huawei.cloud.gaussdb.testfixtures;
 
 import com.huawei.gauss200.jdbc.ds.PGPoolingDataSource;
 import com.huawei.gauss200.jdbc.util.PSQLException;

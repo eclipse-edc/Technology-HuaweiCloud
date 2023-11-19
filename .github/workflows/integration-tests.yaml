@@ -60,4 +60,4 @@ jobs:
       - name: GaussDB Integration Tests
         run: |
           ./gradlew compileJava compileTestJava
-          ./gradlew test -DincludeTags="GaussDbTest" -PverboseTest=true
+          ./gradlew test -DincludeTags="GaussDbTest" -PverboseTest=true --no-parallel
