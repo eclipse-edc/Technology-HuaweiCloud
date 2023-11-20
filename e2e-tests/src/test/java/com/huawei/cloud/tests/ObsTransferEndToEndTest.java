@@ -50,12 +50,12 @@ public class ObsTransferEndToEndTest {
     @RegisterExtension
     static EdcClassRuntimesExtension runtimes = new EdcClassRuntimesExtension(
             new EdcRuntimeExtension(
-                    ":launchers",
+                    ":launchers:e2e-test",
                     "consumer",
                     CONSUMER.controlPlaneConfiguration()
             ),
             new EdcRuntimeExtension(
-                    ":launchers",
+                    ":launchers:e2e-test",
                     "provider",
                     PROVIDER.controlPlaneConfiguration()
             )

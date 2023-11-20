@@ -17,7 +17,7 @@ public class GaussDbTransferProcessStoreExtension implements ServiceExtension {
     }
 
     @Provider
-    TransferProcessStoreStatements createGaussDbStatements() {
+    public TransferProcessStoreStatements createGaussDbStatements() {
         return new GaussDbStatements();
     }
 }

@@ -47,13 +47,13 @@ public class OtcTransferEndToEndTest {
 
 
     static EdcRuntimeExtension providerRuntime = new EdcRuntimeExtension(
-            ":launchers",
+            ":launchers:e2e-test",
             "consumer",
             CONSUMER.controlPlaneConfiguration()
     );
 
     static EdcRuntimeExtension consumerRuntime = new EdcRuntimeExtension(
-            ":launchers",
+            ":launchers:e2e-test",
             "provider",
             PROVIDER.controlPlaneConfiguration()
     );

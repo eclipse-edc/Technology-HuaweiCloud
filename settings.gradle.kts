@@ -21,7 +21,8 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "components"
-include(":launchers")
+include(":launchers:e2e-test")
+include(":launchers:huawei-cloud-runtime")
 include(":extensions")
 include(":extensions:common:obs:obs-core")
 include(":extensions:control-plane:provision-obs")

@@ -82,6 +82,7 @@ edc-sql-transferprocess = { module = "org.eclipse.edc:transfer-process-store-sql
 edc-sql-policy-definition = { module = "org.eclipse.edc:policy-definition-store-sql", version.ref = "edc" }
 edc-sql-lease = { module = "org.eclipse.edc:sql-lease", version.ref = "edc" }
 edc-sql-core = { module = "org.eclipse.edc:sql-core", version.ref = "edc" }
+edc-sql-pool-apachecommons = { module = "org.eclipse.edc:sql-pool-apache-commons", version.ref = "edc" }
 edc-transfer-dataplane = { module = "org.eclipse.edc:transfer-data-plane", version.ref = "edc" }
 edc-transfer-httppull-receiver = { module = "org.eclipse.edc:transfer-pull-http-receiver", version.ref = "edc" }
 edc-transfer-httppull-receiver-dynamic = { module = "org.eclipse.edc:transfer-pull-http-dynamic-receiver", version.ref = "edc" }
