@@ -3,7 +3,7 @@ format.version = "1.1"
 
 [versions]
 awaitility = "4.2.0"
-bouncyCastle-jdk18on = "1.76"
+bouncyCastle-jdk18on = "1.77"
 edc = "0.4.0"
 failsafe = "3.3.2"
 httpMockServer = "5.15.0"
