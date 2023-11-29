@@ -31,3 +31,9 @@ build
 .idea/
 out/
 build/
+
+# Ignore terraform stuff
+.terraform
+*.tfstate.backup
+.terraform.lock.hcl
+*.tfstate

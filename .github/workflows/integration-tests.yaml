@@ -47,17 +47,3 @@ jobs:
           ./gradlew compileJava compileTestJava
           ./gradlew test -DincludeTags="OtcTest" -PverboseTest=true
 
-  gaussdb-test:
-    runs-on: ubuntu-latest
-    needs: [ secret-presence ]
-    if: |
-      needs.secret-presence.outputs.HAS_PG_CONNECTION_STRING
-    env:
-      PG_CONNECTION_STRING: ${{ secrets.pg_connection_string }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-java
-      - name: GaussDB Integration Tests
-        run: |
-          ./gradlew compileJava compileTestJava
-          ./gradlew test -DincludeTags="GaussDbTest" -PverboseTest=true --no-parallel

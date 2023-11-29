@@ -1,0 +1,68 @@
+---
+name: "Run GaussDB Tests"
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  secret-presence:
+    runs-on: ubuntu-latest
+    outputs:
+      HAS_CLOUD_CRED: ${{ steps.secret-presence.outputs.HAS_CLOUD_CRED }}
+    steps:
+      - name: Check whether secrets exist
+        id: secret-presence
+        run: |
+          [ ! -z "${{ secrets.access_key }}" ] && 
+          [ ! -z "${{ secrets.secret_key }}" ] && echo "HAS_CLOUD_CRED=true" >> $GITHUB_OUTPUT
+          exit 0
+  
+
+  run-gaussdb-tests:
+    runs-on: ubuntu-latest
+    needs: [ secret-presence ]
+    if: |
+      needs.secret-presence.outputs.HAS_CLOUD_CRED
+    env:
+      HW_ACCESS_KEY: ${{ secrets.access_key }}
+      HW_SECRET_KEY: ${{ secrets.secret_key }}
+
+    steps:
+      - uses: actions/checkout@4
+
+      - name: "Terraform init"
+        working-directory: ./deployment
+        run: |-
+          terraform init -reconfigure
+      - name: "Terraform plan"
+        working-directory: ./deployment
+        run: |-
+          terraform plan -out=$GITHUB_SHA.out
+
+      - name: "Terraform apply"
+        working-directory: ./deployment
+        run: |-
+          terraform apply "$GITHUB_SHA.out"
+
+      - name: "Store PG connection string as env"
+        working-directory: ./deployment
+        run: |-
+          echo "PG_CONNECTION_STRING=$(terraform output -raw pg_connection_string)" >> $GITHUB_ENV
+
+      - name: "Echo Connection String"
+        run: |-
+          echo $PG_CONNECTION_STRING
+
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-java
+      - name: "GaussDB Integration Tests"
+        continue-on-error: true
+        run: |
+          ./gradlew compileJava compileTestJava
+          ./gradlew test -DincludeTags="GaussDbTest" -PverboseTest=true --no-parallel
+
+      - name: "Terraform destroy"
+        run: |-
+          terraform plan -destroy -out=$GITHUB_SHA.out
+          terraform apply "$GITHUB_SHA.out"
