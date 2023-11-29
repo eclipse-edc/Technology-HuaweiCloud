@@ -29,7 +29,7 @@ jobs:
       HW_SECRET_KEY: ${{ secrets.secret_key }}
 
     steps:
-      - uses: actions/checkout@4
+      - uses: actions/checkout@v4
 
       - name: "Terraform init"
         working-directory: ./deployment
