@@ -3,7 +3,7 @@ variable "region" {
 }
 
 variable "instance_name" {
-  default = "gaussdb-paul"
+  default = "gaussdb-itest"
 }
 variable "instance_password" {
   default = "dJyqo4vLoL!DGFZRLPVu*DbX"

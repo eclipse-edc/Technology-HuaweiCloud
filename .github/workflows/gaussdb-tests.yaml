@@ -50,11 +50,6 @@ jobs:
         run: |-
           echo "PG_CONNECTION_STRING=$(terraform output -raw pg_connection_string)" >> $GITHUB_ENV
 
-      - name: "Echo Connection String"
-        run: |-
-          echo $PG_CONNECTION_STRING
-
-      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
       - name: "GaussDB Integration Tests"
         continue-on-error: true
@@ -63,6 +58,7 @@ jobs:
           ./gradlew test -DincludeTags="GaussDbTest" -PverboseTest=true --no-parallel
 
       - name: "Terraform destroy"
+        working-directory: ./deployment
         run: |-
           terraform plan -destroy -out=$GITHUB_SHA.out
           terraform apply "$GITHUB_SHA.out"
