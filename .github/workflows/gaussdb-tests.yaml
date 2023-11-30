@@ -51,13 +51,25 @@ jobs:
           echo "PG_CONNECTION_STRING=$(terraform output -raw pg_connection_string)" >> $GITHUB_ENV
 
       - uses: ./.github/actions/setup-java
-      - name: "GaussDB Integration Tests"
-        continue-on-error: true
-        run: |
-          ./gradlew compileJava compileTestJava
-          ./gradlew test -DincludeTags="GaussDbTest" -PverboseTest=true --no-parallel
+      - name: "Prepare GaussDB Integration Tests"
+        run: ./gradlew compileJava compileTestJava
+
+      # GaussDB may be in recovery mode directly after creating, which is why the JDBC Driver returns an "Error cannot execute in a
+      # readonly transaction".
+      - uses: nick-fields/retry@v2
+        name: "Run GaussDB Integration Tests"
+        with:
+          timeout_minutes: 30
+          max_attempts: 5
+          retry_on: error
+          polling_interval_seconds: 60
+          retry_wait_seconds: 120
+          command: |
+            ./gradlew test -DincludeTags="GaussDbTest" -PverboseTest=true --no-parallel
 
       - name: "Terraform destroy"
+        # execute terraform teardown always, except if job was cancelled
+        if: '!cancelled()'
         working-directory: ./deployment
         run: |-
           terraform plan -destroy -out=$GITHUB_SHA.out
