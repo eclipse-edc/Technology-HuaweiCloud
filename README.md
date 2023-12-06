@@ -8,5 +8,5 @@ Contains implementations for several Huawei Cloud services, such as OBS and Gaus
 
 ### Run
 ```shell
-java -jar launchers/build/libs/hds-connector.jar
+java -jar launchers/huawei-cloud-runtime/build/libs/hds-connector.jar
 ```
