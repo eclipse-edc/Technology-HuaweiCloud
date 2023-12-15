@@ -31,7 +31,32 @@ resource "huaweicloud_vpc_bandwidth" "gaussdb-bw-shared" {
   size = 5
 }
 
-resource "huaweicloud_vpc_eip" "shared" {
+resource "huaweicloud_vpc_eip" "node1" {
+  publicip {
+    # can be 5_bgp (dynamic BGP) and 5_sbgp (static BGP)
+    type = "5_bgp"
+  }
+
+  bandwidth {
+    # WHOLE means shared bandwidth
+    share_type = "WHOLE"
+    id         = huaweicloud_vpc_bandwidth.gaussdb-bw-shared.id
+  }
+}
+resource "huaweicloud_vpc_eip" "node2" {
+  publicip {
+    # can be 5_bgp (dynamic BGP) and 5_sbgp (static BGP)
+    type = "5_bgp"
+  }
+
+  bandwidth {
+    # WHOLE means shared bandwidth
+    share_type = "WHOLE"
+    id         = huaweicloud_vpc_bandwidth.gaussdb-bw-shared.id
+  }
+}
+
+resource "huaweicloud_vpc_eip" "node3" {
   publicip {
     # can be 5_bgp (dynamic BGP) and 5_sbgp (static BGP)
     type = "5_bgp"
@@ -45,8 +70,19 @@ resource "huaweicloud_vpc_eip" "shared" {
 }
 
 
-resource "huaweicloud_vpc_eip_associate" "associated" {
-  public_ip  = huaweicloud_vpc_eip.shared.address
+resource "huaweicloud_vpc_eip_associate" "assoc1" {
+  public_ip  = huaweicloud_vpc_eip.node1.address
   network_id = var.subnet_network_id
   fixed_ip   = huaweicloud_gaussdb_opengauss_instance.instance_acc.private_ips[0]
+}
+
+resource "huaweicloud_vpc_eip_associate" "assoc2" {
+  public_ip  = huaweicloud_vpc_eip.node2.address
+  network_id = var.subnet_network_id
+  fixed_ip   = huaweicloud_gaussdb_opengauss_instance.instance_acc.private_ips[1]
+}
+resource "huaweicloud_vpc_eip_associate" "assoc3" {
+  public_ip  = huaweicloud_vpc_eip.node3.address
+  network_id = var.subnet_network_id
+  fixed_ip   = huaweicloud_gaussdb_opengauss_instance.instance_acc.private_ips[2]
 }
