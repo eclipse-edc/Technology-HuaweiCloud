@@ -63,7 +63,7 @@ jobs:
           max_attempts: 5
           retry_on: error
           polling_interval_seconds: 60
-          retry_wait_seconds: 120
+          retry_wait_seconds: 180
           command: |
             ./gradlew test -DincludeTags="GaussDbTest" -PverboseTest=true --no-parallel
 
