@@ -56,7 +56,7 @@ jobs:
 
       # GaussDB may be in recovery mode directly after creating, which is why the JDBC Driver returns an "Error cannot execute in a
       # readonly transaction".
-      - uses: nick-fields/retry@v2
+      - uses: nick-fields/retry@v3
         name: "Run GaussDB Integration Tests"
         with:
           timeout_minutes: 30
