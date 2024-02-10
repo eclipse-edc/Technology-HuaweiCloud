@@ -17,20 +17,19 @@ import static com.huawei.cloud.obs.ObsCoreExtension.HUAWEI_SECRET_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(DependencyInjectionExtension.class)
 public class ObsCoreExtensionTest {
-    
+
     private final Vault vault = mock();
     private ServiceExtensionContext context;
 
     @BeforeEach
     void setup(ServiceExtensionContext context) {
         context.registerService(Vault.class, vault);
-        this.context = spy(context);
+        this.context = context;
     }
 
     @Test

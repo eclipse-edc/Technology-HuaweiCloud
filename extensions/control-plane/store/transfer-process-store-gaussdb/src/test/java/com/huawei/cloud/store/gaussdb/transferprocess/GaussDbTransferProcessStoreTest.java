@@ -386,7 +386,7 @@ class GaussDbTransferProcessStoreTest {
                         .assetId("new-asset")
                         .contractId("new-contract")
                         .protocol("test-protocol")
-                        .connectorId("new-connector")
+                        .connectorAddress("new-connector")
                         .build())
                 .build();
         getTransferProcessStore().save(t2);
@@ -982,6 +982,19 @@ class GaussDbTransferProcessStoreTest {
         AbstractResultAssert.assertThat(result).isFailed().extracting(StoreFailure::getReason).isEqualTo(ALREADY_LEASED);
     }
 
+    @BeforeAll
+    static void createDatabase(GaussDbTestExtension.SqlHelper runner) throws IOException {
+        var schema = Files.readString(Paths.get("docs/schema.sql"));
+        runner.executeStatement(schema);
+    }
+
+    @AfterAll
+    static void deleteTable(GaussDbTestExtension.SqlHelper runner) {
+        runner.dropTable(SQL_STATEMENTS.getTransferProcessTableName());
+        runner.dropTable(SQL_STATEMENTS.getDataRequestTable());
+        runner.dropTable(SQL_STATEMENTS.getLeaseTableName());
+    }
+
     protected TransferProcessStore getTransferProcessStore() {
         return transferProcessStore;
     }
@@ -1005,18 +1018,5 @@ class GaussDbTransferProcessStoreTest {
             // noop
         }
         t.updateStateTimestamp();
-    }
-
-    @BeforeAll
-    static void createDatabase(GaussDbTestExtension.SqlHelper runner) throws IOException {
-        var schema = Files.readString(Paths.get("docs/schema.sql"));
-        runner.executeStatement(schema);
-    }
-
-    @AfterAll
-    static void deleteTable(GaussDbTestExtension.SqlHelper runner) {
-        runner.dropTable(SQL_STATEMENTS.getTransferProcessTableName());
-        runner.dropTable(SQL_STATEMENTS.getDataRequestTable());
-        runner.dropTable(SQL_STATEMENTS.getLeaseTableName());
     }
 }

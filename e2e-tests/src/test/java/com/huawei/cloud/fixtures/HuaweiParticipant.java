@@ -45,6 +45,7 @@ public class HuaweiParticipant extends Participant {
                 put("edc.dsp.callback.address", protocolEndpoint.getUrl().toString());
                 put("edc.connector.name", name);
                 put("edc.dataplane.token.validation.endpoint", "http://token-validation.com");
+                put("edc.dpf.selector.url", "http://does-this-matter.com");
                 put("edc.huawei.iam.endpoint", IAM_OTC_CLOUD_URL);
             }
         };
@@ -75,11 +76,6 @@ public class HuaweiParticipant extends Participant {
             super(new HuaweiParticipant());
         }
 
-        @JsonCreator
-        public static Builder newInstance() {
-            return new Builder();
-        }
-
         public Builder apiKey(String apiKey) {
             this.participant.apiKey = apiKey;
             return this;
@@ -92,6 +88,11 @@ public class HuaweiParticipant extends Participant {
             super.build();
             participant.controlEndpoint = new Endpoint(URI.create("http://localhost:" + getFreePort() + "/control"), Map.of());
             return participant;
+        }
+
+        @JsonCreator
+        public static Builder newInstance() {
+            return new Builder();
         }
     }
 }

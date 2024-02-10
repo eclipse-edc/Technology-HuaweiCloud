@@ -4,7 +4,7 @@ format.version = "1.1"
 [versions]
 awaitility = "4.2.0"
 bouncyCastle-jdk18on = "1.77"
-edc = "0.4.1"
+edc = "0.5.0"
 failsafe = "3.3.2"
 httpMockServer = "5.15.0"
 jakarta-json = "2.0.1"
@@ -43,14 +43,13 @@ edc-core-jwt = { module = "org.eclipse.edc:jwt-core", version.ref = "edc" }
 edc-dpf-framework = { module = "org.eclipse.edc:data-plane-framework", version.ref = "edc" }
 edc-dpf-core = { module = "org.eclipse.edc:data-plane-core", version.ref = "edc" }
 edc-dpf-transfer = { module = "org.eclipse.edc:transfer-data-plane", version.ref = "edc" }
-edc-dpf-selector-client = { module = "org.eclipse.edc:data-plane-selector-client", version.ref = "edc" }
 edc-dpf-selector-core = { module = "org.eclipse.edc:data-plane-selector-core", version.ref = "edc" }
 edc-dpf-selector-spi = { module = "org.eclipse.edc:data-plane-selector-spi", version.ref = "edc" }
 edc-dpf-selector-api = { module = "org.eclipse.edc:data-plane-selector-api", version.ref = "edc" }
 edc-dpf-client = { module = "org.eclipse.edc:data-plane-client", version.ref = "edc" }
 edc-dpf-http = { module = "org.eclipse.edc:data-plane-http", version.ref = "edc" }
 edc-dpf-http-oauth2 = { module = "org.eclipse.edc:data-plane-http-oauth2", version.ref = "edc" }
-edc-dpf-api = { module = "org.eclipse.edc:data-plane-api", version.ref = "edc" }
+edc-dpf-api = { module = "org.eclipse.edc:data-plane-control-api", version.ref = "edc" }
 edc-dpf-util = { module = "org.eclipse.edc:data-plane-util", version.ref = "edc" }
 edc-ext-azure-cosmos-core = { module = "org.eclipse.edc:azure-cosmos-core", version.ref = "edc" }
 edc-ext-azure-test = { module = "org.eclipse.edc:azure-test", version.ref = "edc" }
@@ -117,7 +116,7 @@ huawei-iam = { module = "com.huaweicloud.sdk:huaweicloud-sdk-iam", version.ref =
 huawei-dws-jdbc = { module = "com.huaweicloud.dws:huaweicloud-dws-jdbc", version.ref = "huawei-dws" }
 
 [bundles]
-edc-dpf = ["edc.dpf-transfer", "edc.dpf-selector-core", "edc.dpf-selector-client", "edc.spi-dataplane-selector"]
+edc-dpf = ["edc.dpf-transfer", "edc.dpf-selector-core", "edc.spi-dataplane-selector"]
 
 [plugins]
 shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
