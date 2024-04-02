@@ -2,7 +2,7 @@
 format.version = "1.1"
 
 [versions]
-awaitility = "4.2.0"
+awaitility = "4.2.1"
 bouncyCastle-jdk18on = "1.77"
 edc = "0.5.0"
 failsafe = "3.3.2"
