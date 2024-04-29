@@ -1,6 +1,7 @@
 package com.huawei.cloud.store.gaussdb.contractdefinition;
 
-import org.eclipse.edc.connector.store.sql.contractdefinition.schema.ContractDefinitionStatements;
+
+import org.eclipse.edc.connector.controlplane.store.sql.contractdefinition.schema.ContractDefinitionStatements;
 import org.eclipse.edc.runtime.metamodel.annotation.Extension;
 import org.eclipse.edc.runtime.metamodel.annotation.Provider;
 import org.eclipse.edc.spi.system.ServiceExtension;

@@ -1,6 +1,6 @@
 package com.huawei.cloud.store.gaussdb.transferprocess;
 
-import org.eclipse.edc.connector.store.sql.transferprocess.store.schema.TransferProcessStoreStatements;
+import org.eclipse.edc.connector.controlplane.store.sql.transferprocess.store.schema.TransferProcessStoreStatements;
 import org.eclipse.edc.runtime.metamodel.annotation.Extension;
 import org.eclipse.edc.runtime.metamodel.annotation.Provider;
 import org.eclipse.edc.spi.system.ServiceExtension;

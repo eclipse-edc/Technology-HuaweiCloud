@@ -7,13 +7,13 @@ import org.eclipse.edc.connector.policy.monitor.spi.PolicyMonitorEntryStates;
 import org.eclipse.edc.connector.policy.monitor.spi.PolicyMonitorStore;
 import org.eclipse.edc.connector.policy.monitor.store.sql.SqlPolicyMonitorStore;
 import org.eclipse.edc.connector.policy.monitor.store.sql.schema.PostgresPolicyMonitorStatements;
+import org.eclipse.edc.json.JacksonTypeManager;
 import org.eclipse.edc.junit.assertions.AbstractResultAssert;
 import org.eclipse.edc.policy.model.PolicyRegistrationTypes;
 import org.eclipse.edc.spi.entity.Entity;
 import org.eclipse.edc.spi.entity.MutableEntity;
 import org.eclipse.edc.spi.entity.StatefulEntity;
 import org.eclipse.edc.spi.result.StoreFailure;
-import org.eclipse.edc.spi.types.TypeManager;
 import org.eclipse.edc.sql.QueryExecutor;
 import org.eclipse.edc.sql.lease.testfixtures.LeaseUtil;
 import org.junit.jupiter.api.AfterAll;
@@ -53,7 +53,7 @@ class GaussDbPolicyMonitorProcessStoreTest {
     @BeforeEach
     void setUp(GaussDbTestExtension extension, GaussDbTestExtension.SqlHelper helper, QueryExecutor queryExecutor) {
         var clock = Clock.systemUTC();
-        var typeManager = new TypeManager();
+        var typeManager = new JacksonTypeManager();
         typeManager.registerTypes(PolicyRegistrationTypes.TYPES.toArray(Class<?>[]::new));
 
         policyMonitorStore = new SqlPolicyMonitorStore(extension.getRegistry(), DEFAULT_DATASOURCE_NAME,

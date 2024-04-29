@@ -1,9 +1,9 @@
 package com.huawei.cloud.provision.obs;
 
 import com.huawei.cloud.obs.ObsBucketSchema;
-import org.eclipse.edc.connector.transfer.spi.provision.ConsumerResourceDefinitionGenerator;
-import org.eclipse.edc.connector.transfer.spi.types.DataRequest;
-import org.eclipse.edc.connector.transfer.spi.types.ResourceDefinition;
+import org.eclipse.edc.connector.controlplane.transfer.spi.provision.ConsumerResourceDefinitionGenerator;
+import org.eclipse.edc.connector.controlplane.transfer.spi.types.ResourceDefinition;
+import org.eclipse.edc.connector.controlplane.transfer.spi.types.TransferProcess;
 import org.eclipse.edc.policy.model.Policy;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +12,7 @@ import static java.util.UUID.randomUUID;
 public class ObsConsumerResourceDefinitionGenerator implements ConsumerResourceDefinitionGenerator {
 
     @Override
-    public @Nullable ResourceDefinition generate(DataRequest dataRequest, Policy policy) {
+    public @Nullable ResourceDefinition generate(TransferProcess dataRequest, Policy policy) {
         if (dataRequest.getDataDestination().getStringProperty(ObsBucketSchema.ENDPOINT) == null) {
             return ObsResourceDefinition.Builder.newInstance()
                     .id(randomUUID().toString())
@@ -29,8 +29,10 @@ public class ObsConsumerResourceDefinitionGenerator implements ConsumerResourceD
                 .build();
     }
 
+
+
     @Override
-    public boolean canGenerate(DataRequest dataRequest, Policy policy) {
+    public boolean canGenerate(TransferProcess dataRequest, Policy policy) {
         return ObsBucketSchema.TYPE.equals(dataRequest.getDestinationType());
     }
 }

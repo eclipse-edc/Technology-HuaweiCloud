@@ -9,7 +9,7 @@ import org.eclipse.edc.junit.annotations.EndToEndTest;
 import org.eclipse.edc.junit.extensions.EdcClassRuntimesExtension;
 import org.eclipse.edc.junit.extensions.EdcRuntimeExtension;
 import org.eclipse.edc.spi.types.domain.DataAddress;
-import org.eclipse.edc.spi.types.domain.transfer.DataFlowRequest;
+import org.eclipse.edc.spi.types.domain.transfer.DataFlowStartMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -154,8 +154,8 @@ public class ObsTransferEndToEndTest {
                         .allSatisfy(obsObject -> assertThat(obsObject.getMetadata().getContentLength()).isEqualTo(fileSize)));
     }
 
-    private DataFlowRequest.Builder createFlowRequest(String consumerBucket, String consumerEndpoint, String providerBucket, String providerObjectKey, String providerEndpoint) {
-        return DataFlowRequest.Builder.newInstance()
+    private DataFlowStartMessage.Builder createFlowRequest(String consumerBucket, String consumerEndpoint, String providerBucket, String providerObjectKey, String providerEndpoint) {
+        return DataFlowStartMessage.Builder.newInstance()
                 .id("test-request")
                 .sourceDataAddress(DataAddress.Builder.newInstance()
                         .type(ObsBucketSchema.TYPE)
@@ -176,8 +176,7 @@ public class ObsTransferEndToEndTest {
                         .property(ObsBucketSchema.ENDPOINT, consumerEndpoint)
                         .build()
                 )
-                .processId("test-process-id")
-                .trackable(false);
+                .processId("test-process-id");
     }
 
 }

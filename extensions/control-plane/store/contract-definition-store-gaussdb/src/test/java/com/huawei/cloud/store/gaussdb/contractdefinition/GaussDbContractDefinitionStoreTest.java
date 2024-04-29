@@ -3,18 +3,18 @@ package com.huawei.cloud.store.gaussdb.contractdefinition;
 import com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension;
 import com.huawei.cloud.gaussdb.testfixtures.annotations.GaussDbTest;
 import org.assertj.core.api.Assertions;
-import org.eclipse.edc.connector.contract.spi.offer.store.ContractDefinitionStore;
-import org.eclipse.edc.connector.contract.spi.types.offer.ContractDefinition;
-import org.eclipse.edc.connector.store.sql.contractdefinition.SqlContractDefinitionStore;
-import org.eclipse.edc.connector.store.sql.contractdefinition.schema.BaseSqlDialectStatements;
+import org.eclipse.edc.connector.controlplane.asset.spi.domain.Asset;
+import org.eclipse.edc.connector.controlplane.contract.spi.offer.store.ContractDefinitionStore;
+import org.eclipse.edc.connector.controlplane.contract.spi.types.offer.ContractDefinition;
+import org.eclipse.edc.connector.controlplane.store.sql.contractdefinition.SqlContractDefinitionStore;
+import org.eclipse.edc.connector.controlplane.store.sql.contractdefinition.schema.BaseSqlDialectStatements;
+import org.eclipse.edc.json.JacksonTypeManager;
 import org.eclipse.edc.junit.assertions.AbstractResultAssert;
 import org.eclipse.edc.policy.model.PolicyRegistrationTypes;
 import org.eclipse.edc.spi.query.Criterion;
 import org.eclipse.edc.spi.query.QuerySpec;
 import org.eclipse.edc.spi.query.SortOrder;
 import org.eclipse.edc.spi.result.StoreFailure;
-import org.eclipse.edc.spi.types.TypeManager;
-import org.eclipse.edc.spi.types.domain.asset.Asset;
 import org.eclipse.edc.sql.QueryExecutor;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -37,11 +37,13 @@ import java.util.stream.IntStream;
 import static com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension.DEFAULT_DATASOURCE_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.eclipse.edc.connector.contract.spi.testfixtures.offer.store.TestFunctions.createContractDefinition;
-import static org.eclipse.edc.connector.contract.spi.testfixtures.offer.store.TestFunctions.createContractDefinitions;
+import static org.eclipse.edc.connector.controlplane.contract.spi.testfixtures.offer.store.TestFunctions.createContractDefinition;
+import static org.eclipse.edc.connector.controlplane.contract.spi.testfixtures.offer.store.TestFunctions.createContractDefinitions;
 import static org.eclipse.edc.spi.query.Criterion.criterion;
 import static org.eclipse.edc.spi.result.StoreFailure.Reason.ALREADY_EXISTS;
 import static org.eclipse.edc.spi.result.StoreFailure.Reason.NOT_FOUND;
+
+
 
 @GaussDbTest
 @ExtendWith(GaussDbTestExtension.class)
@@ -52,7 +54,7 @@ class GaussDbContractDefinitionStoreTest {
     @BeforeEach
     void setUp(GaussDbTestExtension extension, GaussDbTestExtension.SqlHelper helper, QueryExecutor queryExecutor) throws IOException {
 
-        var typeManager = new TypeManager();
+        var typeManager = new JacksonTypeManager();
         typeManager.registerTypes(PolicyRegistrationTypes.TYPES.toArray(Class<?>[]::new));
 
         sqlContractDefinitionStore = new SqlContractDefinitionStore(extension.getRegistry(), DEFAULT_DATASOURCE_NAME,

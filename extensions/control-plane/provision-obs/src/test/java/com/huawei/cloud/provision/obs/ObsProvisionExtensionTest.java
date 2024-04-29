@@ -1,10 +1,10 @@
 package com.huawei.cloud.provision.obs;
 
 
-import org.eclipse.edc.connector.transfer.spi.provision.ConsumerResourceDefinitionGenerator;
-import org.eclipse.edc.connector.transfer.spi.provision.ProvisionManager;
-import org.eclipse.edc.connector.transfer.spi.provision.Provisioner;
-import org.eclipse.edc.connector.transfer.spi.provision.ResourceManifestGenerator;
+import org.eclipse.edc.connector.controlplane.transfer.spi.provision.ConsumerResourceDefinitionGenerator;
+import org.eclipse.edc.connector.controlplane.transfer.spi.provision.ProvisionManager;
+import org.eclipse.edc.connector.controlplane.transfer.spi.provision.Provisioner;
+import org.eclipse.edc.connector.controlplane.transfer.spi.provision.ResourceManifestGenerator;
 import org.eclipse.edc.junit.extensions.DependencyInjectionExtension;
 import org.eclipse.edc.spi.system.ServiceExtensionContext;
 import org.eclipse.edc.spi.types.TypeManager;

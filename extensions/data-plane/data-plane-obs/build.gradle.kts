@@ -5,7 +5,7 @@ plugins {
 dependencies {
     api(project(":extensions:common:obs:obs-core"))
     api(libs.huawei.obs)
-    implementation(libs.edc.util)
+    implementation(libs.edc.lib.util)
     implementation(libs.edc.spi.core)
     implementation(libs.edc.spi.validation)
     implementation(libs.edc.spi.dataplane)

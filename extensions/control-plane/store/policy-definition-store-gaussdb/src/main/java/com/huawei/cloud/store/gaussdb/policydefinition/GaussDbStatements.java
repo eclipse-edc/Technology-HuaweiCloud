@@ -1,8 +1,8 @@
 package com.huawei.cloud.store.gaussdb.policydefinition;
 
 
-import org.eclipse.edc.connector.store.sql.policydefinition.store.schema.postgres.PolicyDefinitionMapping;
-import org.eclipse.edc.connector.store.sql.policydefinition.store.schema.postgres.PostgresDialectStatements;
+import org.eclipse.edc.connector.controlplane.store.sql.policydefinition.store.schema.postgres.PolicyDefinitionMapping;
+import org.eclipse.edc.connector.controlplane.store.sql.policydefinition.store.schema.postgres.PostgresDialectStatements;
 import org.eclipse.edc.spi.persistence.EdcPersistenceException;
 import org.eclipse.edc.spi.query.QuerySpec;
 import org.eclipse.edc.sql.translation.SqlQueryStatement;
@@ -49,7 +49,7 @@ public class GaussDbStatements extends PostgresDialectStatements {
             // remove all criteria, that target the assetSelector
             criteria.removeAll(filteredCriteria);
 
-            var stmt = new SqlQueryStatement(select, querySpec, new PolicyDefinitionMapping(this));
+            var stmt = new SqlQueryStatement(select, querySpec, new PolicyDefinitionMapping(this), operatorTranslator);
 
             // manually construct a SELECT statement using json_array_elements syntax.
             // for reference, check this article: https://stackoverflow.com/a/30691077/7079724

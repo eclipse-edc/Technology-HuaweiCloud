@@ -1,10 +1,10 @@
 package com.huawei.cloud.provision.obs;
 
 import com.huawei.cloud.obs.ObsBucketSchema;
-import org.eclipse.edc.connector.transfer.spi.types.DataRequest;
+import org.eclipse.edc.connector.controlplane.asset.spi.domain.Asset;
+import org.eclipse.edc.connector.controlplane.transfer.spi.types.TransferProcess;
 import org.eclipse.edc.policy.model.Policy;
 import org.eclipse.edc.spi.types.domain.DataAddress;
-import org.eclipse.edc.spi.types.domain.asset.Asset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,10 +32,14 @@ public class ObsConsumerResourceDefinitionGeneratorTest {
                 .property(ObsBucketSchema.ENDPOINT, ENDPOINT)
                 .build();
         var asset = Asset.Builder.newInstance().build();
-        var dr = DataRequest.Builder.newInstance().dataDestination(destination).assetId(asset.getId()).processId("process-id").build();
+        var transferProcess = TransferProcess.Builder.newInstance()
+                .dataDestination(destination)
+                .assetId(asset.getId())
+                .correlationId("process-id")
+                .build();
         var policy = Policy.Builder.newInstance().build();
 
-        var definition = generator.generate(dr, policy);
+        var definition = generator.generate(transferProcess, policy);
 
         assertThat(definition).isInstanceOf(ObsResourceDefinition.class);
         var objectDef = (ObsResourceDefinition) definition;
@@ -56,10 +60,14 @@ public class ObsConsumerResourceDefinitionGeneratorTest {
                 .property(ObsBucketSchema.ENDPOINT, ENDPOINT)
                 .build();
         var asset = Asset.Builder.newInstance().build();
-        var dr = DataRequest.Builder.newInstance().dataDestination(destination).assetId(asset.getId()).processId("process-id").build();
+        var transferProcess = TransferProcess.Builder.newInstance()
+                .dataDestination(destination)
+                .assetId(asset.getId())
+                .correlationId("process-id")
+                .build();
         var policy = Policy.Builder.newInstance().build();
 
-        assertThatExceptionOfType(NullPointerException.class).isThrownBy(() -> generator.generate(dr, policy));
+        assertThatExceptionOfType(NullPointerException.class).isThrownBy(() -> generator.generate(transferProcess, policy));
     }
 
     @Test
@@ -68,10 +76,14 @@ public class ObsConsumerResourceDefinitionGeneratorTest {
                 .property(ObsBucketSchema.BUCKET_NAME, BUCKET)
                 .build();
         var asset = Asset.Builder.newInstance().build();
-        var dr = DataRequest.Builder.newInstance().dataDestination(destination).assetId(asset.getId()).processId("process-id").build();
+        var transferProcess = TransferProcess.Builder.newInstance()
+                .dataDestination(destination)
+                .assetId(asset.getId())
+                .correlationId("process-id")
+                .build();
         var policy = Policy.Builder.newInstance().build();
 
-        assertThatExceptionOfType(NullPointerException.class).isThrownBy(() -> generator.generate(dr, policy));
+        assertThatExceptionOfType(NullPointerException.class).isThrownBy(() -> generator.generate(transferProcess, policy));
     }
 
     @Test
@@ -80,10 +92,14 @@ public class ObsConsumerResourceDefinitionGeneratorTest {
                 .property(ObsBucketSchema.BUCKET_NAME, BUCKET)
                 .build();
         var asset = Asset.Builder.newInstance().build();
-        var dr = DataRequest.Builder.newInstance().dataDestination(destination).assetId(asset.getId()).processId("process-id").build();
+        var transferProcess = TransferProcess.Builder.newInstance()
+                .dataDestination(destination)
+                .assetId(asset.getId())
+                .correlationId("process-id")
+                .build();
         var policy = Policy.Builder.newInstance().build();
 
-        var definition = generator.canGenerate(dr, policy);
+        var definition = generator.canGenerate(transferProcess, policy);
 
         assertThat(definition).isTrue();
     }
@@ -94,10 +110,14 @@ public class ObsConsumerResourceDefinitionGeneratorTest {
                 .property(ObsBucketSchema.BUCKET_NAME, BUCKET)
                 .build();
         var asset = Asset.Builder.newInstance().build();
-        var dataRequest = DataRequest.Builder.newInstance().dataDestination(destination).assetId(asset.getId()).build();
+        var transferProcess = TransferProcess.Builder.newInstance()
+                .dataDestination(destination)
+                .assetId(asset.getId())
+                .correlationId("process-id")
+                .build();
         var policy = Policy.Builder.newInstance().build();
 
-        var definition = generator.canGenerate(dataRequest, policy);
+        var definition = generator.canGenerate(transferProcess, policy);
         assertThat(definition).isFalse();
     }
 }

@@ -1,6 +1,6 @@
 package com.huawei.cloud.provision.obs;
 
-import org.eclipse.edc.spi.types.TypeManager;
+import org.eclipse.edc.json.JacksonTypeManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +17,7 @@ class ObsProvisionedResourceTest {
 
     @Test
     void verifyDeserialize() throws IOException {
-        var mapper = new TypeManager().getMapper();
+        var mapper = new JacksonTypeManager().getMapper();
 
         StringWriter writer = new StringWriter();
         mapper.writeValue(writer, provisionedResource);

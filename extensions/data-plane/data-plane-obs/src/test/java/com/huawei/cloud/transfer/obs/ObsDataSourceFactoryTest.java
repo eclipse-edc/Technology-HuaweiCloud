@@ -2,10 +2,11 @@ package com.huawei.cloud.transfer.obs;
 
 import com.huawei.cloud.obs.ObsBucketSchema;
 import com.huawei.cloud.obs.ObsClientProvider;
+import org.eclipse.edc.json.JacksonTypeManager;
 import org.eclipse.edc.spi.security.Vault;
 import org.eclipse.edc.spi.types.TypeManager;
 import org.eclipse.edc.spi.types.domain.DataAddress;
-import org.eclipse.edc.spi.types.domain.transfer.DataFlowRequest;
+import org.eclipse.edc.spi.types.domain.transfer.DataFlowStartMessage;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.when;
 
 class ObsDataSourceFactoryTest {
     public static final ObsClientProvider CLIENT_PROVIDER = mock();
-    private final TypeManager typeManager = new TypeManager();
+    private final TypeManager typeManager = new JacksonTypeManager();
     private final Vault vault = mock(Vault.class);
     private final ObsDataSourceFactory factory = new ObsDataSourceFactory(vault, typeManager, CLIENT_PROVIDER);
 
@@ -133,8 +134,8 @@ class ObsDataSourceFactoryTest {
         assertThatThrownBy(() -> factory.createSource(req)).isInstanceOf(IllegalArgumentException.class);
     }
 
-    private DataFlowRequest createRequest(DataAddress source) {
-        return DataFlowRequest.Builder.newInstance()
+    private DataFlowStartMessage createRequest(DataAddress source) {
+        return DataFlowStartMessage.Builder.newInstance()
                 .id(UUID.randomUUID().toString())
                 .processId(UUID.randomUUID().toString())
                 .sourceDataAddress(source)

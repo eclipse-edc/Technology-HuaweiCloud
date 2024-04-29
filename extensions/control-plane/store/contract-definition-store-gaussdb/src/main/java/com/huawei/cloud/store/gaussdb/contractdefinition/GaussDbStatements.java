@@ -1,7 +1,8 @@
 package com.huawei.cloud.store.gaussdb.contractdefinition;
 
-import org.eclipse.edc.connector.store.sql.contractdefinition.schema.postgres.ContractDefinitionMapping;
-import org.eclipse.edc.connector.store.sql.contractdefinition.schema.postgres.PostgresDialectStatements;
+
+import org.eclipse.edc.connector.controlplane.store.sql.contractdefinition.schema.postgres.ContractDefinitionMapping;
+import org.eclipse.edc.connector.controlplane.store.sql.contractdefinition.schema.postgres.PostgresDialectStatements;
 import org.eclipse.edc.spi.query.QuerySpec;
 import org.eclipse.edc.sql.translation.SqlQueryStatement;
 
@@ -25,7 +26,7 @@ public class GaussDbStatements extends PostgresDialectStatements {
             // remove all criteria, that target the assetSelector
             criteria.removeAll(filteredCriteria);
 
-            var stmt = new SqlQueryStatement(select, querySpec, new ContractDefinitionMapping(this));
+            var stmt = new SqlQueryStatement(select, querySpec, new ContractDefinitionMapping(this), operatorTranslator);
 
             // manually construct a SELECT statement using json_array_elements syntax.
             // for reference, check this article: https://stackoverflow.com/a/30691077/7079724

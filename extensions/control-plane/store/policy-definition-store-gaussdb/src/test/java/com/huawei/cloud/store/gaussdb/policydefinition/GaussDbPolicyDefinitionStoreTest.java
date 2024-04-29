@@ -2,10 +2,11 @@ package com.huawei.cloud.store.gaussdb.policydefinition;
 
 import com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension;
 import com.huawei.cloud.gaussdb.testfixtures.annotations.GaussDbTest;
-import org.eclipse.edc.connector.policy.spi.PolicyDefinition;
-import org.eclipse.edc.connector.policy.spi.store.PolicyDefinitionStore;
-import org.eclipse.edc.connector.store.sql.policydefinition.store.SqlPolicyDefinitionStore;
-import org.eclipse.edc.connector.store.sql.policydefinition.store.schema.BaseSqlDialectStatements;
+import org.eclipse.edc.connector.controlplane.policy.spi.PolicyDefinition;
+import org.eclipse.edc.connector.controlplane.policy.spi.store.PolicyDefinitionStore;
+import org.eclipse.edc.connector.controlplane.store.sql.policydefinition.store.SqlPolicyDefinitionStore;
+import org.eclipse.edc.connector.controlplane.store.sql.policydefinition.store.schema.BaseSqlDialectStatements;
+import org.eclipse.edc.json.JacksonTypeManager;
 import org.eclipse.edc.policy.model.Action;
 import org.eclipse.edc.policy.model.Duty;
 import org.eclipse.edc.policy.model.Permission;
@@ -16,7 +17,6 @@ import org.eclipse.edc.spi.query.Criterion;
 import org.eclipse.edc.spi.query.QuerySpec;
 import org.eclipse.edc.spi.query.SortOrder;
 import org.eclipse.edc.spi.result.StoreResult;
-import org.eclipse.edc.spi.types.TypeManager;
 import org.eclipse.edc.sql.QueryExecutor;
 import org.eclipse.edc.transaction.datasource.spi.DataSourceRegistry;
 import org.eclipse.edc.transaction.spi.TransactionContext;
@@ -37,13 +37,13 @@ import java.util.stream.IntStream;
 import static com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension.DEFAULT_DATASOURCE_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.eclipse.edc.connector.policy.spi.testfixtures.TestFunctions.createAction;
-import static org.eclipse.edc.connector.policy.spi.testfixtures.TestFunctions.createDutyBuilder;
-import static org.eclipse.edc.connector.policy.spi.testfixtures.TestFunctions.createPermissionBuilder;
-import static org.eclipse.edc.connector.policy.spi.testfixtures.TestFunctions.createPolicies;
-import static org.eclipse.edc.connector.policy.spi.testfixtures.TestFunctions.createPolicy;
-import static org.eclipse.edc.connector.policy.spi.testfixtures.TestFunctions.createPolicyBuilder;
-import static org.eclipse.edc.connector.policy.spi.testfixtures.TestFunctions.createProhibitionBuilder;
+import static org.eclipse.edc.connector.controlplane.policy.spi.testfixtures.TestFunctions.createAction;
+import static org.eclipse.edc.connector.controlplane.policy.spi.testfixtures.TestFunctions.createDutyBuilder;
+import static org.eclipse.edc.connector.controlplane.policy.spi.testfixtures.TestFunctions.createPermissionBuilder;
+import static org.eclipse.edc.connector.controlplane.policy.spi.testfixtures.TestFunctions.createPolicies;
+import static org.eclipse.edc.connector.controlplane.policy.spi.testfixtures.TestFunctions.createPolicy;
+import static org.eclipse.edc.connector.controlplane.policy.spi.testfixtures.TestFunctions.createPolicyBuilder;
+import static org.eclipse.edc.connector.controlplane.policy.spi.testfixtures.TestFunctions.createProhibitionBuilder;
 import static org.eclipse.edc.spi.query.Criterion.criterion;
 import static org.eclipse.edc.spi.result.StoreFailure.Reason.ALREADY_EXISTS;
 import static org.eclipse.edc.spi.result.StoreFailure.Reason.NOT_FOUND;
@@ -66,7 +66,7 @@ class GaussDbPolicyDefinitionStoreTest {
 
     @BeforeEach
     void setup(GaussDbTestExtension.SqlHelper runner, TransactionContext transactionContext, QueryExecutor queryExecutor, DataSourceRegistry reg) {
-        var typeManager = new TypeManager();
+        var typeManager = new JacksonTypeManager();
         typeManager.registerTypes(PolicyRegistrationTypes.TYPES.toArray(Class<?>[]::new));
 
         policyDefinitionStore = new SqlPolicyDefinitionStore(reg, DEFAULT_DATASOURCE_NAME, transactionContext, typeManager.getMapper(), SQL_STATEMENTS, queryExecutor);
@@ -81,7 +81,7 @@ class GaussDbPolicyDefinitionStoreTest {
 
         getPolicyDefinitionStore().create(policy);
 
-        var policyFromDb = getPolicyDefinitionStore().findById(policy.getUid());
+        var policyFromDb = getPolicyDefinitionStore().findById(policy.getId());
         assertThat(policy).usingRecursiveComparison().isEqualTo(policyFromDb);
     }
 
@@ -239,7 +239,7 @@ class GaussDbPolicyDefinitionStoreTest {
         var policy = createPolicy(getRandomId());
         getPolicyDefinitionStore().create(policy);
 
-        var policyFromDb = getPolicyDefinitionStore().findById(policy.getUid());
+        var policyFromDb = getPolicyDefinitionStore().findById(policy.getId());
 
         assertThat(policy).usingRecursiveComparison().isEqualTo(policyFromDb);
     }
@@ -335,8 +335,7 @@ class GaussDbPolicyDefinitionStoreTest {
     void findAll_queryByProhibitions() {
         var p = createPolicyBuilder("test-policy")
                 .prohibition(createProhibitionBuilder("prohibition1")
-                        .assignee("test-assignee")
-                        .action(createAction())
+                        .action(createAction("test-action-type"))
                         .build())
                 .build();
 
@@ -362,8 +361,7 @@ class GaussDbPolicyDefinitionStoreTest {
     void findAll_queryByProhibitions_valueNotExist() {
         var p = createPolicyBuilder("test-policy")
                 .prohibition(createProhibitionBuilder("prohibition1")
-                        .assignee("test-assignee")
-                        .action(createAction())
+                        .action(createAction("test-action-type"))
                         .build())
                 .build();
 
@@ -380,8 +378,7 @@ class GaussDbPolicyDefinitionStoreTest {
     void findAll_queryByPermissions() {
         var p = createPolicyBuilder("test-policy")
                 .permission(createPermissionBuilder("permission1")
-                        .assignee("test-assignee")
-                        .action(createAction())
+                        .action(createAction("test-action-type"))
                         .build())
                 .build();
 
@@ -407,8 +404,7 @@ class GaussDbPolicyDefinitionStoreTest {
     void findAll_queryByPermissions_valueNotExist() {
         var p = createPolicyBuilder("test-policy")
                 .permission(createPermissionBuilder("permission1")
-                        .assignee("test-assignee")
-                        .action(createAction())
+                        .action(createAction("test-action-type"))
                         .build())
                 .build();
 
@@ -425,8 +421,7 @@ class GaussDbPolicyDefinitionStoreTest {
     void findAll_queryByDuties() {
         var p = createPolicyBuilder("test-policy")
                 .duty(createDutyBuilder("prohibition1")
-                        .assignee("test-assignee")
-                        .action(createAction())
+                        .action(createAction("test-action-type"))
                         .build())
                 .build();
 
@@ -453,8 +448,7 @@ class GaussDbPolicyDefinitionStoreTest {
     void findAll_queryByDuties_valueNotExist() {
         var p = createPolicyBuilder("test-policy")
                 .duty(createDutyBuilder("prohibition1")
-                        .assignee("test-assignee")
-                        .action(createAction())
+                        .action(createAction("test-action-type"))
                         .build())
                 .build();
 
@@ -529,7 +523,7 @@ class GaussDbPolicyDefinitionStoreTest {
         getPolicyDefinitionStore().create(policy2);
         getPolicyDefinitionStore().create(policy3);
 
-        var querySpec = QuerySpec.Builder.newInstance().filter(Criterion.criterion("id", "=", policy1.getUid())).build();
+        var querySpec = QuerySpec.Builder.newInstance().filter(Criterion.criterion("id", "=", policy1.getId())).build();
 
         assertThat(getPolicyDefinitionStore().findAll(querySpec)).usingRecursiveFieldByFieldElementComparator().containsExactly(policy1);
     }
@@ -580,10 +574,10 @@ class GaussDbPolicyDefinitionStoreTest {
         var store = getPolicyDefinitionStore();
         store.create(policy);
 
-        var result = store.delete(policy.getUid());
+        var result = store.delete(policy.getId());
         assertThat(result.succeeded()).isTrue();
         assertThat(result.getContent()).usingRecursiveComparison().isEqualTo(policy);
-        assertThat(store.findById(policy.getUid())).isNull();
+        assertThat(store.findById(policy.getId())).isNull();
     }
 
     @Test

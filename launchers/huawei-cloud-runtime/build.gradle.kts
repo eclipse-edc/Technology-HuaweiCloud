@@ -14,6 +14,7 @@ dependencies {
     runtimeOnly(libs.edc.sql.pool.apachecommons)
     runtimeOnly(libs.edc.core.controlplane)
     runtimeOnly(libs.edc.core.dataplane)
+    runtimeOnly(libs.edc.core.connector)
     runtimeOnly(libs.edc.config.filesystem)
     runtimeOnly(libs.edc.auth.tokenbased)
 

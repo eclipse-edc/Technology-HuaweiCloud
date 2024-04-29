@@ -2,7 +2,7 @@ package com.huawei.cloud.fixtures;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.json.JsonArray;
-import org.eclipse.edc.test.system.utils.Participant;
+import org.eclipse.edc.connector.controlplane.test.system.utils.Participant;
 
 import java.net.URI;
 import java.time.Duration;
@@ -12,8 +12,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static io.restassured.http.ContentType.JSON;
 import static org.awaitility.Awaitility.await;
-import static org.eclipse.edc.junit.testfixtures.TestUtils.getFreePort;
-import static org.eclipse.edc.spi.system.ServiceExtensionContext.PARTICIPANT_ID;
+import static org.eclipse.edc.boot.BootServicesExtension.PARTICIPANT_ID;
+import static org.eclipse.edc.util.io.Ports.getFreePort;
+
 
 public class HuaweiParticipant extends Participant {
 

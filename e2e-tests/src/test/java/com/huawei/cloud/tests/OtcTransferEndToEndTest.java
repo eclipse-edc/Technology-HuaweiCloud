@@ -20,11 +20,12 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
-import static org.eclipse.edc.connector.transfer.spi.types.TransferProcessStates.COMPLETED;
+import static org.eclipse.edc.connector.controlplane.test.system.utils.PolicyFixtures.inForceDatePolicy;
+import static org.eclipse.edc.connector.controlplane.transfer.spi.types.TransferProcessStates.COMPLETED;
 import static org.eclipse.edc.jsonld.spi.JsonLdKeywords.TYPE;
 import static org.eclipse.edc.junit.testfixtures.TestUtils.getFileFromResourceName;
-import static org.eclipse.edc.spi.CoreConstants.EDC_NAMESPACE;
-import static org.eclipse.edc.test.system.utils.PolicyFixtures.inForceDatePolicy;
+import static org.eclipse.edc.spi.constants.CoreConstants.EDC_NAMESPACE;
+
 
 @OtcTest
 public class OtcTransferEndToEndTest {

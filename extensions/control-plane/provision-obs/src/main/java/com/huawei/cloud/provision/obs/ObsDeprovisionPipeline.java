@@ -10,7 +10,7 @@ import com.obs.services.model.ObjectListing;
 import com.obs.services.model.ObsObject;
 import dev.failsafe.Failsafe;
 import dev.failsafe.RetryPolicy;
-import org.eclipse.edc.connector.transfer.spi.types.DeprovisionedResource;
+import org.eclipse.edc.connector.controlplane.transfer.spi.types.DeprovisionedResource;
 import org.eclipse.edc.spi.monitor.Monitor;
 
 import java.util.Arrays;

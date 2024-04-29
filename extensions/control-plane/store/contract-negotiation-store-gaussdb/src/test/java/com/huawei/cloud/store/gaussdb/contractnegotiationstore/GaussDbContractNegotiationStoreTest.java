@@ -2,13 +2,15 @@ package com.huawei.cloud.store.gaussdb.contractnegotiationstore;
 
 import com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension;
 import com.huawei.cloud.gaussdb.testfixtures.annotations.GaussDbTest;
-import org.eclipse.edc.connector.contract.spi.ContractOfferId;
-import org.eclipse.edc.connector.contract.spi.negotiation.store.ContractNegotiationStore;
-import org.eclipse.edc.connector.contract.spi.testfixtures.negotiation.store.TestFunctions;
-import org.eclipse.edc.connector.contract.spi.types.negotiation.ContractNegotiation;
-import org.eclipse.edc.connector.contract.spi.types.negotiation.ContractNegotiationStates;
-import org.eclipse.edc.connector.store.sql.contractnegotiation.store.SqlContractNegotiationStore;
-import org.eclipse.edc.connector.store.sql.contractnegotiation.store.schema.postgres.PostgresDialectStatements;
+import org.eclipse.edc.connector.controlplane.contract.spi.ContractOfferId;
+import org.eclipse.edc.connector.controlplane.contract.spi.negotiation.store.ContractNegotiationStore;
+import org.eclipse.edc.connector.controlplane.contract.spi.testfixtures.negotiation.store.TestFunctions;
+import org.eclipse.edc.connector.controlplane.contract.spi.types.agreement.ContractAgreement;
+import org.eclipse.edc.connector.controlplane.contract.spi.types.negotiation.ContractNegotiation;
+import org.eclipse.edc.connector.controlplane.contract.spi.types.negotiation.ContractNegotiationStates;
+import org.eclipse.edc.connector.controlplane.store.sql.contractnegotiation.store.SqlContractNegotiationStore;
+import org.eclipse.edc.connector.controlplane.store.sql.contractnegotiation.store.schema.postgres.PostgresDialectStatements;
+import org.eclipse.edc.json.JacksonTypeManager;
 import org.eclipse.edc.junit.assertions.AbstractResultAssert;
 import org.eclipse.edc.policy.model.Action;
 import org.eclipse.edc.policy.model.AtomicConstraint;
@@ -21,8 +23,6 @@ import org.eclipse.edc.spi.query.Criterion;
 import org.eclipse.edc.spi.query.QuerySpec;
 import org.eclipse.edc.spi.query.SortOrder;
 import org.eclipse.edc.spi.result.StoreFailure;
-import org.eclipse.edc.spi.types.TypeManager;
-import org.eclipse.edc.spi.types.domain.agreement.ContractAgreement;
 import org.eclipse.edc.spi.types.domain.callback.CallbackAddress;
 import org.eclipse.edc.sql.QueryExecutor;
 import org.eclipse.edc.sql.lease.testfixtures.LeaseUtil;
@@ -49,13 +49,13 @@ import static com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension.DEFAULT
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.eclipse.edc.connector.contract.spi.testfixtures.negotiation.store.TestFunctions.createContract;
-import static org.eclipse.edc.connector.contract.spi.testfixtures.negotiation.store.TestFunctions.createContractBuilder;
-import static org.eclipse.edc.connector.contract.spi.testfixtures.negotiation.store.TestFunctions.createNegotiation;
-import static org.eclipse.edc.connector.contract.spi.testfixtures.negotiation.store.TestFunctions.createNegotiationBuilder;
-import static org.eclipse.edc.connector.contract.spi.types.negotiation.ContractNegotiation.Type.CONSUMER;
-import static org.eclipse.edc.connector.contract.spi.types.negotiation.ContractNegotiation.Type.PROVIDER;
-import static org.eclipse.edc.connector.contract.spi.types.negotiation.ContractNegotiationStates.REQUESTED;
+import static org.eclipse.edc.connector.controlplane.contract.spi.testfixtures.negotiation.store.TestFunctions.createContract;
+import static org.eclipse.edc.connector.controlplane.contract.spi.testfixtures.negotiation.store.TestFunctions.createContractBuilder;
+import static org.eclipse.edc.connector.controlplane.contract.spi.testfixtures.negotiation.store.TestFunctions.createNegotiation;
+import static org.eclipse.edc.connector.controlplane.contract.spi.testfixtures.negotiation.store.TestFunctions.createNegotiationBuilder;
+import static org.eclipse.edc.connector.controlplane.contract.spi.types.negotiation.ContractNegotiation.Type.CONSUMER;
+import static org.eclipse.edc.connector.controlplane.contract.spi.types.negotiation.ContractNegotiation.Type.PROVIDER;
+import static org.eclipse.edc.connector.controlplane.contract.spi.types.negotiation.ContractNegotiationStates.REQUESTED;
 import static org.eclipse.edc.spi.persistence.StateEntityStore.hasState;
 import static org.eclipse.edc.spi.query.Criterion.criterion;
 import static org.eclipse.edc.spi.result.StoreFailure.Reason.ALREADY_LEASED;
@@ -75,7 +75,7 @@ class GaussDbContractNegotiationStoreTest {
     @BeforeEach
     void setUp(GaussDbTestExtension extension, GaussDbTestExtension.SqlHelper helper, QueryExecutor queryExecutor) {
         var clock = Clock.systemUTC();
-        var typeManager = new TypeManager();
+        var typeManager = new JacksonTypeManager();
         typeManager.registerTypes(PolicyRegistrationTypes.TYPES.toArray(Class<?>[]::new));
 
         contractNegotiationStore = new SqlContractNegotiationStore(extension.getRegistry(), DEFAULT_DATASOURCE_NAME,
@@ -164,7 +164,7 @@ class GaussDbContractNegotiationStoreTest {
     @Test
     void save() {
         var negotiation = createNegotiationBuilder("test-id1")
-                .type(ContractNegotiation.Type.PROVIDER)
+                .type(PROVIDER)
                 .build();
         getContractNegotiationStore().save(negotiation);
 
@@ -179,7 +179,7 @@ class GaussDbContractNegotiationStoreTest {
         var callbacks = List.of(CallbackAddress.Builder.newInstance().uri("test").events(Set.of("event")).build());
 
         var negotiation = createNegotiationBuilder("test-id1")
-                .type(ContractNegotiation.Type.CONSUMER)
+                .type(CONSUMER)
                 .callbackAddresses(callbacks)
                 .build();
 
@@ -218,7 +218,7 @@ class GaussDbContractNegotiationStoreTest {
         getContractNegotiationStore().save(negotiation);
 
         var newNegotiation = ContractNegotiation.Builder.newInstance()
-                .type(ContractNegotiation.Type.CONSUMER)
+                .type(CONSUMER)
                 .id(id)
                 .stateCount(420) //modified
                 .state(800) //modified
@@ -272,7 +272,7 @@ class GaussDbContractNegotiationStoreTest {
         leaseEntity(id, "someone-else");
 
         var newNegotiation = ContractNegotiation.Builder.newInstance()
-                .type(ContractNegotiation.Type.CONSUMER)
+                .type(CONSUMER)
                 .id(id)
                 .stateCount(420) //modified
                 .state(800) //modified
@@ -564,7 +564,6 @@ class GaussDbContractNegotiationStoreTest {
                 .assignee("test-assignee")
                 .assigner("test-assigner")
                 .permission(Permission.Builder.newInstance()
-                        .target("")
                         .action(Action.Builder.newInstance()
                                 .type("USE")
                                 .build())

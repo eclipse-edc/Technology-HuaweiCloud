@@ -5,18 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension;
 import com.huawei.cloud.gaussdb.testfixtures.annotations.GaussDbTest;
 import org.assertj.core.api.Assertions;
-import org.eclipse.edc.connector.store.sql.assetindex.SqlAssetIndex;
-import org.eclipse.edc.connector.store.sql.assetindex.schema.BaseSqlDialectStatements;
-import org.eclipse.edc.connector.store.sql.assetindex.schema.postgres.PostgresDialectStatements;
+import org.eclipse.edc.connector.controlplane.asset.spi.domain.Asset;
+import org.eclipse.edc.connector.controlplane.asset.spi.index.AssetIndex;
+import org.eclipse.edc.connector.controlplane.store.sql.assetindex.SqlAssetIndex;
+import org.eclipse.edc.connector.controlplane.store.sql.assetindex.schema.BaseSqlDialectStatements;
+import org.eclipse.edc.connector.controlplane.store.sql.assetindex.schema.postgres.PostgresDialectStatements;
+import org.eclipse.edc.json.JacksonTypeManager;
 import org.eclipse.edc.policy.model.PolicyRegistrationTypes;
-import org.eclipse.edc.spi.asset.AssetIndex;
 import org.eclipse.edc.spi.query.Criterion;
 import org.eclipse.edc.spi.query.QuerySpec;
 import org.eclipse.edc.spi.query.SortOrder;
 import org.eclipse.edc.spi.result.StoreResult;
-import org.eclipse.edc.spi.types.TypeManager;
 import org.eclipse.edc.spi.types.domain.DataAddress;
-import org.eclipse.edc.spi.types.domain.asset.Asset;
 import org.eclipse.edc.sql.QueryExecutor;
 import org.eclipse.edc.transaction.datasource.spi.DataSourceRegistry;
 import org.eclipse.edc.transaction.spi.TransactionContext;
@@ -44,7 +44,7 @@ import static com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension.DEFAULT
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.eclipse.edc.spi.CoreConstants.EDC_NAMESPACE;
+import static org.eclipse.edc.spi.constants.CoreConstants.EDC_NAMESPACE;
 import static org.eclipse.edc.spi.query.Criterion.criterion;
 import static org.eclipse.edc.spi.result.StoreFailure.Reason.ALREADY_EXISTS;
 import static org.eclipse.edc.spi.result.StoreFailure.Reason.NOT_FOUND;
@@ -57,7 +57,7 @@ class GaussDbAssetIndexTest {
 
     @BeforeEach
     void setup(GaussDbTestExtension.SqlHelper runner, TransactionContext transactionContext, QueryExecutor queryExecutor, DataSourceRegistry reg) {
-        var typeManager = new TypeManager();
+        var typeManager = new JacksonTypeManager();
         typeManager.registerTypes(PolicyRegistrationTypes.TYPES.toArray(Class<?>[]::new));
 
         sqlAssetIndex = new SqlAssetIndex(reg, DEFAULT_DATASOURCE_NAME, transactionContext, new ObjectMapper(), SQL_STATEMENTS, queryExecutor);

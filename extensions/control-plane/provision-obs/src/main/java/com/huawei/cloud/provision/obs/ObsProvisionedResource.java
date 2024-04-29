@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.huawei.cloud.obs.ObsBucketSchema;
-import org.eclipse.edc.connector.transfer.spi.types.ProvisionedDataDestinationResource;
+import org.eclipse.edc.connector.controlplane.transfer.spi.types.ProvisionedDataDestinationResource;
 
 import static com.huawei.cloud.obs.ObsBucketSchema.BUCKET_NAME;
 import static com.huawei.cloud.obs.ObsBucketSchema.ENDPOINT;
-import static org.eclipse.edc.spi.CoreConstants.EDC_NAMESPACE;
+import static org.eclipse.edc.spi.constants.CoreConstants.EDC_NAMESPACE;
 
 
 @JsonDeserialize(builder = ObsProvisionedResource.Builder.class)

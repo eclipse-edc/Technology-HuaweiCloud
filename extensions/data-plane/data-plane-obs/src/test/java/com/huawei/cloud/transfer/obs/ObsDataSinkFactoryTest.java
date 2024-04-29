@@ -2,12 +2,12 @@ package com.huawei.cloud.transfer.obs;
 
 import com.huawei.cloud.obs.ObsBucketSchema;
 import com.huawei.cloud.obs.ObsClientProvider;
+import org.eclipse.edc.json.JacksonTypeManager;
 import org.eclipse.edc.junit.assertions.AbstractResultAssert;
 import org.eclipse.edc.spi.EdcException;
 import org.eclipse.edc.spi.security.Vault;
-import org.eclipse.edc.spi.types.TypeManager;
 import org.eclipse.edc.spi.types.domain.DataAddress;
-import org.eclipse.edc.spi.types.domain.transfer.DataFlowRequest;
+import org.eclipse.edc.spi.types.domain.transfer.DataFlowStartMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class ObsDataSinkFactoryTest {
     private final Vault vaultMock = mock();
     private final ExecutorService executor = Executors.newFixedThreadPool(1);
     private final ObsClientProvider obsClientProviderMock = mock();
-    private final ObsDataSinkFactory factory = new ObsDataSinkFactory(vaultMock, new TypeManager(), mock(), executor, obsClientProviderMock);
+    private final ObsDataSinkFactory factory = new ObsDataSinkFactory(vaultMock, new JacksonTypeManager(), mock(), executor, obsClientProviderMock);
 
     @BeforeEach
     void setUp() {
@@ -123,8 +123,8 @@ class ObsDataSinkFactoryTest {
         // no-op
     }
 
-    private DataFlowRequest createRequest(DataAddress destination) {
-        return DataFlowRequest.Builder.newInstance()
+    private DataFlowStartMessage createRequest(DataAddress destination) {
+        return DataFlowStartMessage.Builder.newInstance()
                 .id(UUID.randomUUID().toString())
                 .processId(UUID.randomUUID().toString())
                 .sourceDataAddress(DataAddress.Builder.newInstance().type(ObsBucketSchema.TYPE).build())

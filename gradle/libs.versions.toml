@@ -4,7 +4,7 @@ format.version = "1.1"
 [versions]
 awaitility = "4.2.1"
 bouncyCastle-jdk18on = "1.78.1"
-edc = "0.5.0"
+edc = "0.6.2"
 failsafe = "3.3.2"
 httpMockServer = "5.15.0"
 jakarta-json = "2.0.1"
@@ -90,6 +90,7 @@ edc-transfer-httppull-receiver = { module = "org.eclipse.edc:transfer-pull-http-
 edc-transfer-httppull-receiver-dynamic = { module = "org.eclipse.edc:transfer-pull-http-dynamic-receiver", version.ref = "edc" }
 edc-util = { module = "org.eclipse.edc:util", version.ref = "edc" }
 edc-testfixtures-managementapi = { module = "org.eclipse.edc:management-api-test-fixtures", version.ref = "edc" }
+edc-lib-util = { module = "org.eclipse.edc:util-lib", version.ref = "edc" }
 
 # Control Plane implementations
 edc-controlplane-callback-dispatcher-event = { module = "org.eclipse.edc:callback-event-dispatcher", version.ref = "edc" }

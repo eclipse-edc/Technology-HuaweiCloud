@@ -30,6 +30,9 @@ public class ObsDataSink extends ParallelSink {
 
     @Override
     protected StreamResult<Object> transferParts(List<DataSource.Part> parts) {
+
+
+
         for (var part : parts) {
             var partNumber = 1;
             var bytesTransferred = 0L;

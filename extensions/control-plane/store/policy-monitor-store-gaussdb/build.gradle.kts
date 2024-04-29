@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     api(libs.edc.spi.core)
-    api(libs.edc.util)
+    api(libs.edc.lib.util)
     api(libs.edc.sql.policymonitor)
     api(libs.edc.sql.lease)
     api(libs.huawei.dws.jdbc)
