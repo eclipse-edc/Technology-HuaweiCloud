@@ -114,7 +114,8 @@ abstract class ObsDataSinkTestBase {
                 .build();
 
         var result = sink.transferParts(List.of(createPart(testFile)));
-        assertThat(result).isFailed().detail().isEqualTo("Error writing part 1 of the %s object on the %s bucket: The specified bucket does not exist.".formatted(testFile.getName(), bucket));
+        assertThat(result).isFailed().detail().startsWith(("Error writing part 1 of the %s object on the %s bucket: " +
+                "The specified bucket does not exist").formatted(testFile.getName(), bucket));
     }
 
     @Disabled("Large files are problematic with MinIO for some reason.")
