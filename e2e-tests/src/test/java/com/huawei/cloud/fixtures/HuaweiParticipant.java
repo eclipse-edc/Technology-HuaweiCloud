@@ -1,3 +1,17 @@
+/*
+ *  Copyright (c) 2024 Huawei Technologies
+ *
+ *  This program and the accompanying materials are made available under the
+ *  terms of the Apache License, Version 2.0 which is available at
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  SPDX-License-Identifier: Apache-2.0
+ *
+ *  Contributors:
+ *       Huawei Technologies - initial API and implementation
+ *
+ */
+
 package com.huawei.cloud.fixtures;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -77,6 +91,11 @@ public class HuaweiParticipant extends Participant {
             super(new HuaweiParticipant());
         }
 
+        @JsonCreator
+        public static Builder newInstance() {
+            return new Builder();
+        }
+
         public Builder apiKey(String apiKey) {
             this.participant.apiKey = apiKey;
             return this;
@@ -89,11 +108,6 @@ public class HuaweiParticipant extends Participant {
             super.build();
             participant.controlEndpoint = new Endpoint(URI.create("http://localhost:" + getFreePort() + "/control"), Map.of());
             return participant;
-        }
-
-        @JsonCreator
-        public static Builder newInstance() {
-            return new Builder();
         }
     }
 }
