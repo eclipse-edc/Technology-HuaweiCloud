@@ -1,19 +1,14 @@
-# Notices for HuaweiCloud-Dataspace-Component
+# Notices for Eclipse Dataspace Components
 
+This content is produced and maintained by the Eclipse Dash, Tools for
+Committers project.
 
-* Project home: https://boot-x.eu/
-Dataspace components belong to boot-x project, boot-x is Gaia-X / IDSA compliance ready, cloud based Data Space implementation. The main focus is on cross-border data exchange, e.g. following international standards for data exchange between Chinese and European industries.
+* Project home: https://projects.eclipse.org/projects/technology.edc
 
-Boot-X consist for 4 main componets 
+## Trademarks
 
-1) Federated Identity and Trust
-2) Federated Service catalouge
-3) Compliance logging and monitoring
-4) Sovereign Data Exchange with Data Usage policy control
-
-This Connector plays a key role in the Sovereign Data Exchange component. It negotiats the valid Data Exchange policy between Data Supplier and Data Consumer in control plane and enables the data exchange using the data plane plug-ins, eg. GaussBD and OBS  
-
-The boot-x connector is compatible to Eclipse Data Space connector, with enhanced features like local data usage policy management and enforcement, Self-Sovereign identity federation and compliance monitoring.
+Eclipse Dataspace Component and the Eclipse Dataspace Component logo are trademarks of the Eclipse Foundation.
+Eclipse and the Eclipse Logo are registered trademarks of the Eclipse Foundation.
 
 ## Copyright
 
@@ -23,10 +18,14 @@ All content is the property of the respective authors or their employers. For mo
 
 This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which is available at https://www.apache.org/licenses/LICENSE-2.0.
 
+SPDX-License-Identifier: Apache-2.0
 
 ## Source Code
 
-The project maintains the following source code repositoriy:
+The project maintains the following source code repositories:
 
-* https://github.com/Huawei-Dataspace-Components/components
+* https://github.com/eclipse-edc/
 
+## Third-party Content (Overarching All Modules)
+
+see DEPENDENCIES file
