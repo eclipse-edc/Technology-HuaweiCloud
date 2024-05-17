@@ -1,4 +1,4 @@
-name: Create Release of Technology-GCP
+name: Create Release of Technology-HuaweiCloud
 on:
   workflow_dispatch:
     inputs:
