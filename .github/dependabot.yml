@@ -14,8 +14,11 @@ updates:
   - package-ecosystem: "gradle" # checks build.gradle(.kts) and settings.gradle(.kts)
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
       - "java"
+    ignore:
+      - dependency-name: "org.eclipse.edc:edc-versions"
+
