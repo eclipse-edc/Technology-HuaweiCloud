@@ -98,7 +98,7 @@ edc-controlplane-callback-dispatcher-http = { module = "org.eclipse.edc:callback
 
 # third-party deps
 awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility" }
-assertj = { module = "org.assertj:assertj-core", version = "3.25.3" }
+assertj = { module = "org.assertj:assertj-core", version = "3.26.0" }
 failsafe-core = { module = "dev.failsafe:failsafe", version.ref = "failsafe" }
 restAssured = { module = "io.rest-assured:rest-assured", version.ref = "restAssured" }
 jakartaJson = { module = "org.glassfish:jakarta.json", version.ref = "jakarta-json" }
