@@ -16,7 +16,7 @@ rsApi = "4.0.0"
 testcontainers = "1.19.8"
 huawei-obs = "3.24.3"
 huawei-iam = "3.1.95"
-huawei-dws = "8.3.0.202-200"
+huawei-dws = "8.3.1-200"
 
 [libraries]
 
