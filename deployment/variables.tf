@@ -1,5 +1,5 @@
 variable "region" {
-  default = "ap-southeast-1"
+  default = "eu-west-101"
 }
 
 variable "instance_name" {
