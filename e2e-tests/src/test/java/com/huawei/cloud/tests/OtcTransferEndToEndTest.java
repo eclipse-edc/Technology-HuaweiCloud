@@ -90,8 +90,8 @@ public class OtcTransferEndToEndTest {
         id = UUID.randomUUID().toString();
         sourceBucket = "src-" + id;
         destBucket = "dest-" + id;
-        providerClient = providerRuntime.getContext().getService(ObsClientProvider.class).obsClient(OBS_OTC_CLOUD_URL);
-        consumerClient = consumerRuntime.getContext().getService(ObsClientProvider.class).obsClient(OBS_OTC_CLOUD_URL);
+        providerClient = providerRuntime.getService(ObsClientProvider.class).obsClient(OBS_OTC_CLOUD_URL);
+        consumerClient = consumerRuntime.getService(ObsClientProvider.class).obsClient(OBS_OTC_CLOUD_URL);
     }
 
     @Test

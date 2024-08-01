@@ -852,7 +852,7 @@ class GaussDbContractNegotiationStoreTest {
         var correlationId = UUID.randomUUID().toString();
         getContractNegotiationStore().save(createNegotiationBuilder(id).correlationId(correlationId).build());
 
-        var result = getContractNegotiationStore().findByCorrelationIdAndLease(correlationId);
+        var result = getContractNegotiationStore().findByIdAndLease(correlationId);
 
         AbstractResultAssert.assertThat(result).isSucceeded();
         assertThat(isLeasedBy(id, CONNECTOR_NAME)).isTrue();
@@ -860,7 +860,7 @@ class GaussDbContractNegotiationStoreTest {
 
     @Test
     void findByCorrelationIdAndLease_shouldReturnNotFound_whenEntityDoesNotExist() {
-        var result = getContractNegotiationStore().findByCorrelationIdAndLease("unexistent");
+        var result = getContractNegotiationStore().findByIdAndLease("unexistent");
 
         AbstractResultAssert.assertThat(result).isFailed().extracting(StoreFailure::getReason).isEqualTo(NOT_FOUND);
     }
@@ -872,7 +872,7 @@ class GaussDbContractNegotiationStoreTest {
         getContractNegotiationStore().save(createNegotiationBuilder(id).correlationId(correlationId).build());
         leaseEntity(id, "other owner");
 
-        var result = getContractNegotiationStore().findByCorrelationIdAndLease(correlationId);
+        var result = getContractNegotiationStore().findByIdAndLease(correlationId);
 
         AbstractResultAssert.assertThat(result).isFailed().extracting(StoreFailure::getReason).isEqualTo(ALREADY_LEASED);
     }
