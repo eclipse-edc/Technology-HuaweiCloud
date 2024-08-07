@@ -104,8 +104,8 @@ public class OtcTransferEndToEndTest {
         providerClient.putObject(sourceBucket, TESTFILE_NAME, f);
 
         createResourcesOnProvider(assetId, sourceAddress(sourceBucket, prefix));
-
-        var transferProcessId = CONSUMER.requestAsset(PROVIDER, assetId, noPrivateProperty(), obsSink(destBucket, prefix));
+        var transferType = "pull";
+        var transferProcessId = CONSUMER.requestAsset(PROVIDER, assetId, noPrivateProperty(), obsSink(destBucket, prefix), transferType);
 
         await().atMost(TIMEOUT).untilAsserted(() -> {
             var state = CONSUMER.getTransferProcessState(transferProcessId);
