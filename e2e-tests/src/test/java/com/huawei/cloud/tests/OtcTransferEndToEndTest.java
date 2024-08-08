@@ -40,7 +40,7 @@ import static org.eclipse.edc.jsonld.spi.JsonLdKeywords.TYPE;
 import static org.eclipse.edc.junit.testfixtures.TestUtils.getFileFromResourceName;
 import static org.eclipse.edc.spi.constants.CoreConstants.EDC_NAMESPACE;
 
-
+@OtcTest
 public class OtcTransferEndToEndTest {
 
     public static final String TESTFILE_NAME = "testfile.json";
