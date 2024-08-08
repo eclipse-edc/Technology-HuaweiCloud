@@ -41,7 +41,6 @@ import static org.eclipse.edc.junit.testfixtures.TestUtils.getFileFromResourceNa
 import static org.eclipse.edc.spi.constants.CoreConstants.EDC_NAMESPACE;
 
 
-@OtcTest
 public class OtcTransferEndToEndTest {
 
     public static final String TESTFILE_NAME = "testfile.json";
@@ -104,7 +103,7 @@ public class OtcTransferEndToEndTest {
         providerClient.putObject(sourceBucket, TESTFILE_NAME, f);
 
         createResourcesOnProvider(assetId, sourceAddress(sourceBucket, prefix));
-        var transferType = "pull";
+        var transferType = "HttpData-PULL";
         var transferProcessId = CONSUMER.requestAsset(PROVIDER, assetId, noPrivateProperty(), obsSink(destBucket, prefix), transferType);
 
         await().atMost(TIMEOUT).untilAsserted(() -> {
