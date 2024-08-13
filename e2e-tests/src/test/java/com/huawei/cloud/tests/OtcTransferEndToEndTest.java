@@ -112,7 +112,7 @@ public class OtcTransferEndToEndTest {
 
         JsonObject dataPlaneRequestBody = Json.createObjectBuilder().add("@context", Json.createObjectBuilder().add("@vocab", "https://w3id.org/edc/v0.0.1/ns/"))
                 .add("@id", "http-pull-provider-dataplane")
-                .add("url",PROVIDER.getControlEndpoint().baseRequest().toString().concat("/transfer"))
+                .add("url",PROVIDER.getControlEndpoint().getUrl().toString().concat("/transfer"))
                 .add("allowedSourceTypes",allowedSourceTypes.build()).add("allowedDestTypes",allowedDestTypes.build())
                 .add("properties","").build();
 
