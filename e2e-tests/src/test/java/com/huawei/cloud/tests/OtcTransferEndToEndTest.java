@@ -19,7 +19,10 @@ import com.huawei.cloud.obs.ObsBucketSchema;
 import com.huawei.cloud.obs.ObsClientProvider;
 import com.huawei.cloud.obs.OtcTest;
 import com.obs.services.ObsClient;
+import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import org.eclipse.edc.junit.extensions.EdcClassRuntimesExtension;
 import org.eclipse.edc.junit.extensions.EdcRuntimeExtension;
@@ -102,7 +105,20 @@ public class OtcTransferEndToEndTest {
         var f = getFileFromResourceName(TESTFILE_NAME);
         providerClient.putObject(sourceBucket, TESTFILE_NAME, f);
 
+        JsonArrayBuilder allowedSourceTypes = Json.createArrayBuilder();
+        allowedSourceTypes.add(Json.createValue("OBS"));
+        JsonArrayBuilder allowedDestTypes = Json.createArrayBuilder();
+        allowedDestTypes.add(Json.createValue("OBS"));
+
+        JsonObject dataPlaneRequestBody = Json.createObjectBuilder().add("@context", Json.createObjectBuilder().add("@vocab", "https://w3id.org/edc/v0.0.1/ns/"))
+                .add("@id", "http-pull-provider-dataplane")
+                .add("url",PROVIDER.getControlEndpoint().baseRequest().toString().concat("/transfer"))
+                .add("allowedSourceTypes",allowedSourceTypes.build()).add("allowedDestTypes",allowedDestTypes.build())
+                .add("properties","").build();
+
+        ValidatableResponse validatableResponse = PROVIDER.getManagementEndpoint().baseRequest().contentType(ContentType.JSON).body(dataPlaneRequestBody).when().post("/v2/dataplanes").then();
         createResourcesOnProvider(assetId, sourceAddress(sourceBucket, prefix));
+
         var transferType = "HttpData-PULL";
         var transferProcessId = CONSUMER.requestAsset(PROVIDER, assetId, noPrivateProperty(), obsSink(destBucket, prefix), transferType);
 
