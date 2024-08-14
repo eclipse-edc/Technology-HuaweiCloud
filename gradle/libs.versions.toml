@@ -42,7 +42,7 @@ edc-core-jetty = { module = "org.eclipse.edc:jetty-core", version.ref = "edc" }
 edc-core-jwt = { module = "org.eclipse.edc:jwt-core", version.ref = "edc" }
 edc-dpf-framework = { module = "org.eclipse.edc:data-plane-framework", version.ref = "edc" }
 edc-dpf-core = { module = "org.eclipse.edc:data-plane-core", version.ref = "edc" }
-edc-dpf-transfer = { module = "org.eclipse.edc:transfer-data-plane", version.ref = "edc" }
+edc-dpf-transfer = { module = "org.eclipse.edc:transfer-data-plane-signaling", version.ref = "edc" }
 edc-dpf-selector-core = { module = "org.eclipse.edc:data-plane-selector-core", version.ref = "edc" }
 edc-dpf-selector-spi = { module = "org.eclipse.edc:data-plane-selector-spi", version.ref = "edc" }
 edc-dpf-selector-api = { module = "org.eclipse.edc:data-plane-selector-api", version.ref = "edc" }
@@ -85,7 +85,7 @@ edc-sql-policymonitor = { module = "org.eclipse.edc:policy-monitor-store-sql", v
 edc-sql-lease = { module = "org.eclipse.edc:sql-lease", version.ref = "edc" }
 edc-sql-core = { module = "org.eclipse.edc:sql-core", version.ref = "edc" }
 edc-sql-pool-apachecommons = { module = "org.eclipse.edc:sql-pool-apache-commons", version.ref = "edc" }
-edc-transfer-dataplane = { module = "org.eclipse.edc:transfer-data-plane", version.ref = "edc" }
+edc-transfer-dataplane = { module = "org.eclipse.edc:transfer-data-plane-signaling", version.ref = "edc" }
 edc-transfer-httppull-receiver = { module = "org.eclipse.edc:transfer-pull-http-receiver", version.ref = "edc" }
 edc-transfer-httppull-receiver-dynamic = { module = "org.eclipse.edc:transfer-pull-http-dynamic-receiver", version.ref = "edc" }
 edc-util = { module = "org.eclipse.edc:util", version.ref = "edc" }

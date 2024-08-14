@@ -107,19 +107,21 @@ public class OtcTransferEndToEndTest {
 
         JsonArrayBuilder allowedSourceTypes = Json.createArrayBuilder();
         allowedSourceTypes.add(Json.createValue("OBS"));
+        allowedSourceTypes.add(Json.createValue("HttpData"));
         JsonArrayBuilder allowedDestTypes = Json.createArrayBuilder();
         allowedDestTypes.add(Json.createValue("OBS"));
+        allowedDestTypes.add(Json.createValue("HttpData"));
         JsonArrayBuilder allowedTransferTypes = Json.createArrayBuilder();
         allowedTransferTypes.add(Json.createValue("HttpData-PULL"));
         allowedTransferTypes.add(Json.createValue("HttpData-PUSH"));
 
         JsonObject dataPlaneRequestBody = Json.createObjectBuilder().add("@context", Json.createObjectBuilder().add("@vocab", "https://w3id.org/edc/v0.0.1/ns/"))
                 .add("@id", "http-pull-provider-dataplane")
-                .add("url",PROVIDER.getControlEndpoint().getUrl().toString().concat("/transfer"))
-                .add("allowedSourceTypes",allowedSourceTypes.build())
-                .add("allowedDestTypes",allowedDestTypes.build())
-                .add("allowedTransferTypes",allowedTransferTypes)
-                .add("properties","").build();
+                .add("url", PROVIDER.getControlEndpoint().getUrl().toString().concat("/transfer"))
+                .add("allowedSourceTypes", allowedSourceTypes.build())
+                .add("allowedDestTypes", allowedDestTypes.build())
+                .add("allowedTransferTypes", allowedTransferTypes)
+                .add("properties", "").build();
 
         ValidatableResponse validatableResponse = PROVIDER.getManagementEndpoint().baseRequest().contentType(ContentType.JSON).body(dataPlaneRequestBody).when().post("/v2/dataplanes").then();
         createResourcesOnProvider(assetId, sourceAddress(sourceBucket, prefix));
