@@ -64,7 +64,7 @@ public class ObsCoreExtension implements ServiceExtension {
                 .iamEndpoint(iamEndpoint)
                 .build();
 
-        clientProvider = new ObsClientProviderImpl(configuration, monitor);
+        clientProvider = new ObsClientProviderImpl(configuration, monitor, vault);
 
         context.registerService(ObsClientProvider.class, clientProvider);
     }
