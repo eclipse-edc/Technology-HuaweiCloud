@@ -103,11 +103,11 @@ public class OtcTransferEndToEndTest {
         var consumerClientProviderImp = (ObsClientProviderImpl) consumerRuntime.getService(ObsClientProvider.class);
         consumerClientProviderImp.getVault().storeSecret("publickey", PUBLIC_KEY);
         consumerClientProviderImp.getVault().storeSecret("privatekey", PRIVATE_KEY);
-        var providerEndpointGeneratorService=(PublicEndpointGeneratorService) providerRuntime.getService(PublicEndpointGeneratorService.class);
-        var consumerEndpointGeneratorService=(PublicEndpointGeneratorService) consumerRuntime.getService(PublicEndpointGeneratorService.class);
+        var providerEndpointGeneratorService = (PublicEndpointGeneratorService) providerRuntime.getService(PublicEndpointGeneratorService.class);
+        var consumerEndpointGeneratorService = (PublicEndpointGeneratorService) consumerRuntime.getService(PublicEndpointGeneratorService.class);
         var endpoint = new Endpoint("endpoint", "obs");
         providerEndpointGeneratorService.addGeneratorFunction("HttpData", dataAddress1 -> endpoint);
-        consumerEndpointGeneratorService.addGeneratorFunction("HttpData",dataAddress1 -> endpoint);
+        consumerEndpointGeneratorService.addGeneratorFunction("HttpData", dataAddress1 -> endpoint);
     }
 
     @Test
