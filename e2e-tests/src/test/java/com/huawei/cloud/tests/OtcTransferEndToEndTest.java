@@ -25,6 +25,8 @@ import io.restassured.response.ValidatableResponse;
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
+import org.eclipse.edc.connector.dataplane.spi.Endpoint;
+import org.eclipse.edc.connector.dataplane.spi.iam.PublicEndpointGeneratorService;
 import org.eclipse.edc.junit.extensions.EdcClassRuntimesExtension;
 import org.eclipse.edc.junit.extensions.EdcRuntimeExtension;
 import org.junit.jupiter.api.AfterEach;
@@ -95,13 +97,17 @@ public class OtcTransferEndToEndTest {
         destBucket = "dest-" + id;
         providerClient = providerRuntime.getService(ObsClientProvider.class).obsClient(OBS_OTC_CLOUD_URL);
         consumerClient = consumerRuntime.getService(ObsClientProvider.class).obsClient(OBS_OTC_CLOUD_URL);
-        var providerClientProviderImp = (ObsClientProviderImpl)providerRuntime.getService(ObsClientProvider.class);
-        providerClientProviderImp.getVault().storeSecret("publickey",PUBLIC_KEY);
-        providerClientProviderImp.getVault().storeSecret("privatekey",PRIVATE_KEY);
-        var consumerClientProviderImp = (ObsClientProviderImpl)consumerRuntime.getService(ObsClientProvider.class);
-        consumerClientProviderImp.getVault().storeSecret("publickey",PUBLIC_KEY);
-        consumerClientProviderImp.getVault().storeSecret("privatekey",PRIVATE_KEY);
-
+        var providerClientProviderImp = (ObsClientProviderImpl) providerRuntime.getService(ObsClientProvider.class);
+        providerClientProviderImp.getVault().storeSecret("publickey", PUBLIC_KEY);
+        providerClientProviderImp.getVault().storeSecret("privatekey", PRIVATE_KEY);
+        var consumerClientProviderImp = (ObsClientProviderImpl) consumerRuntime.getService(ObsClientProvider.class);
+        consumerClientProviderImp.getVault().storeSecret("publickey", PUBLIC_KEY);
+        consumerClientProviderImp.getVault().storeSecret("privatekey", PRIVATE_KEY);
+        var providerEndpointGeneratorService=(PublicEndpointGeneratorService) providerRuntime.getService(PublicEndpointGeneratorService.class);
+        var consumerEndpointGeneratorService=(PublicEndpointGeneratorService) consumerRuntime.getService(PublicEndpointGeneratorService.class);
+        var endpoint = new Endpoint("endpoint", "obs");
+        providerEndpointGeneratorService.addGeneratorFunction("HttpData", dataAddress1 -> endpoint);
+        consumerEndpointGeneratorService.addGeneratorFunction("HttpData",dataAddress1 -> endpoint);
     }
 
     @Test

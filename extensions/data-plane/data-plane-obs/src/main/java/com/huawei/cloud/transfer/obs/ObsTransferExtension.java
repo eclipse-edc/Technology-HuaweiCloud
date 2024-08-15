@@ -15,8 +15,6 @@
 package com.huawei.cloud.transfer.obs;
 
 import com.huawei.cloud.obs.ObsClientProvider;
-import org.eclipse.edc.connector.dataplane.spi.Endpoint;
-import org.eclipse.edc.connector.dataplane.spi.iam.PublicEndpointGeneratorService;
 import org.eclipse.edc.connector.dataplane.spi.pipeline.PipelineService;
 import org.eclipse.edc.runtime.metamodel.annotation.Extension;
 import org.eclipse.edc.runtime.metamodel.annotation.Inject;
@@ -24,7 +22,6 @@ import org.eclipse.edc.spi.security.Vault;
 import org.eclipse.edc.spi.system.ServiceExtension;
 import org.eclipse.edc.spi.system.ServiceExtensionContext;
 import org.eclipse.edc.spi.types.TypeManager;
-import org.eclipse.edc.spi.types.domain.DataAddress;
 
 import java.util.concurrent.Executors;
 
@@ -41,8 +38,6 @@ public class ObsTransferExtension implements ServiceExtension {
     private Vault vault;
     @Inject
     private ObsClientProvider clientProvider;
-    @Inject
-    private PublicEndpointGeneratorService publicEndpointGeneratorService;
 
     @Override
     public void initialize(ServiceExtensionContext context) {
@@ -53,9 +48,6 @@ public class ObsTransferExtension implements ServiceExtension {
         var executor = Executors.newFixedThreadPool(10);
         var sinkFactory = new ObsDataSinkFactory(vault, typeManager, context.getMonitor(), executor, clientProvider);
         pipelineService.registerFactory(sinkFactory);
-        DataAddress dataAddress = DataAddress.Builder.newInstance().type("HttpData").build();
-        var endpoint = new Endpoint("fizz", "bar-type");
-        publicEndpointGeneratorService.addGeneratorFunction("HttpData", dataAddress1 -> endpoint);
     }
 
     @Override
