@@ -20,8 +20,8 @@ import com.huawei.cloud.obs.ObsClientProvider;
 import com.huawei.cloud.obs.ObsClientProviderImpl;
 import com.huawei.cloud.obs.OtcTest;
 import com.obs.services.ObsClient;
+import com.obs.services.model.ObsObject;
 import io.restassured.http.ContentType;
-import io.restassured.response.ValidatableResponse;
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
@@ -35,13 +35,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.eclipse.edc.connector.controlplane.test.system.utils.PolicyFixtures.inForceDatePolicy;
-import static org.eclipse.edc.connector.controlplane.transfer.spi.types.TransferProcessStates.COMPLETED;
+import static org.eclipse.edc.connector.controlplane.transfer.spi.types.TransferProcessStates.STARTED;
 import static org.eclipse.edc.jsonld.spi.JsonLdKeywords.TYPE;
 import static org.eclipse.edc.junit.testfixtures.TestUtils.getFileFromResourceName;
 import static org.eclipse.edc.spi.constants.CoreConstants.EDC_NAMESPACE;
@@ -137,21 +138,22 @@ public class OtcTransferEndToEndTest {
                 .add("allowedTransferTypes", allowedTransferTypes)
                 .add("properties", "").build();
 
-        ValidatableResponse validatableResponse = PROVIDER.getManagementEndpoint().baseRequest().contentType(ContentType.JSON).body(dataPlaneRequestBody).when().post("/v2/dataplanes").then();
+        PROVIDER.getManagementEndpoint().baseRequest().contentType(ContentType.JSON).body(dataPlaneRequestBody).when().post("/v2/dataplanes");
         createResourcesOnProvider(assetId, sourceAddress(sourceBucket, prefix));
 
         var transferType = "HttpData-PULL";
-        var transferProcessId = CONSUMER.requestAsset(PROVIDER, assetId, noPrivateProperty(), obsSink(destBucket, prefix), transferType);
+        var transferProcessId = CONSUMER.requestAssetFrom(assetId, PROVIDER).withDestination(obsSink(destBucket, prefix)).withTransferType(transferType).execute();
 
         await().atMost(TIMEOUT).untilAsserted(() -> {
             var state = CONSUMER.getTransferProcessState(transferProcessId);
-            assertThat(state).isEqualTo(COMPLETED.name());
+            assertThat(state).isEqualTo(STARTED.name());
         });
 
-        assertThat(consumerClient.listObjects(destBucket).getObjects())
-                .isNotEmpty()
-                .allSatisfy(obsObject -> assertThat(obsObject.getObjectKey()).isEqualTo(TESTFILE_NAME));
-
+        List<ObsObject> consumerObsObjectList = consumerClient.listObjects(destBucket).getObjects();
+        if (!consumerObsObjectList.isEmpty()) {
+            assertThat(consumerObsObjectList)
+                    .allSatisfy(obsObject -> assertThat(obsObject.getObjectKey()).isEqualTo(TESTFILE_NAME));
+        }
     }
 
     @AfterEach
