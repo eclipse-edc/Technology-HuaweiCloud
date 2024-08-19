@@ -2,7 +2,7 @@
 format.version = "1.1"
 
 [versions]
-awaitility = "4.2.1"
+awaitility = "4.2.2"
 bouncyCastle-jdk18on = "1.78.1"
 edc = "0.8.2-SNAPSHOT"
 failsafe = "3.3.2"
@@ -13,9 +13,9 @@ mockito = "5.2.0"
 nimbus = "9.39"
 restAssured = "5.4.0"
 rsApi = "4.0.0"
-testcontainers = "1.20.0"
+testcontainers = "1.20.1"
 huawei-obs = "3.24.3"
-huawei-iam = "3.1.107"
+huawei-iam = "3.1.108"
 huawei-dws = "8.3.1.200-200"
 
 [libraries]
