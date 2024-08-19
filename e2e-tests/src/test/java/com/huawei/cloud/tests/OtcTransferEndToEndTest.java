@@ -25,6 +25,9 @@ import io.restassured.http.ContentType;
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
+import org.eclipse.edc.connector.controlplane.test.system.utils.Participant;
+import org.eclipse.edc.connector.controlplane.transfer.spi.types.TransferProcessStates;
 import org.eclipse.edc.connector.dataplane.spi.Endpoint;
 import org.eclipse.edc.connector.dataplane.spi.iam.PublicEndpointGeneratorService;
 import org.eclipse.edc.junit.extensions.EdcClassRuntimesExtension;
@@ -128,10 +131,10 @@ public class OtcTransferEndToEndTest {
         allowedDestTypes.add(Json.createValue("HttpData"));
         JsonArrayBuilder allowedTransferTypes = Json.createArrayBuilder();
         allowedTransferTypes.add(Json.createValue("HttpData-PULL"));
-        allowedTransferTypes.add(Json.createValue("HttpData-PUSH"));
+        allowedTransferTypes.add(Json.createValue("OBS-PUSH"));
 
         JsonObject dataPlaneRequestBody = Json.createObjectBuilder().add("@context", Json.createObjectBuilder().add("@vocab", "https://w3id.org/edc/v0.0.1/ns/"))
-                .add("@id", "http-pull-provider-dataplane")
+                .add("@id", "http-push-provider-dataplane")
                 .add("url", PROVIDER.getControlEndpoint().getUrl().toString().concat("/transfer"))
                 .add("allowedSourceTypes", allowedSourceTypes.build())
                 .add("allowedDestTypes", allowedDestTypes.build())
@@ -141,12 +144,14 @@ public class OtcTransferEndToEndTest {
         PROVIDER.getManagementEndpoint().baseRequest().contentType(ContentType.JSON).body(dataPlaneRequestBody).when().post("/v2/dataplanes");
         createResourcesOnProvider(assetId, sourceAddress(sourceBucket, prefix));
 
-        var transferType = "HttpData-PULL";
-        var transferProcessId = CONSUMER.requestAssetFrom(assetId, PROVIDER).withDestination(obsSink(destBucket, prefix)).withTransferType(transferType).execute();
-
+        var transferType = "OBS-PUSH";
+        //var transferProcessId = CONSUMER.requestAssetFrom(assetId, PROVIDER).withDestination(obsSink(destBucket, prefix)).withTransferType(transferType).execute();
+        var offer = getOfferForAsset(PROVIDER, assetId);
+        var contractAggId = CONSUMER.negotiateContract(PROVIDER, offer);
+        var transferProcessId = CONSUMER.initiateTransfer(PROVIDER, contractAggId,null, obsSink(destBucket,prefix), transferType);
         await().atMost(TIMEOUT).untilAsserted(() -> {
             var state = CONSUMER.getTransferProcessState(transferProcessId);
-            assertThat(state).isEqualTo(STARTED.name());
+            assertThat(TransferProcessStates.valueOf(state).code()).isGreaterThanOrEqualTo(STARTED.code());
         });
 
         List<ObsObject> consumerObsObjectList = consumerClient.listObjects(destBucket).getObjects();
@@ -162,6 +167,11 @@ public class OtcTransferEndToEndTest {
         cleanResource(consumerClient, destBucket);
     }
 
+    private JsonObject getOfferForAsset(Participant provider, String assetId) {
+        JsonObject dataset = PROVIDER.getDatasetForAsset(provider, assetId);
+        JsonObject policy = ((JsonValue)dataset.getJsonArray("http://www.w3.org/ns/odrl/2/hasPolicy").get(0)).asJsonObject();
+        return Json.createObjectBuilder(policy).add("http://www.w3.org/ns/odrl/2/assigner", Json.createObjectBuilder().add("@id", provider.getId())).add("http://www.w3.org/ns/odrl/2/target", Json.createObjectBuilder().add("@id", (JsonValue)dataset.get("@id"))).build();
+    }
 
     void cleanResource(ObsClient obsClient, String bucketName) {
         if (obsClient.headBucket(bucketName)) {
