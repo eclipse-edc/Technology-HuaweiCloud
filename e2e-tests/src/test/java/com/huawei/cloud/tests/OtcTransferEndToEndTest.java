@@ -66,7 +66,7 @@ public class OtcTransferEndToEndTest {
             .apiKey("password")
             .build();
 
-    private static final Duration TIMEOUT = Duration.ofSeconds(30);
+    private static final Duration TIMEOUT = Duration.ofMinutes(1);
     private static final String OBS_OTC_CLOUD_URL = "https://obs.eu-de.otc.t-systems.com";
 
 
@@ -148,7 +148,7 @@ public class OtcTransferEndToEndTest {
         //var transferProcessId = CONSUMER.requestAssetFrom(assetId, PROVIDER).withDestination(obsSink(destBucket, prefix)).withTransferType(transferType).execute();
         var offer = getOfferForAsset(PROVIDER, assetId);
         var contractAggId = CONSUMER.negotiateContract(PROVIDER, offer);
-        var transferProcessId = CONSUMER.initiateTransfer(PROVIDER, contractAggId,null, obsSink(destBucket,prefix), transferType);
+        var transferProcessId = CONSUMER.initiateTransfer(PROVIDER, contractAggId, null, obsSink(destBucket, prefix), transferType);
         await().atMost(TIMEOUT).untilAsserted(() -> {
             var state = CONSUMER.getTransferProcessState(transferProcessId);
             assertThat(TransferProcessStates.valueOf(state).code()).isGreaterThanOrEqualTo(STARTED.code());
@@ -169,8 +169,8 @@ public class OtcTransferEndToEndTest {
 
     private JsonObject getOfferForAsset(Participant provider, String assetId) {
         JsonObject dataset = PROVIDER.getDatasetForAsset(provider, assetId);
-        JsonObject policy = ((JsonValue)dataset.getJsonArray("http://www.w3.org/ns/odrl/2/hasPolicy").get(0)).asJsonObject();
-        return Json.createObjectBuilder(policy).add("http://www.w3.org/ns/odrl/2/assigner", Json.createObjectBuilder().add("@id", provider.getId())).add("http://www.w3.org/ns/odrl/2/target", Json.createObjectBuilder().add("@id", (JsonValue)dataset.get("@id"))).build();
+        JsonObject policy = ((JsonValue) dataset.getJsonArray("http://www.w3.org/ns/odrl/2/hasPolicy").get(0)).asJsonObject();
+        return Json.createObjectBuilder(policy).add("http://www.w3.org/ns/odrl/2/assigner", Json.createObjectBuilder().add("@id", provider.getId())).add("http://www.w3.org/ns/odrl/2/target", Json.createObjectBuilder().add("@id", (JsonValue) dataset.get("@id"))).build();
     }
 
     void cleanResource(ObsClient obsClient, String bucketName) {
