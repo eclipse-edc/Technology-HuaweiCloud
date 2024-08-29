@@ -34,7 +34,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "components"
+rootProject.name = "technology-huaweicloud"
 include(":launchers:e2e-test")
 include(":launchers:huawei-cloud-runtime")
 include(":extensions")
