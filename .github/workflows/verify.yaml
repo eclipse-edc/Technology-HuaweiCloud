@@ -3,6 +3,7 @@ name: Run Tests
 on:
   workflow_dispatch:
   push:
+    branches: [ main, release/*, bugfix/* ]
   pull_request:
     branches: [ main, release/*, bugfix/* ]
     paths-ignore:
@@ -16,6 +17,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+
+  CodeQL:
+    uses: eclipse-edc/.github/.github/workflows/codeql-analysis.yml@main
+    secrets: inherit
+
   Checkstyle:
     runs-on: ubuntu-latest
     steps:
@@ -23,10 +29,6 @@ jobs:
       - uses: eclipse-edc/.github/.github/actions/setup-build@main
       - name: Run Checkstyle
         run: ./gradlew checkstyleMain checkstyleTest
-
-  CodeQL:
-    uses: eclipse-edc/.github/.github/workflows/codeql-analysis.yml@main
-    secrets: inherit
 
   Dependency-Check:
     uses: eclipse-edc/.github/.github/workflows/dependency-check.yml@main
