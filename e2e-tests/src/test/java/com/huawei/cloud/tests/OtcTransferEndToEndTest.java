@@ -124,14 +124,11 @@ public class OtcTransferEndToEndTest {
         providerClient.putObject(sourceBucket, TESTFILE_NAME, f);
 
         JsonArrayBuilder allowedSourceTypes = Json.createArrayBuilder();
-        allowedSourceTypes.add(Json.createValue("OBS"));
-        allowedSourceTypes.add(Json.createValue("HttpData"));
+        allowedSourceTypes.add(Json.createValue(ObsBucketSchema.TYPE));
         JsonArrayBuilder allowedDestTypes = Json.createArrayBuilder();
-        allowedDestTypes.add(Json.createValue("OBS"));
-        allowedDestTypes.add(Json.createValue("HttpData"));
+        allowedDestTypes.add(Json.createValue(ObsBucketSchema.TYPE));
         JsonArrayBuilder allowedTransferTypes = Json.createArrayBuilder();
-        allowedTransferTypes.add(Json.createValue("HttpData-PULL"));
-        allowedTransferTypes.add(Json.createValue("OBS-PUSH"));
+        allowedTransferTypes.add(Json.createValue(ObsBucketSchema.TRANSFERTYPE_PUSH));
 
         JsonObject dataPlaneRequestBody = Json.createObjectBuilder().add("@context", Json.createObjectBuilder().add("@vocab", "https://w3id.org/edc/v0.0.1/ns/"))
                 .add("@id", "http-push-provider-dataplane")
@@ -144,8 +141,7 @@ public class OtcTransferEndToEndTest {
         PROVIDER.getManagementEndpoint().baseRequest().contentType(ContentType.JSON).body(dataPlaneRequestBody).when().post("/v2/dataplanes");
         createResourcesOnProvider(assetId, sourceAddress(sourceBucket, prefix));
 
-        var transferType = "OBS-PUSH";
-        //var transferProcessId = CONSUMER.requestAssetFrom(assetId, PROVIDER).withDestination(obsSink(destBucket, prefix)).withTransferType(transferType).execute();
+        var transferType = ObsBucketSchema.TRANSFERTYPE_PUSH;
         var offer = getOfferForAsset(PROVIDER, assetId);
         var contractAggId = CONSUMER.negotiateContract(PROVIDER, offer);
         var transferProcessId = CONSUMER.initiateTransfer(PROVIDER, contractAggId, null, obsSink(destBucket, prefix), transferType);
