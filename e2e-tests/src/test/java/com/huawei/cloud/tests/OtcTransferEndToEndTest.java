@@ -32,7 +32,6 @@ import org.eclipse.edc.connector.dataplane.spi.Endpoint;
 import org.eclipse.edc.connector.dataplane.spi.iam.PublicEndpointGeneratorService;
 import org.eclipse.edc.junit.extensions.EdcClassRuntimesExtension;
 import org.eclipse.edc.junit.extensions.EdcRuntimeExtension;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -41,6 +40,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -155,9 +155,14 @@ public class OtcTransferEndToEndTest {
             assertThat(consumerObsObjectList)
                     .allSatisfy(obsObject -> assertThat(obsObject.getObjectKey()).isEqualTo(TESTFILE_NAME));
         }
+        try {
+            TimeUnit.SECONDS.sleep(20);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        cleanup();
     }
 
-    @AfterEach
     void cleanup() {
         cleanResource(providerClient, sourceBucket);
         cleanResource(consumerClient, destBucket);
@@ -170,10 +175,14 @@ public class OtcTransferEndToEndTest {
     }
 
     void cleanResource(ObsClient obsClient, String bucketName) {
-        if (obsClient.headBucket(bucketName)) {
-            obsClient.listObjects(bucketName).getObjects()
-                    .forEach(obj -> obsClient.deleteObject(bucketName, obj.getObjectKey()));
-            obsClient.deleteBucket(bucketName);
+        try {
+            if (obsClient.headBucket(bucketName)) {
+                obsClient.listObjects(bucketName).getObjects()
+                        .forEach(obj -> obsClient.deleteObject(bucketName, obj.getObjectKey()));
+                obsClient.deleteBucket(bucketName);
+            }
+        } catch (Exception e) {
+            System.out.println("--> error : " + e.getMessage());
         }
     }
 
