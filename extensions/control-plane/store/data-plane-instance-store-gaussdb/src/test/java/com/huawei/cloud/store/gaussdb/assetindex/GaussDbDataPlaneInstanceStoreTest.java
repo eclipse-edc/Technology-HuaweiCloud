@@ -19,10 +19,10 @@ import com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension;
 import com.huawei.cloud.gaussdb.testfixtures.annotations.GaussDbTest;
 import org.eclipse.edc.connector.dataplane.selector.spi.instance.DataPlaneInstance;
 import org.eclipse.edc.connector.dataplane.selector.spi.store.DataPlaneInstanceStore;
-import org.eclipse.edc.connector.dataplane.selector.spi.testfixtures.TestFunctions;
 import org.eclipse.edc.connector.dataplane.selector.store.sql.SqlDataPlaneInstanceStore;
 import org.eclipse.edc.connector.dataplane.selector.store.sql.schema.DataPlaneInstanceStatements;
 import org.eclipse.edc.connector.dataplane.selector.store.sql.schema.postgres.PostgresDataPlaneInstanceStatements;
+import org.eclipse.edc.spi.types.domain.DataAddress;
 import org.eclipse.edc.sql.QueryExecutor;
 import org.eclipse.edc.transaction.datasource.spi.DataSourceRegistry;
 import org.eclipse.edc.transaction.spi.TransactionContext;
@@ -35,6 +35,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Clock;
 
 import static com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension.DEFAULT_DATASOURCE_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,14 +54,15 @@ class GaussDbDataPlaneInstanceStoreTest {
 
     @AfterAll
     static void deleteTable(GaussDbTestExtension.SqlHelper runner) {
-        runner.dropTable(SQL_STATEMENTS.getDataPlaneInstanceTable());
+        runner.dropTable("edc_data_plane_instance");
     }
 
     @BeforeEach
-    void setup(GaussDbTestExtension.SqlHelper runner, TransactionContext transactionContext, QueryExecutor queryExecutor, DataSourceRegistry reg) {
-        dataPlaneInstanceStore = new SqlDataPlaneInstanceStore(reg, DEFAULT_DATASOURCE_NAME, transactionContext, SQL_STATEMENTS, new ObjectMapper(), queryExecutor);
+    void setup(GaussDbTestExtension.SqlHelper runner, TransactionContext transactionContext, QueryExecutor queryExecutor, DataSourceRegistry reg, Clock clock) {
+        String lease = "lease";
+        dataPlaneInstanceStore = new SqlDataPlaneInstanceStore(reg, DEFAULT_DATASOURCE_NAME, transactionContext, SQL_STATEMENTS, new ObjectMapper(), queryExecutor, clock, lease);
 
-        runner.truncateTable(SQL_STATEMENTS.getDataPlaneInstanceTable());
+        runner.truncateTable("edc_data_plane_instance");
     }
 
     @Test
@@ -105,7 +107,7 @@ class GaussDbDataPlaneInstanceStoreTest {
 
         assertThat(getStore().getAll()).hasSize(1).usingRecursiveFieldByFieldElementComparator().containsExactly(inst2);
     }
-    
+
     @Test
     void save_shouldReturnCustomInstance() {
         var custom = TestFunctions.createCustomInstance("test-id", "name");
@@ -151,6 +153,23 @@ class GaussDbDataPlaneInstanceStoreTest {
 
     protected DataPlaneInstanceStore getStore() {
         return dataPlaneInstanceStore;
+    }
+
+    public class TestFunctions {
+        TestFunctions() {
+        }
+
+        public static DataAddress createAddress(String type) {
+            return DataAddress.Builder.newInstance().type("test-type").keyName(type).property("someprop", "someval").build();
+        }
+
+        public static DataPlaneInstance createInstance(String id) {
+            return org.eclipse.edc.connector.dataplane.selector.spi.instance.DataPlaneInstance.Builder.newInstance().id(id).url("http://somewhere.com:1234/api/v1").build();
+        }
+
+        public static DataPlaneInstance createCustomInstance(String id, String name) {
+            return org.eclipse.edc.connector.dataplane.selector.spi.instance.DataPlaneInstance.Builder.newInstance().id(id).url("http://somewhere.com:1234/api/v1").property("name", "name").build();
+        }
     }
 
 }

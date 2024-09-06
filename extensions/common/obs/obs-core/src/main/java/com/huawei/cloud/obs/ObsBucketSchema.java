@@ -21,4 +21,7 @@ public interface ObsBucketSchema {
     String ACCESS_KEY_ID = "accessKeyId";
     String SECRET_ACCESS_KEY = "secretAccessKey";
     String ENDPOINT = "endpoint";
+    String TRANSFERTYPE_PUSH = TYPE + "-PUSH";
+    String TRANSFERTYPE_PULL = TYPE + "-PULL";
+
 }

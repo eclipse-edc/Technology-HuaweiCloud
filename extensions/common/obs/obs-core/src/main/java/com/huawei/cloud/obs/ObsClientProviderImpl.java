@@ -21,6 +21,7 @@ import com.obs.services.OBSCredentialsProviderChain;
 import com.obs.services.ObsClient;
 import com.obs.services.ObsConfiguration;
 import org.eclipse.edc.spi.monitor.Monitor;
+import org.eclipse.edc.spi.security.Vault;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -39,9 +40,17 @@ public class ObsClientProviderImpl implements ObsClientProvider {
 
     private IamClient iamClient;
 
+    private Vault vault;
+
     public ObsClientProviderImpl(ObsClientProviderConfiguration configuration, Monitor monitor) {
         this.configuration = configuration;
         this.monitor = monitor;
+    }
+
+    public ObsClientProviderImpl(ObsClientProviderConfiguration configuration, Monitor monitor, Vault vault) {
+        this.configuration = configuration;
+        this.monitor = monitor;
+        this.vault = vault;
     }
 
     @NotNull
@@ -113,6 +122,10 @@ public class ObsClientProviderImpl implements ObsClientProvider {
             }
             return iamClient;
         }
+    }
+
+    public Vault getVault() {
+        return vault;
     }
 
     private void closeClient(Map.Entry<String, ObsClient> clientEntry) {

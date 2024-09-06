@@ -62,6 +62,8 @@ public class HuaweiParticipant extends Participant {
                 put("edc.dataplane.token.validation.endpoint", "http://token-validation.com");
                 put("edc.dpf.selector.url", "http://does-this-matter.com");
                 put("edc.huawei.iam.endpoint", IAM_OTC_CLOUD_URL);
+                put("edc.transfer.proxy.token.verifier.publickey.alias", "publickey");
+                put("edc.transfer.proxy.token.signer.privatekey.alias", "privatekey");
             }
         };
     }

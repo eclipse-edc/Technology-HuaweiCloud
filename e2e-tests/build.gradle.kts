@@ -23,6 +23,7 @@ dependencies {
     testImplementation(libs.awaitility)
     testImplementation(libs.awaitility)
     testImplementation(libs.testcontainers.junit)
+    testImplementation(libs.edc.spi.dataplane)
     testImplementation(testFixtures(project(":extensions:common:obs:obs-core")))
     testCompileOnly(project(":extensions:data-plane:data-plane-obs"))
     testCompileOnly(project(":launchers:e2e-test"))

@@ -24,6 +24,7 @@ import org.eclipse.edc.junit.extensions.EdcClassRuntimesExtension;
 import org.eclipse.edc.junit.extensions.EdcRuntimeExtension;
 import org.eclipse.edc.spi.types.domain.DataAddress;
 import org.eclipse.edc.spi.types.domain.transfer.DataFlowStartMessage;
+import org.eclipse.edc.spi.types.domain.transfer.FlowType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -190,7 +191,7 @@ public class ObsTransferEndToEndTest {
                         .property(ObsBucketSchema.ENDPOINT, consumerEndpoint)
                         .build()
                 )
-                .processId("test-process-id");
+                .processId("test-process-id").flowType(FlowType.PUSH);
     }
 
 }
