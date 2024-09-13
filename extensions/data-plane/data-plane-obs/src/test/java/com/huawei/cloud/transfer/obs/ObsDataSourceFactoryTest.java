@@ -54,15 +54,6 @@ class ObsDataSourceFactoryTest {
     private final ObsDataSourceFactory factory = new ObsDataSourceFactory(vault, typeManager, CLIENT_PROVIDER);
 
     @Test
-    void canHandle() {
-        var dataAddress = DataAddress.Builder.newInstance().type(ObsBucketSchema.TYPE).build();
-
-        var result = factory.canHandle(createRequest(dataAddress));
-
-        assertThat(result).isTrue();
-    }
-
-    @Test
     void canHandle_unexpectedType() {
         var dataAddress = DataAddress.Builder.newInstance().type("any").build();
 

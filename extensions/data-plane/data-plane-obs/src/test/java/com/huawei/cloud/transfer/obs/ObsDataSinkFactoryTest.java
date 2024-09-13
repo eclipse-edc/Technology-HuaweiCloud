@@ -54,15 +54,6 @@ class ObsDataSinkFactoryTest {
     }
 
     @Test
-    void canHandle() {
-        var dataAddress = DataAddress.Builder.newInstance().type(ObsBucketSchema.TYPE).build();
-        assertThat(factory.canHandle(createRequest(dataAddress))).isTrue();
-
-        var dataAddress2 = DataAddress.Builder.newInstance().type("invalid-type").build();
-        assertThat(factory.canHandle(createRequest(dataAddress2))).isFalse();
-    }
-
-    @Test
     void validate_success() {
         var addr = DataAddress.Builder.newInstance()
                 .type(ObsBucketSchema.TYPE)

@@ -51,11 +51,6 @@ public class ObsDataSinkFactory extends ObsFactory implements DataSinkFactory {
     }
 
     @Override
-    public boolean canHandle(DataFlowStartMessage request) {
-        return ObsBucketSchema.TYPE.equals(request.getDestinationDataAddress().getType());
-    }
-
-    @Override
     public DataSink createSink(DataFlowStartMessage request) {
         var validationResult = validateRequest(request);
         if (validationResult.failed()) {
