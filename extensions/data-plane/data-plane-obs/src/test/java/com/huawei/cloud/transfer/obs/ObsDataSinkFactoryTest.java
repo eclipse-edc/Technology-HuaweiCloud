@@ -54,6 +54,11 @@ class ObsDataSinkFactoryTest {
     }
 
     @Test
+    void canSupport() {
+        assertThat(factory.supportedType()).isEqualTo(ObsBucketSchema.TYPE);
+    }
+
+    @Test
     void validate_success() {
         var addr = DataAddress.Builder.newInstance()
                 .type(ObsBucketSchema.TYPE)
