@@ -1,6 +1,12 @@
 name: Run Tests
 
 on:
+  workflow_call:
+    inputs:
+      skip-dependency-check:
+        description: 'Skip the Dependency-Check job'
+        required: false
+        default: 'false'
   workflow_dispatch:
   push:
     branches: [ main, release/*, bugfix/* ]
