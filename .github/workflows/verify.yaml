@@ -31,6 +31,7 @@ jobs:
         run: ./gradlew checkstyleMain checkstyleTest
 
   Dependency-Check:
+    if: ${{ inputs.skip-dependency-check != 'true' }}
     uses: eclipse-edc/.github/.github/workflows/dependency-check.yml@main
     secrets: inherit
 
