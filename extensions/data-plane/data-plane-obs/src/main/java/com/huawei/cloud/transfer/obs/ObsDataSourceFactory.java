@@ -40,8 +40,8 @@ public class ObsDataSourceFactory extends ObsFactory implements DataSourceFactor
     }
 
     @Override
-    public boolean canHandle(DataFlowStartMessage request) {
-        return ObsBucketSchema.TYPE.equals(request.getSourceDataAddress().getType());
+    public String supportedType() {
+        return ObsBucketSchema.TYPE;
     }
 
     @Override

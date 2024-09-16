@@ -4,7 +4,7 @@ format.version = "1.1"
 [versions]
 awaitility = "4.2.2"
 bouncyCastle-jdk18on = "1.78.1"
-edc = "0.6.2"
+edc = "0.8.2-SNAPSHOT"
 failsafe = "3.3.2"
 httpMockServer = "5.15.0"
 jakarta-json = "2.0.1"
@@ -30,6 +30,7 @@ edc-auth-tokenbased = { module = "org.eclipse.edc:auth-tokenbased", version.ref 
 edc-boot = { module = "org.eclipse.edc:boot", version.ref = "edc" }
 edc-config-filesystem = { module = "org.eclipse.edc:configuration-filesystem", version.ref = "edc" }
 edc-vault-filesystem = { module = "org.eclipse.edc:vault-filesystem", version.ref = "edc" }
+edc-control-api-configuration = { module = "org.eclipse.edc:control-api-configuration", version.ref = "edc" }
 edc-core-connector = { module = "org.eclipse.edc:connector-core", version.ref = "edc" }
 edc-core-controlplane = { module = "org.eclipse.edc:control-plane-core", version.ref = "edc" }
 edc-core-controlplane-apiclient = { module = "org.eclipse.edc:control-plane-api-client", version.ref = "edc" }
@@ -42,7 +43,7 @@ edc-core-jetty = { module = "org.eclipse.edc:jetty-core", version.ref = "edc" }
 edc-core-jwt = { module = "org.eclipse.edc:jwt-core", version.ref = "edc" }
 edc-dpf-framework = { module = "org.eclipse.edc:data-plane-framework", version.ref = "edc" }
 edc-dpf-core = { module = "org.eclipse.edc:data-plane-core", version.ref = "edc" }
-edc-dpf-transfer = { module = "org.eclipse.edc:transfer-data-plane", version.ref = "edc" }
+edc-dpf-transfer = { module = "org.eclipse.edc:transfer-data-plane-signaling", version.ref = "edc" }
 edc-dpf-selector-core = { module = "org.eclipse.edc:data-plane-selector-core", version.ref = "edc" }
 edc-dpf-selector-spi = { module = "org.eclipse.edc:data-plane-selector-spi", version.ref = "edc" }
 edc-dpf-selector-api = { module = "org.eclipse.edc:data-plane-selector-api", version.ref = "edc" }
@@ -51,6 +52,7 @@ edc-dpf-http = { module = "org.eclipse.edc:data-plane-http", version.ref = "edc"
 edc-dpf-http-oauth2 = { module = "org.eclipse.edc:data-plane-http-oauth2", version.ref = "edc" }
 edc-dpf-api = { module = "org.eclipse.edc:data-plane-control-api", version.ref = "edc" }
 edc-dpf-util = { module = "org.eclipse.edc:data-plane-util", version.ref = "edc" }
+edc-dpf-self-registration = { module = "org.eclipse.edc:data-plane-self-registration", version.ref = "edc" }
 edc-ext-azure-cosmos-core = { module = "org.eclipse.edc:azure-cosmos-core", version.ref = "edc" }
 edc-ext-azure-test = { module = "org.eclipse.edc:azure-test", version.ref = "edc" }
 edc-ext-http = { module = "org.eclipse.edc:http", version.ref = "edc" }
@@ -85,7 +87,7 @@ edc-sql-policymonitor = { module = "org.eclipse.edc:policy-monitor-store-sql", v
 edc-sql-lease = { module = "org.eclipse.edc:sql-lease", version.ref = "edc" }
 edc-sql-core = { module = "org.eclipse.edc:sql-core", version.ref = "edc" }
 edc-sql-pool-apachecommons = { module = "org.eclipse.edc:sql-pool-apache-commons", version.ref = "edc" }
-edc-transfer-dataplane = { module = "org.eclipse.edc:transfer-data-plane", version.ref = "edc" }
+edc-transfer-dataplane = { module = "org.eclipse.edc:transfer-data-plane-signaling", version.ref = "edc" }
 edc-transfer-httppull-receiver = { module = "org.eclipse.edc:transfer-pull-http-receiver", version.ref = "edc" }
 edc-transfer-httppull-receiver-dynamic = { module = "org.eclipse.edc:transfer-pull-http-dynamic-receiver", version.ref = "edc" }
 edc-util = { module = "org.eclipse.edc:util", version.ref = "edc" }

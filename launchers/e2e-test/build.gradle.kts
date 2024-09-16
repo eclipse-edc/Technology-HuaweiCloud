@@ -44,7 +44,9 @@ dependencies {
     runtimeOnly(libs.edc.controlplane.callback.dispatcher.event)
     runtimeOnly(libs.edc.controlplane.callback.dispatcher.http)
     runtimeOnly(libs.edc.core.controlplane.apiclient)
-
+    runtimeOnly(libs.edc.transfer.dataplane)
+    runtimeOnly(libs.edc.dpf.self.registration)
+    runtimeOnly(libs.edc.control.api.configuration)
 
     implementation(libs.edc.spi.core)
     runtimeOnly(libs.edc.core.controlplane)

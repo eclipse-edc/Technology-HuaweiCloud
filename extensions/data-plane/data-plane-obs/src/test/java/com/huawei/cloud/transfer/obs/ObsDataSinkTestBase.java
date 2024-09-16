@@ -114,7 +114,7 @@ abstract class ObsDataSinkTestBase {
                 .build();
 
         var result = sink.transferParts(List.of(createPart(testFile)));
-        assertThat(result).isFailed().detail().startsWith(("Error writing part 1 of the %s object on the %s bucket: " +
+        assertThat(result).isFailed().detail().startsWith(("GENERAL_ERROR: Error writing part 1 of the %s object on the %s bucket: " +
                 "The specified bucket does not exist").formatted(testFile.getName(), bucket));
     }
 

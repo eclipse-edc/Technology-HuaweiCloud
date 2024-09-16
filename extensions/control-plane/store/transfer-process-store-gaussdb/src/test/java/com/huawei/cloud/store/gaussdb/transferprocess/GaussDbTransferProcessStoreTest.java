@@ -965,7 +965,7 @@ class GaussDbTransferProcessStoreTest {
         var correlationId = UUID.randomUUID().toString();
         getTransferProcessStore().save(createTransferProcessBuilder(id).correlationId(correlationId).build());
 
-        var result = getTransferProcessStore().findByCorrelationIdAndLease(correlationId);
+        var result = getTransferProcessStore().findByIdAndLease(correlationId);
 
         AbstractResultAssert.assertThat(result).isSucceeded();
         assertThat(isLeasedBy(id, CONNECTOR_NAME)).isTrue();
@@ -973,7 +973,7 @@ class GaussDbTransferProcessStoreTest {
 
     @Test
     void findByCorrelationIdAndLease_shouldReturnNotFound_whenEntityDoesNotExist() {
-        var result = getTransferProcessStore().findByCorrelationIdAndLease("unexistent");
+        var result = getTransferProcessStore().findByIdAndLease("unexistent");
 
         AbstractResultAssert.assertThat(result).isFailed().extracting(StoreFailure::getReason).isEqualTo(NOT_FOUND);
     }
@@ -985,7 +985,7 @@ class GaussDbTransferProcessStoreTest {
         getTransferProcessStore().save(createTransferProcessBuilder(id).correlationId(correlationId).build());
         leaseEntity(id, "other owner");
 
-        var result = getTransferProcessStore().findByCorrelationIdAndLease(correlationId);
+        var result = getTransferProcessStore().findByIdAndLease(correlationId);
 
         AbstractResultAssert.assertThat(result).isFailed().extracting(StoreFailure::getReason).isEqualTo(ALREADY_LEASED);
     }
