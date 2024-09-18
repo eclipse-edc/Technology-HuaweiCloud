@@ -40,8 +40,8 @@ maven/mavencentral/com.google.guava/guava/33.3.0-jre, Apache-2.0 AND CC0-1.0 AND
 maven/mavencentral/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava, Apache-2.0, approved, CQ22657
 maven/mavencentral/com.google.protobuf/protobuf-java/3.25.3, BSD-3-Clause, approved, clearlydefined
 maven/mavencentral/com.huaweicloud.dws/huaweicloud-dws-jdbc/8.3.1.200-200, NOASSERTION, restricted, clearlydefined
-maven/mavencentral/com.huaweicloud.sdk/huaweicloud-sdk-core/3.1.110, Apache-2.0, approved, #11922
-maven/mavencentral/com.huaweicloud.sdk/huaweicloud-sdk-iam/3.1.110, Apache-2.0, approved, #12598
+maven/mavencentral/com.huaweicloud.sdk/huaweicloud-sdk-core/3.1.114, Apache-2.0, approved, #11922
+maven/mavencentral/com.huaweicloud.sdk/huaweicloud-sdk-iam/3.1.114, Apache-2.0, approved, #12598
 maven/mavencentral/com.huaweicloud/esdk-obs-java/3.24.3, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.nimbusds/nimbus-jose-jwt/9.40, Apache-2.0, approved, #15156
 maven/mavencentral/com.puppycrawl.tools/checkstyle/10.18.1, LGPL-2.1-or-later AND (Apache-2.0 AND LGPL-2.1-or-later) AND Apache-2.0, approved, #16060
