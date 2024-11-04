@@ -78,6 +78,7 @@ public class ObsTransferEndToEndTest {
     private static final String CONSUMER_SK = "consumer-sk";
     private static final String PROVIDER_AK = "provider-ak";
     private static final String PROVIDER_SK = "provider-sk";
+
     @RegisterExtension
     static EdcClassRuntimesExtension runtimes = new EdcClassRuntimesExtension(
             new EdcRuntimeExtension(
@@ -125,8 +126,6 @@ public class ObsTransferEndToEndTest {
         registry.register(new JsonObjectFromDataAddressDspaceTransformer(builderFactory, mapper));
         registry.register(new JsonObjectToDataAddressDspaceTransformer());
         registry.register(new JsonObjectToDataFlowResponseMessageTransformer());
-
-
     }
 
     @Test
@@ -142,12 +141,14 @@ public class ObsTransferEndToEndTest {
         consumerClient.createBucket(destBucket);
 
         var flowRequest = createFlowRequest(destBucket, consumerEndpoint, srcBucket, TESTFILE_NAME, providerEndpoint).build();
-        var url = PROVIDER.getControlEndpoint().getUrl().toString() + "/transfer";
+        var url = PROVIDER.getControlEndpoint().getUrl().toString() + "/v1/dataflows";
+
+        var startMessage = registry.transform(flowRequest, JsonObject.class).orElseThrow(failTest());
 
         given().when()
                 .baseUri(url)
                 .contentType(ContentType.JSON)
-                .body(flowRequest)
+                .body(startMessage)
                 .post()
                 .then()
                 .statusCode(200)
@@ -203,8 +204,9 @@ public class ObsTransferEndToEndTest {
     }
 
     private DataFlowStartMessage.Builder createFlowRequest(String consumerBucket, String consumerEndpoint, String providerBucket, String providerObjectKey, String providerEndpoint) {
+        var id = UUID.randomUUID().toString();
         return DataFlowStartMessage.Builder.newInstance()
-                .processId("processId")
+                .processId("processId-" + id)
                 .sourceDataAddress(DataAddress.Builder.newInstance()
                                 .type(ObsBucketSchema.TYPE)
                                 .keyName(TESTFILE_NAME)
