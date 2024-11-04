@@ -25,6 +25,7 @@ import jakarta.json.JsonObject;
 import org.eclipse.edc.connector.api.signaling.transform.from.JsonObjectFromDataFlowStartMessageTransformer;
 import org.eclipse.edc.connector.api.signaling.transform.to.JsonObjectToDataFlowResponseMessageTransformer;
 import org.eclipse.edc.jsonld.util.JacksonJsonLd;
+import org.eclipse.edc.junit.annotations.EndToEndTest;
 import org.eclipse.edc.junit.extensions.EdcClassRuntimesExtension;
 import org.eclipse.edc.junit.extensions.EdcRuntimeExtension;
 import org.eclipse.edc.spi.result.Failure;
@@ -58,7 +59,7 @@ import static org.eclipse.edc.junit.testfixtures.TestUtils.getFileFromResourceNa
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 @Testcontainers
-//@EndToEndTest
+@EndToEndTest
 public class ObsTransferEndToEndTest {
     public static final String MINIO_DOCKER_IMAGE = "bitnami/minio";
     public static final int MINIO_CONTAINER_PORT = 9000;
