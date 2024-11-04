@@ -15,17 +15,12 @@
 package com.huawei.cloud.fixtures;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import jakarta.json.JsonArray;
 import org.eclipse.edc.connector.controlplane.test.system.utils.Participant;
 
 import java.net.URI;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
-
-import static io.restassured.http.ContentType.JSON;
-import static org.awaitility.Awaitility.await;
 import static org.eclipse.edc.boot.BootServicesExtension.PARTICIPANT_ID;
 import static org.eclipse.edc.util.io.Ports.getFreePort;
 
@@ -59,6 +54,7 @@ public class HuaweiParticipant extends Participant {
                 put("web.http.public.port", String.valueOf(getFreePort()));
                 put("edc.dsp.callback.address", protocolEndpoint.getUrl().toString());
                 put("edc.connector.name", name);
+                put("edc.component.id", "connector-test");
                 put("edc.dataplane.token.validation.endpoint", "http://token-validation.com");
                 put("edc.dpf.selector.url", "http://does-this-matter.com");
                 put("edc.huawei.iam.endpoint", IAM_OTC_CLOUD_URL);
@@ -66,25 +62,6 @@ public class HuaweiParticipant extends Participant {
                 put("edc.transfer.proxy.token.signer.privatekey.alias", "privatekey");
             }
         };
-    }
-
-    public JsonArray getPolicies() {
-
-        AtomicReference<JsonArray> array = new AtomicReference<>();
-        await().atMost(TIMEOUT).untilAsserted(() -> {
-            var response = managementEndpoint.baseRequest()
-                    .contentType(JSON)
-                    .when()
-                    .post("/v2/policydefinitions/request")
-                    .then()
-                    .log().ifError()
-                    .statusCode(200)
-                    .extract().body().asString();
-
-            array.set(objectMapper.readValue(response, JsonArray.class));
-        });
-
-        return array.get();
     }
 
     public static final class Builder extends Participant.Builder<HuaweiParticipant, Builder> {
