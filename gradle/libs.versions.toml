@@ -3,20 +3,20 @@ format.version = "1.1"
 
 [versions]
 awaitility = "4.2.2"
-bouncyCastle-jdk18on = "1.78.1"
+bouncyCastle-jdk18on = "1.79"
 edc = "0.11.0-SNAPSHOT"
 failsafe = "3.3.2"
 httpMockServer = "5.15.0"
 jakarta-json = "2.0.1"
 junit = "5.11.2"
 mockito = "5.2.0"
-nimbus = "9.41.2"
+nimbus = "9.45"
 restAssured = "5.4.0"
 rsApi = "4.0.0"
-testcontainers = "1.20.2"
+testcontainers = "1.20.3"
 huawei-obs = "3.24.9"
-huawei-iam = "3.1.115"
-huawei-dws = "8.3.1.200-200"
+huawei-iam = "3.1.120"
+huawei-dws = "8.5.0-200"
 
 [libraries]
 
