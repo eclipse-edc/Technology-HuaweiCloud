@@ -18,6 +18,8 @@ plugins {
 
 dependencies {
     testImplementation(libs.edc.junit)
+    testImplementation(libs.edc.lib.transform)
+    testImplementation(libs.edc.transform.dpf.signaling)
     testImplementation(testFixtures(libs.edc.testfixtures.managementapi))
     testImplementation(libs.restAssured)
     testImplementation(libs.awaitility)

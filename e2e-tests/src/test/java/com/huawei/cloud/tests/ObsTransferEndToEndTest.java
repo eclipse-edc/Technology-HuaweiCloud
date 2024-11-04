@@ -14,17 +14,30 @@
 
 package com.huawei.cloud.tests;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.huawei.cloud.fixtures.HuaweiParticipant;
 import com.huawei.cloud.obs.ObsBucketSchema;
 import com.huawei.cloud.obs.TestFunctions;
 import com.obs.services.ObsClient;
 import io.restassured.http.ContentType;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import org.eclipse.edc.connector.api.signaling.transform.from.JsonObjectFromDataFlowStartMessageTransformer;
+import org.eclipse.edc.connector.api.signaling.transform.to.JsonObjectToDataFlowResponseMessageTransformer;
+import org.eclipse.edc.jsonld.util.JacksonJsonLd;
 import org.eclipse.edc.junit.annotations.EndToEndTest;
 import org.eclipse.edc.junit.extensions.EdcClassRuntimesExtension;
 import org.eclipse.edc.junit.extensions.EdcRuntimeExtension;
+import org.eclipse.edc.spi.result.Failure;
 import org.eclipse.edc.spi.types.domain.DataAddress;
 import org.eclipse.edc.spi.types.domain.transfer.DataFlowStartMessage;
 import org.eclipse.edc.spi.types.domain.transfer.FlowType;
+import org.eclipse.edc.spi.types.domain.transfer.TransferType;
+import org.eclipse.edc.transform.TypeTransformerRegistryImpl;
+import org.eclipse.edc.transform.spi.TypeTransformerRegistry;
+import org.eclipse.edc.transform.transformer.dspace.from.JsonObjectFromDataAddressDspaceTransformer;
+import org.eclipse.edc.transform.transformer.dspace.to.JsonObjectToDataAddressDspaceTransformer;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -33,9 +46,12 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.time.Duration;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,7 +59,7 @@ import static org.eclipse.edc.junit.testfixtures.TestUtils.getFileFromResourceNa
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 @Testcontainers
-@EndToEndTest
+//@EndToEndTest
 public class ObsTransferEndToEndTest {
     public static final String MINIO_DOCKER_IMAGE = "bitnami/minio";
     public static final int MINIO_CONTAINER_PORT = 9000;
@@ -92,6 +108,9 @@ public class ObsTransferEndToEndTest {
     private String consumerEndpoint;
     private String providerEndpoint;
 
+    private final TypeTransformerRegistry registry = new TypeTransformerRegistryImpl();
+    private ObjectMapper mapper;
+
     @BeforeEach
     void setup() {
         consumerEndpoint = "http://localhost:%s".formatted(consumerContainer.getMappedPort(MINIO_CONTAINER_PORT));
@@ -99,6 +118,15 @@ public class ObsTransferEndToEndTest {
 
         providerClient = TestFunctions.createClient(PROVIDER_AK, PROVIDER_SK, providerEndpoint);
         consumerClient = TestFunctions.createClient(CONSUMER_AK, CONSUMER_SK, consumerEndpoint);
+
+        var builderFactory = Json.createBuilderFactory(Map.of());
+        mapper = JacksonJsonLd.createObjectMapper();
+        registry.register(new JsonObjectFromDataFlowStartMessageTransformer(builderFactory, mapper));
+        registry.register(new JsonObjectFromDataAddressDspaceTransformer(builderFactory, mapper));
+        registry.register(new JsonObjectToDataAddressDspaceTransformer());
+        registry.register(new JsonObjectToDataFlowResponseMessageTransformer());
+
+
     }
 
     @Test
@@ -148,16 +176,21 @@ public class ObsTransferEndToEndTest {
         consumerClient.createBucket(destBucket);
 
         var flowRequest = createFlowRequest(destBucket, consumerEndpoint, srcBucket, "file", providerEndpoint).build();
-        var url = PROVIDER.getControlEndpoint().getUrl().toString() + "/transfer";
+        var url = PROVIDER.getControlEndpoint().getUrl().toString() + "/v1/dataflows";
 
-        given().when()
+
+        var startMessage = registry.transform(flowRequest, JsonObject.class).orElseThrow(failTest());
+
+        var response = given().when()
                 .baseUri(url)
                 .contentType(ContentType.JSON)
-                .body(flowRequest)
+                .body(startMessage)
                 .post()
                 .then()
                 .statusCode(200)
                 .log().all(true);
+
+        System.out.println(response);
 
         await().pollInterval(Duration.ofSeconds(2))
                 .atMost(Duration.ofSeconds(60))
@@ -171,17 +204,21 @@ public class ObsTransferEndToEndTest {
 
     private DataFlowStartMessage.Builder createFlowRequest(String consumerBucket, String consumerEndpoint, String providerBucket, String providerObjectKey, String providerEndpoint) {
         return DataFlowStartMessage.Builder.newInstance()
-                .id("test-request")
+                .processId("processId")
                 .sourceDataAddress(DataAddress.Builder.newInstance()
-                        .type(ObsBucketSchema.TYPE)
-                        .keyName(TESTFILE_NAME)
-                        .property(ObsBucketSchema.BUCKET_NAME, providerBucket)
-                        .property(ObsBucketSchema.KEY_PREFIX, providerObjectKey)
-                        .property(ObsBucketSchema.ACCESS_KEY_ID, PROVIDER_AK)
-                        .property(ObsBucketSchema.SECRET_ACCESS_KEY, PROVIDER_SK)
-                        .property(ObsBucketSchema.ENDPOINT, providerEndpoint)
-                        .build()
-                )
+                                .type(ObsBucketSchema.TYPE)
+                                .keyName(TESTFILE_NAME)
+                                .property(ObsBucketSchema.BUCKET_NAME, providerBucket)
+                                .property(ObsBucketSchema.KEY_PREFIX, providerObjectKey)
+                                .property(ObsBucketSchema.ACCESS_KEY_ID, PROVIDER_AK)
+                                .property(ObsBucketSchema.SECRET_ACCESS_KEY, PROVIDER_SK)
+                                .property(ObsBucketSchema.ENDPOINT, providerEndpoint)
+                                .build())
+                .transferType(new TransferType(ObsBucketSchema.TYPE, FlowType.PUSH))
+                .participantId("participantId")
+                .assetId("assetId")
+                .callbackAddress(URI.create("http://localhost"))
+                .agreementId("agreementId")
                 .destinationDataAddress(DataAddress.Builder.newInstance()
                         .type(ObsBucketSchema.TYPE)
                         .keyName(TESTFILE_NAME)
@@ -190,8 +227,12 @@ public class ObsTransferEndToEndTest {
                         .property(ObsBucketSchema.SECRET_ACCESS_KEY, CONSUMER_SK)
                         .property(ObsBucketSchema.ENDPOINT, consumerEndpoint)
                         .build()
-                )
-                .processId("test-process-id").flowType(FlowType.PUSH);
+                );
+    }
+
+    @NotNull
+    private Function<Failure, AssertionError> failTest() {
+        return f -> new AssertionError(f.getFailureDetail());
     }
 
 }
