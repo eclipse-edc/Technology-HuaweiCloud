@@ -22,27 +22,35 @@ plugins {
 
 dependencies {
 
-
     runtimeOnly(project(":extensions:control-plane:provision-obs"))
     runtimeOnly(project(":extensions:data-plane:data-plane-obs"))
-
-    runtimeOnly(libs.edc.core.connector)
-    runtimeOnly(libs.edc.core.dataplane)
-    runtimeOnly(libs.edc.control.api.configuration)
-    runtimeOnly(libs.edc.core.controlplane.apiclient)
-    runtimeOnly(libs.edc.dpf.iam)
-    runtimeOnly(libs.edc.dpf.public.api)
-    runtimeOnly(libs.edc.ext.http)
-    runtimeOnly(libs.edc.jsonld)
-    runtimeOnly(libs.edc.core.token)
     runtimeOnly(libs.edc.core.controlplane)
-    runtimeOnly(libs.edc.dsp)
-    runtimeOnly(libs.edc.iam.mock)
+    runtimeOnly(libs.edc.core.dataplane)
+    runtimeOnly(libs.edc.core.connector)
+    runtimeOnly(libs.edc.config.filesystem)
+    runtimeOnly(libs.edc.auth.tokenbased)
+
     runtimeOnly(libs.edc.api.management)
-    runtimeOnly(libs.edc.controlplane.edr.core.store)
-    runtimeOnly(libs.edc.dpf.self.registration)
-    runtimeOnly(libs.bundles.edc.dpf)
     runtimeOnly(libs.edc.api.controlplane)
+    runtimeOnly(libs.edc.dpf.api)
+    runtimeOnly(libs.edc.dpf.selector.api)
+    runtimeOnly(libs.edc.api.management.config)
+    runtimeOnly(libs.edc.api.observability)
+    runtimeOnly(libs.edc.dsp)
+    runtimeOnly(libs.edc.spi.jwt)
+    runtimeOnly(libs.bundles.edc.dpf)
+    runtimeOnly(libs.edc.iam.mock)
+    runtimeOnly(libs.edc.ext.http)
+    runtimeOnly(libs.edc.controlplane.callback.dispatcher.event)
+    runtimeOnly(libs.edc.controlplane.callback.dispatcher.http)
+    runtimeOnly(libs.edc.core.controlplane.apiclient)
+    runtimeOnly(libs.edc.transfer.dataplane)
+    runtimeOnly(libs.edc.dpf.self.registration)
+    runtimeOnly(libs.edc.control.api.configuration)
+
+    implementation(libs.edc.spi.core)
+    runtimeOnly(libs.edc.core.controlplane)
+    testImplementation(libs.edc.junit)
 }
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
