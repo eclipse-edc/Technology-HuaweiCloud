@@ -49,14 +49,9 @@ jobs:
       - name: Component Tests
         run: ./gradlew -DincludeTags="ComponentTest"
 
-  End-To-End-Tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: eclipse-edc/.github/.github/actions/setup-build@main
-
-      - name: End to End Integration Tests
-        run: ./gradlew test -DincludeTags="EndToEndTest"
+  Integration-Tests:
+    uses: ./.github/workflows/integration-tests.yaml
+    secrets: inherit
 
   API-Tests:
     runs-on: ubuntu-latest

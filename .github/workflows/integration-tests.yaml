@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  secret-presence:
+  Secret-Presence:
     runs-on: ubuntu-latest
     outputs:
       HAS_OTC_CRED: ${{ steps.secret-presence.outputs.HAS_OTC_CRED }}
@@ -22,7 +22,7 @@ jobs:
           [ ! -z "${{ secrets.pg_connection_string }}" ] && echo "HAS_PG_CONNECTION_STRING=true" >> $GITHUB_OUTPUT
           exit 0
 
-  end-to-end-test:
+  End-to-End-Test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,7 +31,8 @@ jobs:
         run: |
           ./gradlew compileJava compileTestJava
           ./gradlew test -DincludeTags="EndToEndTest" -PverboseTest=true
-  obs-otc-test:
+
+  Obs-Otc-Test:
     runs-on: ubuntu-latest
     needs: [ secret-presence ]
     if: |
@@ -46,4 +47,3 @@ jobs:
         run: |
           ./gradlew compileJava compileTestJava
           ./gradlew test -DincludeTags="OtcTest" -PverboseTest=true
-
