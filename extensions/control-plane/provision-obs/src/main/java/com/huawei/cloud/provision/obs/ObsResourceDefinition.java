@@ -14,15 +14,10 @@
 
 package com.huawei.cloud.provision.obs;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import org.eclipse.edc.connector.controlplane.transfer.spi.types.ResourceDefinition;
 
 import java.util.Objects;
 
-@JsonTypeName("dataspaceconnector:obsresourcedefinition")
-@JsonDeserialize(builder = ObsResourceDefinition.Builder.class)
 public class ObsResourceDefinition extends ResourceDefinition {
 
     private String endpoint;
@@ -47,7 +42,6 @@ public class ObsResourceDefinition extends ResourceDefinition {
                 .endpoint(endpoint);
     }
 
-    @JsonPOJOBuilder(withPrefix = "")
     public static class Builder extends ResourceDefinition.Builder<ObsResourceDefinition, Builder> {
 
         private Builder() {
