@@ -47,6 +47,10 @@ public class ObsConsumerResourceDefinitionGenerator implements ConsumerResourceD
 
     @Override
     public boolean canGenerate(TransferProcess dataRequest, Policy policy) {
+        if (dataRequest.getDataDestination() == null) {
+            return false;
+        }
+
         return ObsBucketSchema.TYPE.equals(dataRequest.getDestinationType());
     }
 }
