@@ -34,7 +34,7 @@ dependencies {
 
     runtimeOnly(libs.edc.api.management)
     runtimeOnly(libs.edc.api.controlplane)
-    runtimeOnly(libs.edc.dpf.api)
+    runtimeOnly(libs.edc.dpf.iam)
     runtimeOnly(libs.edc.dpf.selector.api)
     runtimeOnly(libs.edc.api.management.config)
     runtimeOnly(libs.edc.api.observability)
@@ -46,6 +46,7 @@ dependencies {
     runtimeOnly(libs.edc.controlplane.callback.dispatcher.event)
     runtimeOnly(libs.edc.controlplane.callback.dispatcher.http)
     runtimeOnly(libs.edc.core.controlplane.apiclient)
+    runtimeOnly(libs.edc.controlplane.edr.core.store)
 
 
     implementation(libs.edc.spi.core)

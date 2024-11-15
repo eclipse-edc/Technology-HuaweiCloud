@@ -1,3 +1,5 @@
+#Not Active in Use
+
 ---
 name: "Run GaussDB Tests"
 on:

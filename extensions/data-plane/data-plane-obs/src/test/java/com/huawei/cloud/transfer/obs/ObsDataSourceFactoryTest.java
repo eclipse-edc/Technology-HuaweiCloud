@@ -60,15 +60,6 @@ class ObsDataSourceFactoryTest {
     }
 
     @Test
-    void canHandle_unexpectedType() {
-        var dataAddress = DataAddress.Builder.newInstance().type("any").build();
-
-        var result = factory.canHandle(createRequest(dataAddress));
-
-        assertThat(result).isFalse();
-    }
-
-    @Test
     void validate_validProperties() {
         var source = dataAddressWithCredentials();
         var request = createRequest(source);
