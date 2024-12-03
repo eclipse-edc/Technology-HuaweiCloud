@@ -1,5 +1,10 @@
 name: Nightly Build
 
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
 on:
   workflow_dispatch:
     inputs:
