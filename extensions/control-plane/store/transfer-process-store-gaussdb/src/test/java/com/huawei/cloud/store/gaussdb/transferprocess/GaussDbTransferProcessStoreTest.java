@@ -33,7 +33,7 @@ import org.eclipse.edc.spi.query.SortOrder;
 import org.eclipse.edc.spi.result.StoreFailure;
 import org.eclipse.edc.spi.types.domain.callback.CallbackAddress;
 import org.eclipse.edc.sql.QueryExecutor;
-import org.eclipse.edc.sql.lease.testfixtures.LeaseUtil;
+import org.eclipse.edc.sql.testfixtures.LeaseUtil;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -75,7 +75,6 @@ class GaussDbTransferProcessStoreTest {
 
     protected static final String CONNECTOR_NAME = "test-connector";
     private static final PostgresDialectStatements SQL_STATEMENTS = new GaussDbStatements();
-    protected final Clock clock = Clock.systemUTC();
     private LeaseUtil leaseUtil;
     private TransferProcessStore transferProcessStore;
 

@@ -23,7 +23,7 @@ dependencies {
     implementation(libs.failsafe.core)
     // sql libs
     implementation(libs.edc.sql.policy.definition)
-    implementation(libs.edc.sql.core)
+    implementation(libs.edc.sql.lib)
     implementation(libs.edc.spi.datasource.transaction)
 
     testImplementation(libs.edc.junit)
