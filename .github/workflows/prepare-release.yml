@@ -1,5 +1,8 @@
 name: Prepare Release
 
+permissions:
+  actions: write
+
 on:
   workflow_dispatch:
     inputs:
