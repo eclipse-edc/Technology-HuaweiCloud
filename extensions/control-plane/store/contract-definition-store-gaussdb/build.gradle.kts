@@ -19,11 +19,11 @@ plugins {
 dependencies {
     api(libs.edc.spi.core)
     api(libs.edc.lib.util)
-    api(libs.edc.sql.contract.definition)
     api(libs.huawei.dws.jdbc)
 
+    implementation(libs.edc.sql.contract.definition)
     implementation(libs.failsafe.core)
-    implementation(libs.edc.sql.core)
+    implementation(libs.edc.sql.lib)
 
     testImplementation(libs.edc.junit)
     testImplementation(libs.junit.jupiter.api)

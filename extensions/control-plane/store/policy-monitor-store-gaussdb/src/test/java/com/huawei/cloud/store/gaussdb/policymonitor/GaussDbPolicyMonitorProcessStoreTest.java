@@ -29,7 +29,7 @@ import org.eclipse.edc.spi.entity.MutableEntity;
 import org.eclipse.edc.spi.entity.StatefulEntity;
 import org.eclipse.edc.spi.result.StoreFailure;
 import org.eclipse.edc.sql.QueryExecutor;
-import org.eclipse.edc.sql.lease.testfixtures.LeaseUtil;
+import org.eclipse.edc.sql.testfixtures.LeaseUtil;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,7 +60,6 @@ class GaussDbPolicyMonitorProcessStoreTest {
 
     protected static final String CONNECTOR_NAME = "test-connector";
     private static final PostgresPolicyMonitorStatements SQL_STATEMENTS = new PostgresPolicyMonitorStatements();
-    protected final Clock clock = Clock.systemUTC();
     private LeaseUtil leaseUtil;
     private SqlPolicyMonitorStore policyMonitorStore;
 

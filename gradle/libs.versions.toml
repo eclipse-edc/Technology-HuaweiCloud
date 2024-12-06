@@ -3,16 +3,10 @@ format.version = "1.1"
 
 [versions]
 awaitility = "4.2.2"
-bouncyCastle-jdk18on = "1.79"
 edc = "0.11.0-SNAPSHOT"
 failsafe = "3.3.2"
-httpMockServer = "5.15.0"
-jakarta-json = "2.0.1"
 junit = "5.11.3"
-mockito = "5.2.0"
-nimbus = "9.47"
 restAssured = "5.4.0"
-rsApi = "4.0.0"
 testcontainers = "1.20.3"
 huawei-obs = "3.24.9"
 huawei-iam = "3.1.122"
@@ -20,59 +14,35 @@ huawei-dws = "8.5.0-200"
 
 [libraries]
 
-bouncyCastle-bcpkixJdk18on = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bouncyCastle-jdk18on" }
-bouncyCastle-bcprovJdk18on = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncyCastle-jdk18on" }
 edc-api-management = { module = "org.eclipse.edc:management-api", version.ref = "edc" }
 edc-api-controlplane = { module = "org.eclipse.edc:control-plane-api", version.ref = "edc" }
 edc-api-management-config = { module = "org.eclipse.edc:management-api-configuration", version.ref = "edc" }
 edc-api-observability = { module = "org.eclipse.edc:api-observability", version.ref = "edc" }
 edc-auth-tokenbased = { module = "org.eclipse.edc:auth-tokenbased", version.ref = "edc" }
-edc-boot = { module = "org.eclipse.edc:boot", version.ref = "edc" }
 edc-config-filesystem = { module = "org.eclipse.edc:configuration-filesystem", version.ref = "edc" }
-edc-vault-filesystem = { module = "org.eclipse.edc:vault-filesystem", version.ref = "edc" }
 edc-control-api-configuration = { module = "org.eclipse.edc:control-api-configuration", version.ref = "edc" }
 edc-core-connector = { module = "org.eclipse.edc:connector-core", version.ref = "edc" }
 edc-core-controlplane = { module = "org.eclipse.edc:control-plane-core", version.ref = "edc" }
 edc-core-controlplane-apiclient = { module = "org.eclipse.edc:control-plane-api-client", version.ref = "edc" }
 edc-core-dataplane = { module = "org.eclipse.edc:data-plane-core", version.ref = "edc" }
-edc-core-dataPlane-selector = { module = "org.eclipse.edc:data-plane-selector-core", version.ref = "edc" }
 edc-core-dataPlane-util = { module = "org.eclipse.edc:data-plane-util", version.ref = "edc" }
-edc-core-catalog = { module = "org.eclipse.edc:catalog-core", version.ref = "edc" }
-edc-core-jersey = { module = "org.eclipse.edc:jersey-core", version.ref = "edc" }
-edc-core-jetty = { module = "org.eclipse.edc:jetty-core", version.ref = "edc" }
-edc-core-jwt = { module = "org.eclipse.edc:jwt-core", version.ref = "edc" }
 edc-core-token = { module = "org.eclipse.edc:token-core", version.ref = "edc" }
-edc-dpf-framework = { module = "org.eclipse.edc:data-plane-framework", version.ref = "edc" }
-edc-dpf-core = { module = "org.eclipse.edc:data-plane-core", version.ref = "edc" }
 edc-dpf-selector-core = { module = "org.eclipse.edc:data-plane-selector-core", version.ref = "edc" }
 edc-dpf-selector-spi = { module = "org.eclipse.edc:data-plane-selector-spi", version.ref = "edc" }
 edc-dpf-selector-api = { module = "org.eclipse.edc:data-plane-selector-api", version.ref = "edc" }
-edc-dpf-client = { module = "org.eclipse.edc:data-plane-client", version.ref = "edc" }
-edc-dpf-http = { module = "org.eclipse.edc:data-plane-http", version.ref = "edc" }
-edc-dpf-http-oauth2 = { module = "org.eclipse.edc:data-plane-http-oauth2", version.ref = "edc" }
 edc-dpf-iam = { module = "org.eclipse.edc:data-plane-iam", version.ref = "edc" }
-edc-dpf-util = { module = "org.eclipse.edc:data-plane-util", version.ref = "edc" }
 edc-dpf-self-registration = { module = "org.eclipse.edc:data-plane-self-registration", version.ref = "edc" }
-edc-ext-azure-cosmos-core = { module = "org.eclipse.edc:azure-cosmos-core", version.ref = "edc" }
-edc-ext-azure-test = { module = "org.eclipse.edc:azure-test", version.ref = "edc" }
 edc-ext-http = { module = "org.eclipse.edc:http", version.ref = "edc" }
-edc-ext-boot = { module = "org.eclipse.edc:boot", version.ref = "edc" }
 edc-spi-jwt = { module = "org.eclipse.edc:jwt-spi", version.ref = "edc" }
 edc-controlplane-spi = { module = "org.eclipse.edc:control-plane-spi", version.ref = "edc" }
 edc-iam-mock = { module = "org.eclipse.edc:iam-mock", version.ref = "edc" }
 edc-dsp = { module = "org.eclipse.edc:dsp", version.ref = "edc" }
 edc-junit = { module = "org.eclipse.edc:junit", version.ref = "edc" }
-edc-provision-http = { module = "org.eclipse.edc:provision-http", version.ref = "edc" }
-edc-rs-spi-store = { module = "org.eclipse.edc:registration-service-store-spi", version.ref = "edc" }
-edc-spi-catalog = { module = "org.eclipse.edc:catalog-spi", version.ref = "edc" }
 edc-spi-contract = { module = "org.eclipse.edc:contract-spi", version.ref = "edc" }
-edc-spi-http = { module = "org.eclipse.edc:http-spi", version.ref = "edc" }
 edc-spi-policy = { module = "org.eclipse.edc:policy-spi", version.ref = "edc" }
 edc-spi-core = { module = "org.eclipse.edc:core-spi", version.ref = "edc" }
 edc-spi-transfer = { module = "org.eclipse.edc:transfer-spi", version.ref = "edc" }
-edc-spi-web = { module = "org.eclipse.edc:web-spi", version.ref = "edc" }
 edc-spi-validation = { module = "org.eclipse.edc:validator-spi", version.ref = "edc" }
-edc-spi-jsonld = { module = "org.eclipse.edc:json-ld-spi", version.ref = "edc" }
 edc-spi-dataplane = { module = "org.eclipse.edc:data-plane-spi", version.ref = "edc" }
 edc-spi-dataplane-selector = { module = "org.eclipse.edc:data-plane-selector-spi", version.ref = "edc" }
 edc-spi-datasource-transaction = { module = "org.eclipse.edc:transaction-datasource-spi", version.ref = "edc" }
@@ -85,14 +55,10 @@ edc-sql-dataplane-instance = { module = "org.eclipse.edc:data-plane-instance-sto
 edc-sql-policy-definition = { module = "org.eclipse.edc:policy-definition-store-sql", version.ref = "edc" }
 edc-sql-policymonitor = { module = "org.eclipse.edc:policy-monitor-store-sql", version.ref = "edc" }
 edc-sql-lease = { module = "org.eclipse.edc:sql-lease", version.ref = "edc" }
-edc-sql-core = { module = "org.eclipse.edc:sql-core", version.ref = "edc" }
+edc-sql-lib = { module = "org.eclipse.edc:sql-lib", version.ref = "edc" }
 edc-sql-pool-apachecommons = { module = "org.eclipse.edc:sql-pool-apache-commons", version.ref = "edc" }
-edc-transfer-dataplane = { module = "org.eclipse.edc:transfer-data-plane-signaling", version.ref = "edc" }
-edc-transfer-httppull-receiver = { module = "org.eclipse.edc:transfer-pull-http-receiver", version.ref = "edc" }
-edc-transfer-httppull-receiver-dynamic = { module = "org.eclipse.edc:transfer-pull-http-dynamic-receiver", version.ref = "edc" }
-edc-util = { module = "org.eclipse.edc:util", version.ref = "edc" }
+edc-sql-test-fixtures = { module = "org.eclipse.edc:sql-test-fixtures", version.ref = "edc" }
 edc-testfixtures-managementapi = { module = "org.eclipse.edc:management-api-test-fixtures", version.ref = "edc" }
-
 
 # Control Plane implementations
 edc-controlplane-callback-dispatcher-event = { module = "org.eclipse.edc:callback-event-dispatcher", version.ref = "edc" }
@@ -104,7 +70,6 @@ edc-dpf-signaling = { module = "org.eclipse.edc:transfer-data-plane-signaling", 
 edc-dpf-signaling-api = { module = "org.eclipse.edc:data-plane-signaling-api", version.ref = "edc" }
 edc-dpf-public-api = { module = "org.eclipse.edc:data-plane-public-api-v2", version.ref = "edc" }
 
-
 # edc-transform
 edc-transform-dpf-signaling = { module = "org.eclipse.edc:data-plane-signaling-transform", version.ref = "edc" }
 
@@ -112,29 +77,17 @@ edc-transform-dpf-signaling = { module = "org.eclipse.edc:data-plane-signaling-t
 edc-lib-util = { module = "org.eclipse.edc:util-lib", version.ref = "edc" }
 edc-lib-transform = { module = "org.eclipse.edc:transform-lib", version.ref = "edc" }
 
-
 # third-party deps
 awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility" }
 assertj = { module = "org.assertj:assertj-core", version = "3.25.3" }
 failsafe-core = { module = "dev.failsafe:failsafe", version.ref = "failsafe" }
 restAssured = { module = "io.rest-assured:rest-assured", version.ref = "restAssured" }
-jakartaJson = { module = "org.glassfish:jakarta.json", version.ref = "jakarta-json" }
-jakarta-rsApi = { module = "jakarta.ws.rs:jakarta.ws.rs-api", version.ref = "rsApi" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 edc-jsonld = { module = "org.eclipse.edc:json-ld", version.ref = "edc" }
-mockserver-client = { module = "org.mock-server:mockserver-client-java", version.ref = "httpMockServer" }
-mockserver-netty = { module = "org.mock-server:mockserver-netty", version.ref = "httpMockServer" }
-nimbus-jwt = { module = "com.nimbusds:nimbus-jose-jwt", version.ref = "nimbus" }
-mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
-mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockito" }
 testcontainers-junit = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
 huawei-obs = { module = "com.huaweicloud:esdk-obs-java", version.ref = "huawei-obs" }
 huawei-iam = { module = "com.huaweicloud.sdk:huaweicloud-sdk-iam", version.ref = "huawei-iam" }
 huawei-dws-jdbc = { module = "com.huaweicloud.dws:huaweicloud-dws-jdbc", version.ref = "huawei-dws" }
 
 [bundles]
-edc-dpf = ["edc.dpf-signaling","edc.dpf-signaling-api","edc.dpf-public-api", "edc.dpf-selector-core", "edc.spi-dataplane-selector"]
-
-[plugins]
-shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
+edc-dpf = ["edc-dpf-signaling","edc-dpf-signaling-api","edc-dpf-public-api", "edc-dpf-selector-core", "edc-spi-dataplane-selector"]

@@ -24,14 +24,14 @@ dependencies {
     api(libs.huawei.dws.jdbc)
 
     implementation(libs.failsafe.core)
-    implementation(libs.edc.sql.core)
+    implementation(libs.edc.sql.lib)
 
     testImplementation(libs.edc.junit)
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.assertj)
     testImplementation(libs.testcontainers.junit)
     testImplementation(testFixtures(libs.edc.spi.transfer))
-    testImplementation(testFixtures(libs.edc.sql.lease))
+    testImplementation(testFixtures(libs.edc.sql.test.fixtures))
     testImplementation(testFixtures(project(":extensions:common:gaussdb:gaussdb-core")))
 
 }
