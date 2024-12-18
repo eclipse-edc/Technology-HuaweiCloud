@@ -26,8 +26,9 @@ import org.eclipse.edc.connector.api.signaling.transform.from.JsonObjectFromData
 import org.eclipse.edc.connector.api.signaling.transform.to.JsonObjectToDataFlowResponseMessageTransformer;
 import org.eclipse.edc.jsonld.util.JacksonJsonLd;
 import org.eclipse.edc.junit.annotations.EndToEndTest;
-import org.eclipse.edc.junit.extensions.EdcClassRuntimesExtension;
-import org.eclipse.edc.junit.extensions.EdcRuntimeExtension;
+import org.eclipse.edc.junit.extensions.EmbeddedRuntime;
+import org.eclipse.edc.junit.extensions.RuntimeExtension;
+import org.eclipse.edc.junit.extensions.RuntimePerClassExtension;
 import org.eclipse.edc.spi.result.Failure;
 import org.eclipse.edc.spi.types.domain.DataAddress;
 import org.eclipse.edc.spi.types.domain.transfer.DataFlowStartMessage;
@@ -80,18 +81,18 @@ public class ObsTransferEndToEndTest {
     private static final String PROVIDER_SK = "provider-sk";
 
     @RegisterExtension
-    static EdcClassRuntimesExtension runtimes = new EdcClassRuntimesExtension(
-            new EdcRuntimeExtension(
-                    ":launchers:e2e-test",
-                    "consumer",
-                    CONSUMER.controlPlaneConfiguration()
-            ),
-            new EdcRuntimeExtension(
-                    ":launchers:e2e-test",
-                    "provider",
-                    PROVIDER.controlPlaneConfiguration()
-            )
-    );
+    static RuntimeExtension consumer = new RuntimePerClassExtension(new EmbeddedRuntime(
+            "consumer",
+            CONSUMER.controlPlaneConfiguration(),
+            ":launchers:e2e-test"
+    ));
+
+    @RegisterExtension
+    static RuntimeExtension provider = new RuntimePerClassExtension(new EmbeddedRuntime(
+            "provider",
+            PROVIDER.controlPlaneConfiguration(),
+            ":launchers:e2e-test"
+    ));
 
     @Container
     private final GenericContainer<?> providerContainer = new GenericContainer<>(MINIO_DOCKER_IMAGE)
