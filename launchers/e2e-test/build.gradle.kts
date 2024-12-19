@@ -16,12 +16,11 @@ plugins {
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
     id("application")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    alias(libs.plugins.shadow)
 }
 
 
 dependencies {
-
 
     runtimeOnly(project(":extensions:control-plane:provision-obs"))
     runtimeOnly(project(":extensions:data-plane:data-plane-obs"))
@@ -46,7 +45,6 @@ dependencies {
 }
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
-    exclude("**/pom.properties", "**/pom.xm")
     mergeServiceFiles()
     archiveFileName.set("hds-connector.jar")
 }
