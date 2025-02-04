@@ -22,7 +22,6 @@ import org.eclipse.edc.connector.dataplane.selector.spi.store.DataPlaneInstanceS
 import org.eclipse.edc.connector.dataplane.selector.store.sql.SqlDataPlaneInstanceStore;
 import org.eclipse.edc.connector.dataplane.selector.store.sql.schema.DataPlaneInstanceStatements;
 import org.eclipse.edc.connector.dataplane.selector.store.sql.schema.postgres.PostgresDataPlaneInstanceStatements;
-import org.eclipse.edc.spi.types.domain.DataAddress;
 import org.eclipse.edc.sql.QueryExecutor;
 import org.eclipse.edc.transaction.datasource.spi.DataSourceRegistry;
 import org.eclipse.edc.transaction.spi.TransactionContext;
@@ -39,7 +38,6 @@ import java.time.Clock;
 
 import static com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension.DEFAULT_DATASOURCE_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.edc.spi.result.StoreFailure.Reason.ALREADY_EXISTS;
 
 @GaussDbTest
 @ExtendWith(GaussDbTestExtension.class)
@@ -59,7 +57,7 @@ class GaussDbDataPlaneInstanceStoreTest {
 
     @BeforeEach
     void setup(GaussDbTestExtension.SqlHelper runner, TransactionContext transactionContext, QueryExecutor queryExecutor, DataSourceRegistry reg, Clock clock) {
-        String lease = "lease";
+        var lease = "lease";
         dataPlaneInstanceStore = new SqlDataPlaneInstanceStore(reg, DEFAULT_DATASOURCE_NAME, transactionContext, SQL_STATEMENTS, new ObjectMapper(), queryExecutor, clock, lease);
 
         runner.truncateTable("edc_data_plane_instance");
@@ -68,32 +66,14 @@ class GaussDbDataPlaneInstanceStoreTest {
     @Test
     void save() {
         var inst = TestFunctions.createInstance("test-id");
-        getStore().create(inst);
+        getStore().save(inst);
         assertThat(getStore().getAll()).usingRecursiveFieldByFieldElementComparator().containsExactly(inst);
-    }
-
-    @Test
-    void save_whenExists_shouldNotUpsert() {
-        var inst = TestFunctions.createInstance("test-id");
-        getStore().create(inst);
-
-        var inst2 = DataPlaneInstance.Builder.newInstance()
-                .id("test-id")
-                .url("http://somewhere.other:9876/api/v2") //different URL
-                .build();
-
-        var result = getStore().create(inst2);
-
-        assertThat(result.failed()).isTrue();
-        assertThat(result.getFailure().getReason()).isEqualTo(ALREADY_EXISTS);
-
-        assertThat(getStore().getAll()).hasSize(1).usingRecursiveFieldByFieldElementComparator().containsExactly(inst);
     }
 
     @Test
     void update_whenExists_shouldUpdate() {
         var inst = TestFunctions.createInstance("test-id");
-        getStore().create(inst);
+        getStore().save(inst);
 
 
         var inst2 = DataPlaneInstance.Builder.newInstance()
@@ -101,9 +81,7 @@ class GaussDbDataPlaneInstanceStoreTest {
                 .url("http://somewhere.other:9876/api/v2") //different URL
                 .build();
 
-        var result = getStore().update(inst2);
-
-        assertThat(result.succeeded()).isTrue();
+        getStore().save(inst2);
 
         assertThat(getStore().getAll()).hasSize(1).usingRecursiveFieldByFieldElementComparator().containsExactly(inst2);
     }
@@ -112,7 +90,7 @@ class GaussDbDataPlaneInstanceStoreTest {
     void save_shouldReturnCustomInstance() {
         var custom = TestFunctions.createCustomInstance("test-id", "name");
 
-        getStore().create(custom);
+        getStore().save(custom);
 
         var customInstance = getStore().findById(custom.getId());
 
@@ -126,7 +104,7 @@ class GaussDbDataPlaneInstanceStoreTest {
     @Test
     void findById() {
         var inst = TestFunctions.createInstance("test-id");
-        getStore().create(inst);
+        getStore().save(inst);
 
         assertThat(getStore().findById("test-id")).usingRecursiveComparison().isEqualTo(inst);
     }
@@ -143,8 +121,8 @@ class GaussDbDataPlaneInstanceStoreTest {
 
         var store = getStore();
 
-        store.create(doc1);
-        store.create(doc2);
+        store.save(doc1);
+        store.save(doc2);
 
         var foundItems = store.getAll();
 
@@ -157,10 +135,6 @@ class GaussDbDataPlaneInstanceStoreTest {
 
     public class TestFunctions {
         TestFunctions() {
-        }
-
-        public static DataAddress createAddress(String type) {
-            return DataAddress.Builder.newInstance().type("test-type").keyName(type).property("someprop", "someval").build();
         }
 
         public static DataPlaneInstance createInstance(String id) {

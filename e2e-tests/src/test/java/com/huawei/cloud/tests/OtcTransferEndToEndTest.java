@@ -20,7 +20,6 @@ import com.huawei.cloud.obs.ObsClientProvider;
 import com.huawei.cloud.obs.ObsClientProviderImpl;
 import com.huawei.cloud.obs.OtcTest;
 import com.obs.services.ObsClient;
-import com.obs.services.model.ObsObject;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
@@ -28,15 +27,15 @@ import org.eclipse.edc.connector.controlplane.test.system.utils.Participant;
 import org.eclipse.edc.connector.controlplane.transfer.spi.types.TransferProcessStates;
 import org.eclipse.edc.connector.dataplane.spi.Endpoint;
 import org.eclipse.edc.connector.dataplane.spi.iam.PublicEndpointGeneratorService;
-import org.eclipse.edc.junit.extensions.EdcClassRuntimesExtension;
-import org.eclipse.edc.junit.extensions.EdcRuntimeExtension;
+import org.eclipse.edc.junit.extensions.EmbeddedRuntime;
+import org.eclipse.edc.junit.extensions.RuntimeExtension;
+import org.eclipse.edc.junit.extensions.RuntimePerClassExtension;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -68,23 +67,16 @@ public class OtcTransferEndToEndTest {
     private static final String OBS_OTC_CLOUD_URL = "https://obs.eu-de.otc.t-systems.com";
 
 
-    static EdcRuntimeExtension providerRuntime = new EdcRuntimeExtension(
-            ":launchers:e2e-test",
-            "consumer",
-            CONSUMER.controlPlaneConfiguration()
-    );
+    static EmbeddedRuntime providerRuntime = new EmbeddedRuntime("consumer", ":launchers:e2e-test")
+            .configurationProvider(CONSUMER::controlPlaneConfig);
 
-    static EdcRuntimeExtension consumerRuntime = new EdcRuntimeExtension(
-            ":launchers:e2e-test",
-            "provider",
-            PROVIDER.controlPlaneConfiguration()
-    );
+    static EmbeddedRuntime consumerRuntime = new EmbeddedRuntime("provider", ":launchers:e2e-test")
+            .configurationProvider(PROVIDER::controlPlaneConfig);
 
     @RegisterExtension
-    static EdcClassRuntimesExtension runtimes = new EdcClassRuntimesExtension(
-            providerRuntime,
-            consumerRuntime
-    );
+    static RuntimeExtension provider = new RuntimePerClassExtension(providerRuntime);
+    @RegisterExtension
+    static RuntimeExtension consumer = new RuntimePerClassExtension(consumerRuntime);
 
     private String id;
     private String sourceBucket;
@@ -105,8 +97,8 @@ public class OtcTransferEndToEndTest {
         var consumerClientProviderImp = (ObsClientProviderImpl) consumerRuntime.getService(ObsClientProvider.class);
         consumerClientProviderImp.getVault().storeSecret("publickey", PUBLIC_KEY);
         consumerClientProviderImp.getVault().storeSecret("privatekey", PRIVATE_KEY);
-        var providerEndpointGeneratorService = (PublicEndpointGeneratorService) providerRuntime.getService(PublicEndpointGeneratorService.class);
-        var consumerEndpointGeneratorService = (PublicEndpointGeneratorService) consumerRuntime.getService(PublicEndpointGeneratorService.class);
+        var providerEndpointGeneratorService = providerRuntime.getService(PublicEndpointGeneratorService.class);
+        var consumerEndpointGeneratorService = consumerRuntime.getService(PublicEndpointGeneratorService.class);
         var endpoint = new Endpoint("endpoint", "obs");
         providerEndpointGeneratorService.addGeneratorFunction("HttpData", dataAddress1 -> endpoint);
         consumerEndpointGeneratorService.addGeneratorFunction("HttpData", dataAddress1 -> endpoint);
@@ -132,7 +124,7 @@ public class OtcTransferEndToEndTest {
             assertThat(TransferProcessStates.valueOf(state).code()).isGreaterThanOrEqualTo(COMPLETED.code());
         });
 
-        List<ObsObject> consumerObsObjectList = consumerClient.listObjects(destBucket).getObjects();
+        var consumerObsObjectList = consumerClient.listObjects(destBucket).getObjects();
         if (!consumerObsObjectList.isEmpty()) {
             assertThat(consumerObsObjectList)
                     .allSatisfy(obsObject -> assertThat(obsObject.getObjectKey()).isEqualTo(TESTFILE_NAME));
@@ -146,8 +138,8 @@ public class OtcTransferEndToEndTest {
     }
 
     private JsonObject getOfferForAsset(Participant provider, String assetId) {
-        JsonObject dataset = CONSUMER.getDatasetForAsset(provider, assetId);
-        JsonObject policy = ((JsonValue) dataset.getJsonArray("http://www.w3.org/ns/odrl/2/hasPolicy").get(0)).asJsonObject();
+        var dataset = CONSUMER.getDatasetForAsset(provider, assetId);
+        var policy = dataset.getJsonArray("http://www.w3.org/ns/odrl/2/hasPolicy").get(0).asJsonObject();
         return Json.createObjectBuilder(policy).add("http://www.w3.org/ns/odrl/2/assigner", Json.createObjectBuilder().add("@id", provider.getId())).add("http://www.w3.org/ns/odrl/2/target", Json.createObjectBuilder().add("@id", (JsonValue) dataset.get("@id"))).build();
     }
 

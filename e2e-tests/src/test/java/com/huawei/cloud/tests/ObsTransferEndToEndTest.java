@@ -83,16 +83,14 @@ public class ObsTransferEndToEndTest {
     @RegisterExtension
     static RuntimeExtension consumer = new RuntimePerClassExtension(new EmbeddedRuntime(
             "consumer",
-            CONSUMER.controlPlaneConfiguration(),
             ":launchers:e2e-test"
-    ));
+    ).configurationProvider(CONSUMER::controlPlaneConfig));
 
     @RegisterExtension
     static RuntimeExtension provider = new RuntimePerClassExtension(new EmbeddedRuntime(
             "provider",
-            PROVIDER.controlPlaneConfiguration(),
             ":launchers:e2e-test"
-    ));
+    ).configurationProvider(PROVIDER::controlPlaneConfig));
 
     @Container
     private final GenericContainer<?> providerContainer = new GenericContainer<>(MINIO_DOCKER_IMAGE)
@@ -142,7 +140,7 @@ public class ObsTransferEndToEndTest {
         consumerClient.createBucket(destBucket);
 
         var flowRequest = createFlowRequest(destBucket, consumerEndpoint, srcBucket, TESTFILE_NAME, providerEndpoint).build();
-        var url = PROVIDER.getControlEndpoint().getUrl().toString() + "/v1/dataflows";
+        var url = PROVIDER.getControlEndpoint() + "/v1/dataflows";
 
         var startMessage = registry.transform(flowRequest, JsonObject.class).orElseThrow(failTest());
 
@@ -178,7 +176,7 @@ public class ObsTransferEndToEndTest {
         consumerClient.createBucket(destBucket);
 
         var flowRequest = createFlowRequest(destBucket, consumerEndpoint, srcBucket, "file", providerEndpoint).build();
-        var url = PROVIDER.getControlEndpoint().getUrl().toString() + "/v1/dataflows";
+        var url = PROVIDER.getControlEndpoint() + "/v1/dataflows";
 
 
         var startMessage = registry.transform(flowRequest, JsonObject.class).orElseThrow(failTest());
