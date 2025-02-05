@@ -3,10 +3,6 @@ name: Release
 on:
   workflow_dispatch:
 
-permissions:
-  actions: read
-  contents: write
-  security-events: write
 
 jobs:
 
