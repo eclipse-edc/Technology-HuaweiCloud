@@ -146,6 +146,17 @@ class GaussDbContractNegotiationStoreTest {
     }
 
     @Test
+    @DisplayName("Find entity by its correlation ID")
+    void findForCorrelationId() {
+        var negotiation = createNegotiation("test-cn1");
+        getContractNegotiationStore().save(negotiation);
+
+        assertThat(getContractNegotiationStore().findForCorrelationId(negotiation.getCorrelationId()))
+                .usingRecursiveComparison()
+                .isEqualTo(negotiation);
+    }
+
+    @Test
     @DisplayName("Find ContractAgreement by contract ID")
     void findContractAgreement() {
         var agreement = createContract(ContractOfferId.create("test-cd1", "test-as1"));

@@ -34,11 +34,11 @@ import static java.lang.String.format;
 @Provides(ObsClientProvider.class)
 public class ObsCoreExtension implements ServiceExtension {
 
-    @Setting(description = "The key of the secret where the AWS Access Key Id is stored")
+    @Setting(value = "The key of the secret where the AWS Access Key Id is stored")
     public static final String HUAWEI_ACCESS_KEY = "edc.huawei.obs.alias.ak";
-    @Setting(description = "The key of the secret where the AWS Secret Access Key is stored")
+    @Setting(value = "The key of the secret where the AWS Secret Access Key is stored")
     public static final String HUAWEI_SECRET_KEY = "edc.huawei.obs.alias.sk";
-    @Setting(description = "If valued, the AWS clients will point to the specified endpoint")
+    @Setting(value = "If valued, the AWS clients will point to the specified endpoint")
     public static final String HUAWEI_IAM_ENDPOINT = "edc.huawei.iam.endpoint";
     protected static final String NAME = "OBS Core";
     private ObsClientProvider clientProvider;

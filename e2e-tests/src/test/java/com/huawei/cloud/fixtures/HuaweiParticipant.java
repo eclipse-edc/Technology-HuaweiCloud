@@ -15,12 +15,10 @@
 package com.huawei.cloud.fixtures;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import org.eclipse.edc.connector.controlplane.test.system.utils.LazySupplier;
 import org.eclipse.edc.connector.controlplane.test.system.utils.Participant;
-import org.eclipse.edc.spi.system.configuration.Config;
-import org.eclipse.edc.spi.system.configuration.ConfigFactory;
 
 import java.net.URI;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,29 +30,30 @@ public class HuaweiParticipant extends Participant {
 
     private static final String IAM_OTC_CLOUD_URL = "https://iam.eu-de.otc.t-systems.com";
 
+    private static final Duration TIMEOUT = Duration.ofMillis(10000);
+    private Endpoint controlEndpoint;
     private String apiKey;
-    private final LazySupplier<URI> controlEndpoint = new LazySupplier<>(() -> URI.create("http://localhost:" + getFreePort() + "/control"));
 
-    public URI getControlEndpoint() {
-        return controlEndpoint.get();
+    public Endpoint getControlEndpoint() {
+        return controlEndpoint;
     }
 
-    public Config controlPlaneConfig() {
-        var settings = (Map<String, String>) new HashMap<String, String>() {
+    public Map<String, String> controlPlaneConfiguration() {
+        return new HashMap<>() {
             {
                 put(PARTICIPANT_ID, id);
                 put("edc.api.auth.key", apiKey);
                 put("web.http.port", String.valueOf(getFreePort()));
                 put("web.http.path", "/api");
-                put("web.http.protocol.port", String.valueOf(controlPlaneProtocol.get().getPort()));
-                put("web.http.protocol.path", controlPlaneProtocol.get().getPath());
-                put("web.http.management.port", String.valueOf(controlPlaneManagement.get().getPort()));
-                put("web.http.management.path", controlPlaneManagement.get().getPath());
-                put("web.http.control.port", String.valueOf(controlEndpoint.get().getPort()));
-                put("web.http.control.path", controlEndpoint.get().getPath());
+                put("web.http.protocol.port", String.valueOf(protocolEndpoint.getUrl().getPort()));
+                put("web.http.protocol.path", protocolEndpoint.getUrl().getPath());
+                put("web.http.management.port", String.valueOf(managementEndpoint.getUrl().getPort()));
+                put("web.http.management.path", managementEndpoint.getUrl().getPath());
+                put("web.http.control.port", String.valueOf(controlEndpoint.getUrl().getPort()));
+                put("web.http.control.path", controlEndpoint.getUrl().getPath());
                 put("web.http.public.path", "/public");
                 put("web.http.public.port", String.valueOf(getFreePort()));
-                put("edc.dsp.callback.address", controlPlaneProtocol.get().toString());
+                put("edc.dsp.callback.address", protocolEndpoint.getUrl().toString());
                 put("edc.connector.name", name);
                 put("edc.component.id", "connector-test");
                 put("edc.dataplane.token.validation.endpoint", "http://token-validation.com");
@@ -64,8 +63,6 @@ public class HuaweiParticipant extends Participant {
                 put("edc.transfer.proxy.token.signer.privatekey.alias", "privatekey");
             }
         };
-
-        return ConfigFactory.fromMap(settings);
     }
 
     public static final class Builder extends Participant.Builder<HuaweiParticipant, Builder> {
@@ -86,8 +83,11 @@ public class HuaweiParticipant extends Participant {
 
         @Override
         public HuaweiParticipant build() {
-            participant.enrichManagementRequest = request -> request.header("X-Api-Key", participant.apiKey);
-            return super.build();
+            super.managementEndpoint(new Endpoint(URI.create("http://localhost:" + getFreePort() + "/api/management"), Map.of("X-Api-Key", participant.apiKey)));
+            super.protocolEndpoint(new Endpoint(URI.create("http://localhost:" + getFreePort() + "/protocol")));
+            super.build();
+            participant.controlEndpoint = new Endpoint(URI.create("http://localhost:" + getFreePort() + "/control"), Map.of());
+            return participant;
         }
     }
 }

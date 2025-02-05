@@ -32,7 +32,7 @@ public class ObsProvisionExtension implements ServiceExtension {
 
     public static final String NAME = "OBS Provision";
 
-    @Setting(description = "Duration in seconds of the temporary token", defaultValue = "" + ObsProvisionExtension.PROVISIONER_DEFAULT_TOKEN_DURATION)
+    @Setting(value = "Duration in seconds of the temporary token", defaultValue = "" + ObsProvisionExtension.PROVISIONER_DEFAULT_TOKEN_DURATION)
     private static final String PROVISION_TOKEN_DURATION = "edc.obs.provision.token.duration";
 
     private static final int PROVISIONER_DEFAULT_TOKEN_DURATION = 60 * 30;
