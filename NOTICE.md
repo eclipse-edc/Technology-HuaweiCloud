@@ -30,7 +30,7 @@ The project maintains the following source code repositories:
 
 ## Third-party Content (Overarching All Modules)
 
-Please refer to the [DEPENDENCIES](https://eclipse-edc.github.io/Technology-HuaweiCloud/DEPENDENCIES) file for a detailed report.
+Please refer to the [DEPENDENCIES](DEPENDENCIES)
 
 ## Cryptography
 
