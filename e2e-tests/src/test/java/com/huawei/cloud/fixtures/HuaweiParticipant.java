@@ -56,6 +56,7 @@ public class HuaweiParticipant extends Participant {
                 put("web.http.public.port", String.valueOf(getFreePort()));
                 put("edc.dsp.callback.address", controlPlaneProtocol.get().toString());
                 put("edc.connector.name", name);
+                put("edc.hostname", name);
                 put("edc.component.id", "connector-test");
                 put("edc.dataplane.token.validation.endpoint", "http://token-validation.com");
                 put("edc.dpf.selector.url", "http://does-this-matter.com");

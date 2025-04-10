@@ -42,6 +42,7 @@ dependencies {
     runtimeOnly(libs.edc.dpf.self.registration)
     runtimeOnly(libs.bundles.edc.dpf)
     runtimeOnly(libs.edc.api.controlplane)
+    runtimeOnly(libs.edc.core.runtime)
 }
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
