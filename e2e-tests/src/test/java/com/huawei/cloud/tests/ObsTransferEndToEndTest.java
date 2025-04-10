@@ -14,7 +14,6 @@
 
 package com.huawei.cloud.tests;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.huawei.cloud.fixtures.HuaweiParticipant;
 import com.huawei.cloud.obs.ObsBucketSchema;
 import com.huawei.cloud.obs.TestFunctions;
@@ -24,12 +23,12 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import org.eclipse.edc.connector.api.signaling.transform.from.JsonObjectFromDataFlowStartMessageTransformer;
 import org.eclipse.edc.connector.api.signaling.transform.to.JsonObjectToDataFlowResponseMessageTransformer;
-import org.eclipse.edc.jsonld.util.JacksonJsonLd;
 import org.eclipse.edc.junit.annotations.EndToEndTest;
 import org.eclipse.edc.junit.extensions.EmbeddedRuntime;
 import org.eclipse.edc.junit.extensions.RuntimeExtension;
 import org.eclipse.edc.junit.extensions.RuntimePerClassExtension;
 import org.eclipse.edc.spi.result.Failure;
+import org.eclipse.edc.spi.types.TypeManager;
 import org.eclipse.edc.spi.types.domain.DataAddress;
 import org.eclipse.edc.spi.types.domain.transfer.DataFlowStartMessage;
 import org.eclipse.edc.spi.types.domain.transfer.FlowType;
@@ -57,6 +56,7 @@ import java.util.function.Function;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.edc.junit.testfixtures.TestUtils.getFileFromResourceName;
+import static org.mockito.Mockito.mock;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 @Testcontainers
@@ -109,7 +109,7 @@ public class ObsTransferEndToEndTest {
     private String providerEndpoint;
 
     private final TypeTransformerRegistry registry = new TypeTransformerRegistryImpl();
-    private ObjectMapper mapper;
+    private final TypeManager typeManager = mock();
 
     @BeforeEach
     void setup() {
@@ -120,9 +120,8 @@ public class ObsTransferEndToEndTest {
         consumerClient = TestFunctions.createClient(CONSUMER_AK, CONSUMER_SK, consumerEndpoint);
 
         var builderFactory = Json.createBuilderFactory(Map.of());
-        mapper = JacksonJsonLd.createObjectMapper();
-        registry.register(new JsonObjectFromDataFlowStartMessageTransformer(builderFactory, mapper));
-        registry.register(new JsonObjectFromDataAddressDspaceTransformer(builderFactory, mapper));
+        registry.register(new JsonObjectFromDataFlowStartMessageTransformer(builderFactory, typeManager, "test"));
+        registry.register(new JsonObjectFromDataAddressDspaceTransformer(builderFactory, typeManager, "test"));
         registry.register(new JsonObjectToDataAddressDspaceTransformer());
         registry.register(new JsonObjectToDataFlowResponseMessageTransformer());
     }
