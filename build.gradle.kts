@@ -35,7 +35,7 @@ allprojects {
         pom {
             scmUrl.set(hcScmConnection)
             scmConnection.set(hcScmConnection)
-            developerId.set("Atul Shrivijay Atavale")
+            groupId = project.group.toString()
         }
     }
 
