@@ -22,7 +22,7 @@ val hcScmConnection: String by project
 
 buildscript {
     dependencies {
-        val version: String by project
+        val version = "0.14.0-SNAPSHOT"
         classpath("org.eclipse.edc.edc-build:org.eclipse.edc.edc-build.gradle.plugin:${version}")
     }
 }
