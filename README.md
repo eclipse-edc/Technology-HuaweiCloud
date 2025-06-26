@@ -2,7 +2,7 @@
 
 [![documentation](https://img.shields.io/badge/documentation-8A2BE2?style=flat-square)](https://eclipse-edc.github.io)
 [![discord](https://img.shields.io/badge/discord-chat-brightgreen.svg?style=flat-square&logo=discord)](https://discord.gg/n4sD9qtjMQ)
-[![latest version](https://img.shields.io/maven-central/v/org.eclipse.edc.huaweicloud/obs-core?logo=apache-maven&style=flat-square&label=latest%20version)](https://search.maven.org/artifact/org.eclipse.edc.huaweicloud/obs-core)
+[![latest version](https://img.shields.io/maven-central/v/org.eclipse.edc.huawei/obs-core?logo=apache-maven&style=flat-square&label=latest%20version)](https://search.maven.org/artifact/org.eclipse.edc.huawei/obs-core)
 [![license](https://img.shields.io/github/license/eclipse-edc/Technology-Azure?style=flat-square&logo=apache)](https://www.apache.org/licenses/LICENSE-2.0)
 <br>
 [![build](https://img.shields.io/github/actions/workflow/status/eclipse-edc/Technology-HuaweiCloud/verify.yaml?branch=main&logo=GitHub&style=flat-square&label=ci)](https://github.com/eclipse-edc/Technology-HuaweiCloud/actions/workflows/verify.yaml?query=branch%3Amain)
