@@ -27,8 +27,6 @@ dependencies {
     implementation(libs.edc.sql.lib)
 
     testImplementation(libs.edc.junit)
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.assertj)
     testImplementation(libs.testcontainers.junit)
     testImplementation(testFixtures(libs.edc.spi.transfer))
     testImplementation(testFixtures(libs.edc.sql.test.fixtures))

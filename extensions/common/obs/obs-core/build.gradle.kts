@@ -22,11 +22,9 @@ dependencies {
     implementation(libs.huawei.obs)
     implementation(libs.huawei.iam)
     implementation(libs.edc.spi.core)
+
     testImplementation(libs.edc.junit)
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.assertj)
+    testFixturesImplementation(libs.edc.junit)
     testFixturesApi(libs.huawei.obs)
     testFixturesApi(libs.huawei.iam)
-    testFixturesApi(libs.edc.junit)
-    testFixturesApi(libs.junit.jupiter.api)
 }
