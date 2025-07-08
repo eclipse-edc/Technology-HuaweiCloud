@@ -27,8 +27,6 @@ dependencies {
     implementation(libs.edc.spi.datasource.transaction)
 
     testImplementation(libs.edc.junit)
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.assertj)
     testImplementation(libs.testcontainers.junit)
     testImplementation(testFixtures(libs.edc.spi.core))
     testImplementation(testFixtures(project(":extensions:common:gaussdb:gaussdb-core")))
