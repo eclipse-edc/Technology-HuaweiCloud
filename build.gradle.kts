@@ -14,6 +14,7 @@
 
 plugins {
     `java-library`
+    alias(libs.plugins.edc.build)
 }
 
 val hcScmUrl: String by project
@@ -22,18 +23,21 @@ val hcScmConnection: String by project
 
 buildscript {
     dependencies {
-        val version = "0.14.0-SNAPSHOT"
-        classpath("org.eclipse.edc.edc-build:org.eclipse.edc.edc-build.gradle.plugin:${version}")
+        val version: String by project
+        classpath("org.eclipse.edc.autodoc:org.eclipse.edc.autodoc.gradle.plugin:$version")
     }
 }
 
+val edcBuildId = libs.plugins.edc.build.get().pluginId
+
 allprojects {
-    apply(plugin = "org.eclipse.edc.edc-build")
+    apply(plugin = edcBuildId)
+    apply(plugin = "org.eclipse.edc.autodoc")
 
     configure<org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension> {
 
         pom {
-            scmUrl.set(hcScmConnection)
+            scmUrl.set(hcScmUrl)
             scmConnection.set(hcScmConnection)
             groupId = project.group.toString()
         }
