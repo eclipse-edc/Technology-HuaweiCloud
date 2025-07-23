@@ -3,11 +3,6 @@ name: Release
 on:
   workflow_dispatch:
 
-permissions:
-  actions: read
-  contents: write
-  security-events: write
-
 jobs:
 
   Run-Tests:
@@ -15,5 +10,6 @@ jobs:
     secrets: inherit
 
   Release:
-    uses: eclipse-edc/.github/.github/workflows/technology-release.yml@main
+    needs: [ Run-Tests ]
+    uses: eclipse-edc/.github/.github/workflows/release.yml@main
     secrets: inherit
