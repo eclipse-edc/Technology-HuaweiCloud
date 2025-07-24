@@ -1,5 +1,10 @@
 name: Prepare Release
 
+permissions:
+  actions: read
+  contents: write
+  security-events: read
+
 on:
   workflow_dispatch:
     inputs:
