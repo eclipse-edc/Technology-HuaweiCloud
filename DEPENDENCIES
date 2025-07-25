@@ -48,8 +48,8 @@ maven/mavencentral/com.google.guava/listenablefuture/9999.0-empty-to-avoid-confl
 maven/mavencentral/com.google.j2objc/j2objc-annotations/3.0.0, Apache-2.0, approved, #13676
 maven/mavencentral/com.google.protobuf/protobuf-java/4.28.2, BSD-3-Clause, approved, #17196
 maven/mavencentral/com.huaweicloud.dws/huaweicloud-dws-jdbc/8.5.0.1-200, Apache-2.0, approved, #17265
-maven/mavencentral/com.huaweicloud.sdk/huaweicloud-sdk-core/3.1.145, Apache-2.0, approved, #11922
-maven/mavencentral/com.huaweicloud.sdk/huaweicloud-sdk-iam/3.1.145, Apache-2.0, approved, #12598
+maven/mavencentral/com.huaweicloud.sdk/huaweicloud-sdk-core/3.1.158, Apache-2.0, approved, #11922
+maven/mavencentral/com.huaweicloud.sdk/huaweicloud-sdk-iam/3.1.158, Apache-2.0, approved, #12598
 maven/mavencentral/com.huaweicloud/esdk-obs-java/3.24.12, Apache-2.0, approved, #16679
 maven/mavencentral/com.nimbusds/nimbus-jose-jwt/10.3.1, Apache-2.0, approved, #22529
 maven/mavencentral/com.puppycrawl.tools/checkstyle/10.26.1, LGPL-2.1-or-later, approved, #22306
