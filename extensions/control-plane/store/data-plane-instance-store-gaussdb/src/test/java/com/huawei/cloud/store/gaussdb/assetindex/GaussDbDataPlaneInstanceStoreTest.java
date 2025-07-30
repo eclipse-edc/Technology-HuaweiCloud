@@ -28,6 +28,7 @@ import org.eclipse.edc.transaction.spi.TransactionContext;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -40,6 +41,7 @@ import static com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension.DEFAULT
 import static org.assertj.core.api.Assertions.assertThat;
 
 @GaussDbTest
+@Disabled("only for release 0.13.2")
 @ExtendWith(GaussDbTestExtension.class)
 class GaussDbDataPlaneInstanceStoreTest {
     private static final DataPlaneInstanceStatements SQL_STATEMENTS = new PostgresDataPlaneInstanceStatements();

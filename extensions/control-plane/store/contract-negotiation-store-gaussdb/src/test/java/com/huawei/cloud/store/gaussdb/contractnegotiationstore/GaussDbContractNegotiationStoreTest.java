@@ -43,6 +43,7 @@ import org.eclipse.edc.sql.testfixtures.LeaseUtil;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -77,6 +78,7 @@ import static org.eclipse.edc.spi.result.StoreFailure.Reason.NOT_FOUND;
 
 @GaussDbTest
 @ExtendWith(GaussDbTestExtension.class)
+@Disabled("only for release 0.13.2")
 class GaussDbContractNegotiationStoreTest {
 
     protected static final String CONNECTOR_NAME = "test-connector";

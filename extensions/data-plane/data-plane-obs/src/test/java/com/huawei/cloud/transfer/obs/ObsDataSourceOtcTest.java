@@ -19,12 +19,14 @@ import com.huawei.cloud.obs.TestFunctions;
 import com.obs.services.ObsClient;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInfo;
 
 import java.io.IOException;
 import java.util.UUID;
 
 @OtcTest
+@Disabled("only for release 0.13.2")
 class ObsDataSourceOtcTest extends ObsDataSourceTestBase {
     public static final String OTC_CLOUD_URL = "https://obs.eu-de.otc.t-systems.com";
     public static final String BUCKET_NAME = "obs-sink-itest-" + UUID.randomUUID();

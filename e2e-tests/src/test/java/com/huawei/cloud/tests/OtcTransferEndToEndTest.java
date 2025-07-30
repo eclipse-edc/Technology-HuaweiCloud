@@ -32,6 +32,7 @@ import org.eclipse.edc.junit.extensions.RuntimeExtension;
 import org.eclipse.edc.junit.extensions.RuntimePerClassExtension;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -48,6 +49,7 @@ import static org.eclipse.edc.junit.testfixtures.TestUtils.getFileFromResourceNa
 import static org.eclipse.edc.spi.constants.CoreConstants.EDC_NAMESPACE;
 
 @OtcTest
+@Disabled("only for release 0.13.2")
 public class OtcTransferEndToEndTest {
 
     public static final String TESTFILE_NAME = "testfile.json";

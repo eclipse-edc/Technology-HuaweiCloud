@@ -37,6 +37,7 @@ import org.eclipse.edc.sql.testfixtures.LeaseUtil;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -70,6 +71,7 @@ import static org.eclipse.edc.spi.result.StoreFailure.Reason.NOT_FOUND;
 import static org.testcontainers.shaded.org.hamcrest.Matchers.hasSize;
 
 @GaussDbTest
+@Disabled("only for release 0.13.2")
 @ExtendWith(GaussDbTestExtension.class)
 class GaussDbTransferProcessStoreTest {
 

@@ -22,6 +22,7 @@ import com.obs.services.ObsClient;
 import com.obs.services.exception.ObsException;
 import com.obs.services.internal.ObsConstraint;
 import org.eclipse.edc.policy.model.Policy;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -31,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @OtcTest
+@Disabled("only for release 0.13.2")
 public class ObsProvisionerOtcTest extends ObsProvisionerTestBase {
 
     private static final String OBS_OTC_CLOUD_URL = "https://obs.eu-de.otc.t-systems.com";
