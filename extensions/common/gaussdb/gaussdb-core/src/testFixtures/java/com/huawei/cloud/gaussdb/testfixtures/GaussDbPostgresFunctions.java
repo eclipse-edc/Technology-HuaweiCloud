@@ -47,7 +47,7 @@ public class GaussDbPostgresFunctions {
 
 
     public static DataSource createDataSource() {
-    var connectionString = propOrEnv(PG_CONNECTION_STRING, null);
+        var connectionString = propOrEnv(PG_CONNECTION_STRING, null);
         Objects.requireNonNull(connectionString, "GaussDB Postgres connection string not found");
         return createDatasource(connectionString);
     }
