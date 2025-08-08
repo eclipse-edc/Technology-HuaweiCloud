@@ -7,7 +7,7 @@ edc = "0.14.0-SNAPSHOT"
 failsafe = "3.3.2"
 restAssured = "5.5.1"
 testcontainers = "1.21.0"
-huawei-obs = "3.24.12"
+huawei-obs = "3.25.7"
 huawei-iam = "3.1.158"
 huawei-dws = "8.5.0.1-200"
 
