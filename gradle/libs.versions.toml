@@ -92,4 +92,4 @@ edc-dpf = ["edc-dpf-signaling","edc-dpf-signaling-api","edc-dpf-public-api", "ed
 
 [plugins]
 edc-build = { id = "org.eclipse.edc.edc-build", version = "0.1.0" }
-shadow = { id = "com.gradleup.shadow", version = "8.3.8" }
+shadow = { id = "com.gradleup.shadow", version = "9.0.0" }
