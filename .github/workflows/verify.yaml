@@ -31,7 +31,7 @@ jobs:
   Checkstyle:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: eclipse-edc/.github/.github/actions/setup-build@main
       - name: Run Checkstyle
         run: ./gradlew checkstyleMain checkstyleTest
@@ -39,7 +39,7 @@ jobs:
   Unit-Tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: eclipse-edc/.github/.github/actions/setup-build@main
 
       - name: Run unit tests
@@ -48,7 +48,7 @@ jobs:
   Component-Tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: eclipse-edc/.github/.github/actions/setup-build@main
 
       - name: Component Tests
@@ -61,7 +61,7 @@ jobs:
   API-Tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: eclipse-edc/.github/.github/actions/setup-build@main
 
       - name: Component Tests
