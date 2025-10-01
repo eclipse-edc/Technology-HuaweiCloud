@@ -33,7 +33,7 @@ import static org.mockito.Mockito.spy;
 @EndToEndTest
 public class ObsProvisionerMinioTest extends ObsProvisionerTestBase {
 
-    private static final String MINIO_DOCKER_IMAGE = "bitnami/minio";
+    private static final String MINIO_DOCKER_IMAGE = "quay.io/minio/minio";
     private static final String USER = "USER";
     private static final String PASSWORD = "PASSWORD";
 
@@ -41,7 +41,8 @@ public class ObsProvisionerMinioTest extends ObsProvisionerTestBase {
     private final GenericContainer<?> minioContainer = new GenericContainer<>(MINIO_DOCKER_IMAGE)
             .withEnv("MINIO_ROOT_USER", USER)
             .withEnv("MINIO_ROOT_PASSWORD", PASSWORD)
-            .withExposedPorts(9000);
+            .withExposedPorts(9000)
+            .withCommand("server /data");
     private ObsClient obsClient;
 
     @Override

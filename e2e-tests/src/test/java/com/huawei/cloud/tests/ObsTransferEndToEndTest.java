@@ -62,7 +62,7 @@ import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 @Testcontainers
 @EndToEndTest
 public class ObsTransferEndToEndTest {
-    public static final String MINIO_DOCKER_IMAGE = "bitnami/minio";
+    public static final String MINIO_DOCKER_IMAGE = "quay.io/minio/minio";
     public static final int MINIO_CONTAINER_PORT = 9000;
     public static final String TESTFILE_NAME = "testfile.json";
     protected static final HuaweiParticipant CONSUMER = HuaweiParticipant.Builder.newInstance()
@@ -96,13 +96,15 @@ public class ObsTransferEndToEndTest {
     private final GenericContainer<?> providerContainer = new GenericContainer<>(MINIO_DOCKER_IMAGE)
             .withEnv("MINIO_ROOT_USER", PROVIDER_AK)
             .withEnv("MINIO_ROOT_PASSWORD", PROVIDER_SK)
-            .withExposedPorts(MINIO_CONTAINER_PORT);
+            .withExposedPorts(MINIO_CONTAINER_PORT)
+            .withCommand("server /data");
 
     @Container
     private final GenericContainer<?> consumerContainer = new GenericContainer<>(MINIO_DOCKER_IMAGE)
             .withEnv("MINIO_ROOT_USER", CONSUMER_AK)
             .withEnv("MINIO_ROOT_PASSWORD", CONSUMER_SK)
-            .withExposedPorts(MINIO_CONTAINER_PORT);
+            .withExposedPorts(MINIO_CONTAINER_PORT)
+            .withCommand("server /data");
     private ObsClient providerClient;
     private ObsClient consumerClient;
     private String consumerEndpoint;

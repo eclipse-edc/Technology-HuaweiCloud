@@ -28,7 +28,7 @@ import java.util.UUID;
 @Testcontainers
 class ObsDataSourceMinioTest extends ObsDataSourceTestBase {
 
-    public static final String MINIO_DOCKER_IMAGE = "bitnami/minio";
+    public static final String MINIO_DOCKER_IMAGE = "quay.io/minio/minio";
     public static final String USER = "USER";
     public static final String PASSWORD = "PASSWORD";
 
@@ -36,7 +36,8 @@ class ObsDataSourceMinioTest extends ObsDataSourceTestBase {
     private final GenericContainer<?> minioContainer = new GenericContainer<>(MINIO_DOCKER_IMAGE)
             .withEnv("MINIO_ROOT_USER", USER)
             .withEnv("MINIO_ROOT_PASSWORD", PASSWORD)
-            .withExposedPorts(9000);
+            .withExposedPorts(9000)
+            .withCommand("server /data");
     private ObsClient obsClient;
 
 
