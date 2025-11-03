@@ -91,5 +91,5 @@ huawei-dws-jdbc = { module = "com.huaweicloud.dws:huaweicloud-dws-jdbc", version
 edc-dpf = ["edc-dpf-signaling","edc-dpf-signaling-api","edc-dpf-public-api", "edc-dpf-selector-core", "edc-spi-dataplane-selector"]
 
 [plugins]
-edc-build = { id = "org.eclipse.edc.edc-build", version = "1.0.0" }
+edc-build = { id = "org.eclipse.edc.edc-build", version = "1.1.2" }
 shadow = { id = "com.gradleup.shadow", version = "8.3.8" }
