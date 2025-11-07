@@ -8,7 +8,7 @@ failsafe = "3.3.2"
 restAssured = "5.5.6"
 testcontainers = "1.21.0"
 huawei-obs = "3.24.12"
-huawei-iam = "3.1.158"
+huawei-iam = "3.1.173"
 huawei-dws = "8.5.1.200-200"
 
 [libraries]
