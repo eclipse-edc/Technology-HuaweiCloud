@@ -15,8 +15,8 @@
 package com.huawei.cloud.fixtures;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import org.eclipse.edc.connector.controlplane.test.system.utils.LazySupplier;
 import org.eclipse.edc.connector.controlplane.test.system.utils.Participant;
+import org.eclipse.edc.junit.utils.LazySupplier;
 import org.eclipse.edc.spi.system.configuration.Config;
 import org.eclipse.edc.spi.system.configuration.ConfigFactory;
 
@@ -24,7 +24,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.eclipse.edc.boot.BootServicesExtension.PARTICIPANT_ID;
 import static org.eclipse.edc.util.io.Ports.getFreePort;
 
 
@@ -42,7 +41,7 @@ public class HuaweiParticipant extends Participant {
     public Config controlPlaneConfig() {
         var settings = (Map<String, String>) new HashMap<String, String>() {
             {
-                put(PARTICIPANT_ID, id);
+                put("edc.participant.id", id);
                 put("edc.api.auth.key", apiKey);
                 put("web.http.port", String.valueOf(getFreePort()));
                 put("web.http.path", "/api");

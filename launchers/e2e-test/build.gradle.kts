@@ -30,7 +30,6 @@ dependencies {
     runtimeOnly(libs.edc.control.api.configuration)
     runtimeOnly(libs.edc.core.controlplane.apiclient)
     runtimeOnly(libs.edc.dpf.iam)
-    runtimeOnly(libs.edc.dpf.public.api)
     runtimeOnly(libs.edc.ext.http)
     runtimeOnly(libs.edc.jsonld)
     runtimeOnly(libs.edc.core.token)
@@ -43,6 +42,7 @@ dependencies {
     runtimeOnly(libs.bundles.edc.dpf)
     runtimeOnly(libs.edc.api.controlplane)
     runtimeOnly(libs.edc.core.runtime)
+    runtimeOnly(libs.edc.dpf.signaling.client)
 }
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {

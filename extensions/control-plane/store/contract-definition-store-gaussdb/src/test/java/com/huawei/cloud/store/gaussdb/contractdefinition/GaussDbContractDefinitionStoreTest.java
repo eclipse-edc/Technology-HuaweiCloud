@@ -77,7 +77,7 @@ class GaussDbContractDefinitionStoreTest {
         helper.truncateTable(SQL_STATEMENTS.getContractDefinitionTable());
     }
 
-    @Test
+    @Test()
     @DisplayName("Save a single Contract Definition that doesn't already exist")
     void save_doesNotExist() {
         var definition = createContractDefinition("id");

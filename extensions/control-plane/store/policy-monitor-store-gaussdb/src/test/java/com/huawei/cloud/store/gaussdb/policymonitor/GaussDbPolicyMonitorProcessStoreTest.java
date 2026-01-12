@@ -25,10 +25,12 @@ import org.eclipse.edc.json.JacksonTypeManager;
 import org.eclipse.edc.junit.assertions.AbstractResultAssert;
 import org.eclipse.edc.policy.model.PolicyRegistrationTypes;
 import org.eclipse.edc.spi.entity.Entity;
-import org.eclipse.edc.spi.entity.MutableEntity;
 import org.eclipse.edc.spi.entity.StatefulEntity;
 import org.eclipse.edc.spi.result.StoreFailure;
 import org.eclipse.edc.sql.QueryExecutor;
+import org.eclipse.edc.sql.lease.BaseSqlLeaseStatements;
+import org.eclipse.edc.sql.lease.SqlLeaseContextBuilderImpl;
+import org.eclipse.edc.sql.lease.spi.LeaseStatements;
 import org.eclipse.edc.sql.testfixtures.LeaseUtil;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -59,7 +61,8 @@ import static org.testcontainers.shaded.org.hamcrest.Matchers.hasSize;
 class GaussDbPolicyMonitorProcessStoreTest {
 
     protected static final String CONNECTOR_NAME = "test-connector";
-    private static final PostgresPolicyMonitorStatements SQL_STATEMENTS = new PostgresPolicyMonitorStatements();
+    private static final LeaseStatements LEASE_STATEMENTS = new BaseSqlLeaseStatements();
+    private static final PostgresPolicyMonitorStatements SQL_STATEMENTS = new PostgresPolicyMonitorStatements(LEASE_STATEMENTS, Clock.systemUTC());
     private LeaseUtil leaseUtil;
     private SqlPolicyMonitorStore policyMonitorStore;
 
@@ -68,14 +71,15 @@ class GaussDbPolicyMonitorProcessStoreTest {
         var clock = Clock.systemUTC();
         var typeManager = new JacksonTypeManager();
         typeManager.registerTypes(PolicyRegistrationTypes.TYPES.toArray(Class<?>[]::new));
+        leaseUtil = new LeaseUtil(extension.getTransactionContext(), extension::newConnection, SQL_STATEMENTS.getPolicyMonitorTable(), LEASE_STATEMENTS, clock);
+        var leaseContextBuilder = SqlLeaseContextBuilderImpl.with(extension.getTransactionContext(), CONNECTOR_NAME, SQL_STATEMENTS.getPolicyMonitorTable(), LEASE_STATEMENTS, clock, queryExecutor);
 
         policyMonitorStore = new SqlPolicyMonitorStore(extension.getRegistry(), DEFAULT_DATASOURCE_NAME,
-                extension.getTransactionContext(), SQL_STATEMENTS, typeManager.getMapper(), clock, queryExecutor, CONNECTOR_NAME);
+                extension.getTransactionContext(), SQL_STATEMENTS, leaseContextBuilder, typeManager.getMapper(), queryExecutor, CONNECTOR_NAME);
 
-        leaseUtil = new LeaseUtil(extension.getTransactionContext(), extension::newConnection, SQL_STATEMENTS, clock);
 
         helper.truncateTable(SQL_STATEMENTS.getPolicyMonitorTable());
-        helper.truncateTable(SQL_STATEMENTS.getLeaseTableName());
+        helper.truncateTable(LEASE_STATEMENTS.getLeaseTableName());
     }
 
     @Test
@@ -93,7 +97,7 @@ class GaussDbPolicyMonitorProcessStoreTest {
                 .isSubsetOf(all.stream().map(Entity::getId).toList())
                 .allMatch(id -> isLeasedBy(id, CONNECTOR_NAME));
 
-        assertThat(leased).extracting(MutableEntity::getUpdatedAt).isSorted();
+        assertThat(leased).extracting(StatefulEntity::getUpdatedAt).isSorted();
     }
 
     @Test
@@ -251,6 +255,6 @@ class GaussDbPolicyMonitorProcessStoreTest {
     @AfterAll
     static void deleteTable(GaussDbTestExtension.SqlHelper runner) {
         runner.dropTable(SQL_STATEMENTS.getPolicyMonitorTable());
-        runner.dropTable(SQL_STATEMENTS.getLeaseTableName());
+        runner.dropTable(LEASE_STATEMENTS.getLeaseTableName());
     }
 }

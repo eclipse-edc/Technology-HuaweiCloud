@@ -108,12 +108,14 @@ class GaussDbPolicyDefinitionStoreTest {
                         .target("Target1")
                         .build())
                 .id(id)
+                .participantContextId("participantContextId")
                 .build();
         var policy2 = PolicyDefinition.Builder.newInstance()
                 .policy(Policy.Builder.newInstance()
                         .target("Target2")
                         .build())
                 .id(id)
+                .participantContextId("participantContextId")
                 .build();
         var spec = QuerySpec.Builder.newInstance().build();
 
@@ -324,7 +326,7 @@ class GaussDbPolicyDefinitionStoreTest {
                 .assigner("test-assigner")
                 .assignee("test-assignee")
                 .build();
-        var policyDef1 = PolicyDefinition.Builder.newInstance().id("test-policy").policy(policy).build();
+        var policyDef1 = PolicyDefinition.Builder.newInstance().id("test-policy").participantContextId("participantContextId").policy(policy).build();
         getPolicyDefinitionStore().create(policyDef1);
 
         var criterion = criterion("notexist", "=", "foobar");
@@ -348,16 +350,17 @@ class GaussDbPolicyDefinitionStoreTest {
     @Test
     void findAll_queryByProhibitions() {
         var p = createPolicyBuilder("test-policy")
+                .assignee("test-assignee")
                 .prohibition(createProhibitionBuilder("prohibition1")
                         .action(createAction("test-action-type"))
                         .build())
                 .build();
 
-        var policyDef = PolicyDefinition.Builder.newInstance().id("test-policy").policy(p).build();
+        var policyDef = PolicyDefinition.Builder.newInstance().id("test-policy").participantContextId("participantContext").policy(p).build();
         getPolicyDefinitionStore().create(policyDef);
 
         // query by prohibition assignee
-        var query = createQuery(Criterion.criterion("policy.prohibitions.assignee", "=", "test-assignee"));
+        var query = createQuery(Criterion.criterion("policy.prohibitions.action.type", "=", "test-action-type"));
         var result = getPolicyDefinitionStore().findAll(query);
         assertThat(result).hasSize(1)
                 .usingRecursiveFieldByFieldElementComparator()
@@ -379,7 +382,7 @@ class GaussDbPolicyDefinitionStoreTest {
                         .build())
                 .build();
 
-        var policyDef = PolicyDefinition.Builder.newInstance().id("test-policy").policy(p).build();
+        var policyDef = PolicyDefinition.Builder.newInstance().id("test-policy").participantContextId("participantContext").policy(p).build();
         getPolicyDefinitionStore().create(policyDef);
 
         // query by prohibition assignee
@@ -396,11 +399,11 @@ class GaussDbPolicyDefinitionStoreTest {
                         .build())
                 .build();
 
-        var policyDef = PolicyDefinition.Builder.newInstance().id("test-policy").policy(p).build();
+        var policyDef = PolicyDefinition.Builder.newInstance().id("test-policy").participantContextId("participantContext").policy(p).build();
         getPolicyDefinitionStore().create(policyDef);
 
         // query by prohibition assignee
-        var query = createQuery(Criterion.criterion("policy.permissions.assignee", "=", "test-assignee"));
+        var query = createQuery(Criterion.criterion("policy.permissions.action.type", "=", "test-action-type"));
         var result = getPolicyDefinitionStore().findAll(query);
         assertThat(result).hasSize(1)
                 .usingRecursiveFieldByFieldElementComparator()
@@ -422,7 +425,7 @@ class GaussDbPolicyDefinitionStoreTest {
                         .build())
                 .build();
 
-        var policyDef = PolicyDefinition.Builder.newInstance().id("test-policy").policy(p).build();
+        var policyDef = PolicyDefinition.Builder.newInstance().id("test-policy").participantContextId("participantContext").policy(p).build();
         getPolicyDefinitionStore().create(policyDef);
 
         // query by prohibition assignee
@@ -439,12 +442,12 @@ class GaussDbPolicyDefinitionStoreTest {
                         .build())
                 .build();
 
-        var policyDef = PolicyDefinition.Builder.newInstance().id("test-policy").policy(p).build();
+        var policyDef = PolicyDefinition.Builder.newInstance().id("test-policy").participantContextId("participantContext").policy(p).build();
         getPolicyDefinitionStore().create(policyDef);
         getPolicyDefinitionStore().create(createPolicy("another-policy"));
 
         // query by prohibition assignee
-        var query = createQuery(Criterion.criterion("policy.obligations.assignee", "=", "test-assignee"));
+        var query = createQuery(Criterion.criterion("policy.obligations.action.type", "=", "test-action-type"));
         var result = getPolicyDefinitionStore().findAll(query);
         assertThat(result).hasSize(1)
                 .usingRecursiveFieldByFieldElementComparator()
@@ -466,7 +469,7 @@ class GaussDbPolicyDefinitionStoreTest {
                         .build())
                 .build();
 
-        var policyDef = PolicyDefinition.Builder.newInstance().id("test-policy").policy(p).build();
+        var policyDef = PolicyDefinition.Builder.newInstance().id("test-policy").participantContextId("participantContext").policy(p).build();
         getPolicyDefinitionStore().create(policyDef);
 
         // query by prohibition assignee
@@ -482,13 +485,13 @@ class GaussDbPolicyDefinitionStoreTest {
                 .assignee("test-assignee")
                 .build();
 
-        var policyDef1 = PolicyDefinition.Builder.newInstance().id("test-policy").policy(p1).build();
+        var policyDef1 = PolicyDefinition.Builder.newInstance().id("test-policy").participantContextId("participantContextId").policy(p1).build();
         var p2 = createPolicyBuilder("test-policy")
                 .assigner("another-test-assigner")
                 .assignee("another-test-assignee")
                 .build();
 
-        var policyDef2 = PolicyDefinition.Builder.newInstance().id("test-policy2").policy(p2).build();
+        var policyDef2 = PolicyDefinition.Builder.newInstance().id("test-policy2").participantContextId("participantContextId").policy(p2).build();
         getPolicyDefinitionStore().create(policyDef1);
         getPolicyDefinitionStore().create(policyDef2);
 
@@ -506,7 +509,7 @@ class GaussDbPolicyDefinitionStoreTest {
                 .assignee("test-assignee")
                 .build();
 
-        var policyDef1 = PolicyDefinition.Builder.newInstance().id("test-policy").policy(policy).build();
+        var policyDef1 = PolicyDefinition.Builder.newInstance().id("test-policy").participantContextId("participantContextId").policy(policy).build();
         getPolicyDefinitionStore().create(policyDef1);
 
         // query by prohibition assignee
@@ -612,7 +615,7 @@ class GaussDbPolicyDefinitionStoreTest {
     }
 
     private PolicyDefinition createPolicyDef(String id, String target) {
-        return PolicyDefinition.Builder.newInstance().id(id).policy(Policy.Builder.newInstance().target(target).build()).build();
+        return PolicyDefinition.Builder.newInstance().id(id).participantContextId("participantContextId").policy(Policy.Builder.newInstance().target(target).build()).build();
     }
 
     private QuerySpec createQuery(Criterion criterion) {

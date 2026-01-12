@@ -62,7 +62,7 @@ import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 @Testcontainers
 @EndToEndTest
 public class ObsTransferEndToEndTest {
-    public static final String MINIO_DOCKER_IMAGE = "bitnami/minio";
+    public static final String MINIO_DOCKER_IMAGE = "bitnamilegacy/minio";
     public static final int MINIO_CONTAINER_PORT = 9000;
     public static final String TESTFILE_NAME = "testfile.json";
     protected static final HuaweiParticipant CONSUMER = HuaweiParticipant.Builder.newInstance()
