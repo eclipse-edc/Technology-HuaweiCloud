@@ -39,6 +39,9 @@ import org.eclipse.edc.spi.query.SortOrder;
 import org.eclipse.edc.spi.result.StoreFailure;
 import org.eclipse.edc.spi.types.domain.callback.CallbackAddress;
 import org.eclipse.edc.sql.QueryExecutor;
+import org.eclipse.edc.sql.lease.BaseSqlLeaseStatements;
+import org.eclipse.edc.sql.lease.SqlLeaseContextBuilderImpl;
+import org.eclipse.edc.sql.lease.spi.LeaseStatements;
 import org.eclipse.edc.sql.testfixtures.LeaseUtil;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -81,7 +84,8 @@ class GaussDbContractNegotiationStoreTest {
 
     protected static final String CONNECTOR_NAME = "test-connector";
     private static final String ASSET_ID = "TEST_ASSET_ID";
-    private static final PostgresDialectStatements SQL_STATEMENTS = new PostgresDialectStatements();
+    private static final LeaseStatements LEASE_STATEMENTS = new BaseSqlLeaseStatements();
+    private static final PostgresDialectStatements SQL_STATEMENTS = new PostgresDialectStatements(LEASE_STATEMENTS, Clock.systemUTC());
     protected final Clock clock = Clock.systemUTC();
     private LeaseUtil leaseUtil;
     private ContractNegotiationStore contractNegotiationStore;
@@ -92,14 +96,16 @@ class GaussDbContractNegotiationStoreTest {
         var typeManager = new JacksonTypeManager();
         typeManager.registerTypes(PolicyRegistrationTypes.TYPES.toArray(Class<?>[]::new));
 
-        contractNegotiationStore = new SqlContractNegotiationStore(extension.getRegistry(), DEFAULT_DATASOURCE_NAME,
-                extension.getTransactionContext(), typeManager.getMapper(), SQL_STATEMENTS, CONNECTOR_NAME, clock, queryExecutor);
+        leaseUtil = new LeaseUtil(extension.getTransactionContext(), extension::newConnection, SQL_STATEMENTS.getContractNegotiationTable(), LEASE_STATEMENTS, clock);
+        var leaseContextBuilder = SqlLeaseContextBuilderImpl.with(extension.getTransactionContext(), CONNECTOR_NAME, SQL_STATEMENTS.getContractNegotiationTable(), LEASE_STATEMENTS, clock, queryExecutor);
 
-        leaseUtil = new LeaseUtil(extension.getTransactionContext(), extension::newConnection, SQL_STATEMENTS, clock);
+
+        contractNegotiationStore = new SqlContractNegotiationStore(extension.getRegistry(), DEFAULT_DATASOURCE_NAME,
+                extension.getTransactionContext(), typeManager.getMapper(), SQL_STATEMENTS, leaseContextBuilder, queryExecutor);
 
         helper.truncateTable(SQL_STATEMENTS.getContractNegotiationTable());
         helper.truncateTable(SQL_STATEMENTS.getContractAgreementTable());
-        helper.truncateTable(SQL_STATEMENTS.getLeaseTableName());
+        helper.truncateTable(LEASE_STATEMENTS.getLeaseTableName());
     }
 
     @Test
@@ -892,6 +898,6 @@ class GaussDbContractNegotiationStoreTest {
     static void deleteTable(GaussDbTestExtension.SqlHelper runner) {
         runner.dropTable(SQL_STATEMENTS.getContractNegotiationTable());
         runner.dropTable(SQL_STATEMENTS.getContractAgreementTable());
-        runner.dropTable(SQL_STATEMENTS.getLeaseTableName());
+        runner.dropTable(LEASE_STATEMENTS.getLeaseTableName());
     }
 }

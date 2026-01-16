@@ -28,7 +28,7 @@ import java.util.UUID;
 @Testcontainers
 class ObsDataSourceMinioTest extends ObsDataSourceTestBase {
 
-    public static final String MINIO_DOCKER_IMAGE = "bitnami/minio";
+    public static final String MINIO_DOCKER_IMAGE = "bitnamilegacy/minio";
     public static final String USER = "USER";
     public static final String PASSWORD = "PASSWORD";
 
