@@ -29,6 +29,7 @@ include(":extensions")
 include(":extensions:common:obs:obs-core")
 include(":extensions:control-plane:provision-obs")
 include(":extensions:data-plane:data-plane-obs")
+include(":extensions:data-plane:data-plane-provision-obs")
 
 // GaussDB
 include(":extensions:control-plane:store:asset-index-gaussdb")

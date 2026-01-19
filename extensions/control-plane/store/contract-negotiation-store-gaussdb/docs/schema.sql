@@ -19,10 +19,10 @@ CREATE TABLE IF NOT EXISTS edc_lease
     leased_by      VARCHAR               NOT NULL,
     leased_at      BIGINT,
     lease_duration INTEGER DEFAULT 60000 NOT NULL,
-    lease_id       VARCHAR               NOT NULL
-        CONSTRAINT lease_pk
-            PRIMARY KEY
-);
+    resource_id       VARCHAR NOT NULL,
+    resource_kind  VARCHAR NOT NULL,
+    PRIMARY KEY(resource_id, resource_kind)
+    );
 
 COMMENT ON COLUMN edc_lease.leased_at IS 'posix timestamp of lease';
 
@@ -33,23 +33,26 @@ COMMENT ON COLUMN edc_lease.lease_duration IS 'duration of lease in milliseconds
 CREATE TABLE IF NOT EXISTS edc_contract_agreement
 (
     agr_id            VARCHAR NOT NULL
-        CONSTRAINT contract_agreement_pk
-            PRIMARY KEY,
+    CONSTRAINT contract_agreement_pk
+    PRIMARY KEY,
     provider_agent_id VARCHAR,
     consumer_agent_id VARCHAR,
     signing_date      BIGINT,
     start_date        BIGINT,
     end_date          INTEGER,
     asset_id          VARCHAR NOT NULL,
-    policy            JSON
-);
+    policy            JSON,
+    agr_participant_context_id VARCHAR NOT NULL,
+    agr_agreement_id VARCHAR NOT NULL,
+    UNIQUE (agr_agreement_id, agr_participant_context_id)
+    );
 
 
 CREATE TABLE IF NOT EXISTS edc_contract_negotiation
 (
     id                   VARCHAR           NOT NULL
-        CONSTRAINT contract_negotiation_pk
-            PRIMARY KEY,
+    CONSTRAINT contract_negotiation_pk
+    PRIMARY KEY,
     created_at           BIGINT            NOT NULL,
     updated_at           BIGINT            NOT NULL,
     correlation_id       VARCHAR,
@@ -62,17 +65,14 @@ CREATE TABLE IF NOT EXISTS edc_contract_negotiation
     state_timestamp      BIGINT,
     error_detail         VARCHAR,
     agreement_id         VARCHAR
-        CONSTRAINT contract_negotiation_contract_agreement_id_fk
-            REFERENCES edc_contract_agreement,
+    CONSTRAINT contract_negotiation_contract_agreement_id_fk
+    REFERENCES edc_contract_agreement,
     contract_offers      JSON,
     callback_addresses   JSON,
     trace_context        JSON,
     pending              BOOLEAN DEFAULT FALSE,
-    lease_id             VARCHAR
-        CONSTRAINT contract_negotiation_lease_lease_id_fk
-            REFERENCES edc_lease
-            ON DELETE SET NULL,
-    CONSTRAINT provider_correlation_id CHECK (type = '0' OR correlation_id IS NOT NULL)
+    protocol_messages    JSON,
+    participant_context_id VARCHAR NOT NULL
 );
 
 COMMENT ON COLUMN edc_contract_negotiation.agreement_id IS 'ContractAgreement serialized as JSON';
@@ -81,6 +81,7 @@ COMMENT ON COLUMN edc_contract_negotiation.contract_offers IS 'List<ContractOffe
 
 COMMENT ON COLUMN edc_contract_negotiation.trace_context IS 'Map<String,String> serialized as JSON';
 
+
 -- create indexes: IF NOT EXISTS syntax is not available in PG 9.2
 -- more info here: https://dba.stackexchange.com/questions/35616/create-index-if-it-does-not-exist
 DO
@@ -88,17 +89,6 @@ $$
     declare
         namespace text;
     BEGIN
-
-        -- lease index
-        namespace := 'public';
-        IF (SELECT COUNT(*)
-            FROM pg_class c
-                     JOIN pg_namespace n ON n.oid = c.relnamespace
-            WHERE c.relname = 'lease_lease_id_uindex'
-              AND n.nspname = namespace) < 1 THEN
-            CREATE UNIQUE INDEX lease_lease_id_uindex
-                ON edc_lease (lease_id);
-        END IF;
 
         -- correlation id index
         IF (SELECT COUNT(*)
@@ -129,5 +119,13 @@ $$
             CREATE UNIQUE INDEX contract_agreement_id_uindex
                 ON edc_contract_agreement (agr_id);
         END IF;
+        IF (SELECT COUNT(*)
+            FROM pg_class c
+                     JOIN pg_namespace n ON n.oid = c.relnamespace
+            WHERE c.relname = 'contract_negotiation_state'
+              AND n.nspname = namespace) < 1 THEN
+            CREATE UNIQUE INDEX contract_negotiation_state
+                ON edc_contract_negotiation (state,state_timestamp);
+            END IF;
     END
 $$;

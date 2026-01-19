@@ -31,6 +31,7 @@ dependencies {
     testCompileOnly(project(":extensions:data-plane:data-plane-obs"))
     testCompileOnly(project(":extensions:control-plane:provision-obs"))
     testCompileOnly(project(":launchers:e2e-test"))
+    testImplementation(libs.edc.spi.participant.context.single)
 }
 
 // do not publish

@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.edc.spi.datasource.transaction)
 
     testImplementation(libs.edc.junit)
+    testImplementation(libs.edc.sql.lease)
     testImplementation(libs.testcontainers.junit)
     testImplementation(testFixtures(libs.edc.spi.core))
     testImplementation(testFixtures(libs.edc.dpf.selector.spi))

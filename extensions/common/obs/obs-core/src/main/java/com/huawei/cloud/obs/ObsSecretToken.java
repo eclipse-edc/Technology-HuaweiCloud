@@ -16,7 +16,6 @@ package com.huawei.cloud.obs;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import org.eclipse.edc.connector.controlplane.transfer.spi.types.SecretToken;
 
 import java.util.Objects;
 
@@ -24,7 +23,7 @@ import java.util.Objects;
 public record ObsSecretToken(@JsonProperty(value = "ak") String ak,
                              @JsonProperty(value = "sk") String sk,
                              @JsonProperty(value = "securitytoken") String securityToken,
-                             @JsonProperty("expiration") Long expiration) implements SecretToken {
+                             @JsonProperty("expiration") Long expiration) {
 
     @Override
     public boolean equals(Object o) {
@@ -37,10 +36,5 @@ public record ObsSecretToken(@JsonProperty(value = "ak") String ak,
     @Override
     public int hashCode() {
         return Objects.hash(ak, sk, securityToken);
-    }
-
-    @Override
-    public long getExpiration() {
-        return expiration != null ? expiration : 0;
     }
 }

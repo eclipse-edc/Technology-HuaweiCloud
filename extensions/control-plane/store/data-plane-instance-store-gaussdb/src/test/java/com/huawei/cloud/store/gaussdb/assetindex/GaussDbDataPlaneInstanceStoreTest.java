@@ -14,7 +14,6 @@
 
 package com.huawei.cloud.store.gaussdb.assetindex;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.huawei.cloud.gaussdb.testfixtures.GaussDbTestExtension;
 import com.huawei.cloud.gaussdb.testfixtures.annotations.GaussDbTest;
 import org.eclipse.edc.connector.dataplane.selector.spi.instance.DataPlaneInstance;
@@ -22,7 +21,11 @@ import org.eclipse.edc.connector.dataplane.selector.spi.store.DataPlaneInstanceS
 import org.eclipse.edc.connector.dataplane.selector.store.sql.SqlDataPlaneInstanceStore;
 import org.eclipse.edc.connector.dataplane.selector.store.sql.schema.DataPlaneInstanceStatements;
 import org.eclipse.edc.connector.dataplane.selector.store.sql.schema.postgres.PostgresDataPlaneInstanceStatements;
+import org.eclipse.edc.json.JacksonTypeManager;
 import org.eclipse.edc.sql.QueryExecutor;
+import org.eclipse.edc.sql.lease.BaseSqlLeaseStatements;
+import org.eclipse.edc.sql.lease.SqlLeaseContextBuilderImpl;
+import org.eclipse.edc.sql.lease.spi.LeaseStatements;
 import org.eclipse.edc.transaction.datasource.spi.DataSourceRegistry;
 import org.eclipse.edc.transaction.spi.TransactionContext;
 import org.junit.jupiter.api.AfterAll;
@@ -42,7 +45,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @GaussDbTest
 @ExtendWith(GaussDbTestExtension.class)
 class GaussDbDataPlaneInstanceStoreTest {
-    private static final DataPlaneInstanceStatements SQL_STATEMENTS = new PostgresDataPlaneInstanceStatements();
+    protected static final String CONNECTOR_NAME = "test-connector";
+    private static final LeaseStatements LEASE_STATEMENTS = new BaseSqlLeaseStatements();
+    private static final DataPlaneInstanceStatements SQL_STATEMENTS = new PostgresDataPlaneInstanceStatements(LEASE_STATEMENTS, Clock.systemUTC());
     private DataPlaneInstanceStore dataPlaneInstanceStore;
 
     @BeforeAll
@@ -56,10 +61,12 @@ class GaussDbDataPlaneInstanceStoreTest {
     }
 
     @BeforeEach
-    void setup(GaussDbTestExtension.SqlHelper runner, TransactionContext transactionContext, QueryExecutor queryExecutor, DataSourceRegistry reg, Clock clock) {
-        var lease = "lease";
-        dataPlaneInstanceStore = new SqlDataPlaneInstanceStore(reg, DEFAULT_DATASOURCE_NAME, transactionContext, SQL_STATEMENTS, new ObjectMapper(), queryExecutor, clock, lease);
-
+    void setup(GaussDbTestExtension extension, GaussDbTestExtension.SqlHelper runner, TransactionContext transactionContext, QueryExecutor queryExecutor, DataSourceRegistry reg) {
+        var typeManager = new JacksonTypeManager();
+        typeManager.registerTypes(DataPlaneInstance.class);
+        var leaseContextBuilder = SqlLeaseContextBuilderImpl.with(extension.getTransactionContext(), CONNECTOR_NAME, SQL_STATEMENTS.getDataPlaneInstanceTable(), LEASE_STATEMENTS, Clock.systemUTC(), queryExecutor);
+        dataPlaneInstanceStore = new SqlDataPlaneInstanceStore(extension.getRegistry(), DEFAULT_DATASOURCE_NAME,
+                extension.getTransactionContext(), SQL_STATEMENTS, leaseContextBuilder, typeManager.getMapper(), queryExecutor);
         runner.truncateTable("edc_data_plane_instance");
     }
 
