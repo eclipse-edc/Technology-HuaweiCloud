@@ -61,6 +61,7 @@ edc-sql-test-fixtures = { module = "org.eclipse.edc:sql-test-fixtures", version.
 edc-testfixtures-managementapi = { module = "org.eclipse.edc:management-api-test-fixtures", version.ref = "edc" }
 edc-spi-participant-context-single = { module = "org.eclipse.edc:participant-context-single-core", version.ref = "edc" }
 edc-boot-lib = { module = "org.eclipse.edc:boot-lib", version.ref = "edc" }
+edc-data-protocol = { module = "org.eclipse.edc:dsp-spi-2025", version.ref = "edc" }
 
 # Control Plane implementations
 edc-controlplane-callback-dispatcher-event = { module = "org.eclipse.edc:callback-event-dispatcher", version.ref = "edc" }

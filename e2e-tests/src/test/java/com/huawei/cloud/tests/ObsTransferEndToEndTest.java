@@ -56,6 +56,7 @@ import java.util.function.Function;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.edc.junit.testfixtures.TestUtils.getFileFromResourceName;
+import static org.eclipse.edc.protocol.dsp.spi.type.Dsp2025Constants.DSP_NAMESPACE_V_2025_1;
 import static org.mockito.Mockito.mock;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
@@ -121,8 +122,8 @@ public class ObsTransferEndToEndTest {
 
         var builderFactory = Json.createBuilderFactory(Map.of());
         registry.register(new JsonObjectFromDataFlowStartMessageTransformer(builderFactory, typeManager, "test"));
-        registry.register(new JsonObjectFromDataAddressDspaceTransformer(builderFactory, typeManager, "test"));
-        registry.register(new JsonObjectToDataAddressDspaceTransformer());
+        registry.register(new JsonObjectFromDataAddressDspaceTransformer(builderFactory, typeManager, "test", DSP_NAMESPACE_V_2025_1));
+        registry.register(new JsonObjectToDataAddressDspaceTransformer(DSP_NAMESPACE_V_2025_1));
         registry.register(new JsonObjectToDataFlowResponseMessageTransformer());
     }
 
