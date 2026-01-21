@@ -3,16 +3,13 @@ maven/mavencentral/com.apicatalog/titanium-json-ld/1.7.0, Apache-2.0, approved, 
 maven/mavencentral/com.apicatalog/titanium-rdf-api/1.0.0, Apache-2.0, approved, #20245
 maven/mavencentral/com.apicatalog/titanium-rdf-n-quads/1.0.2, Apache-2.0, approved, #20243
 maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.10.3, Apache-2.0, approved, CQ21280
-maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.14.2, Apache-2.0, approved, #5303
 maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.15.4, Apache-2.0, approved, #15260
 maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.16.2, Apache-2.0, approved, #11606
 maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.18.0, Apache-2.0, approved, #16364
 maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.20, Apache-2.0, approved, #23056
 maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.21, Apache-2.0, approved, #25587
-maven/mavencentral/com.fasterxml.jackson.core/jackson-core/2.14.2, Apache-2.0 AND MIT, approved, #4303
 maven/mavencentral/com.fasterxml.jackson.core/jackson-core/2.15.4, Apache-2.0 AND MIT AND BSD-2-Clause, approved, #15194
 maven/mavencentral/com.fasterxml.jackson.core/jackson-core/2.21.0, Apache-2.0 AND MIT, approved, #25590
-maven/mavencentral/com.fasterxml.jackson.core/jackson-databind/2.14.2, Apache-2.0, approved, #15232
 maven/mavencentral/com.fasterxml.jackson.core/jackson-databind/2.15.4, Apache-2.0, approved, #15199
 maven/mavencentral/com.fasterxml.jackson.core/jackson-databind/2.16.2, Apache-2.0, approved, #11605
 maven/mavencentral/com.fasterxml.jackson.core/jackson-databind/2.18.0, Apache-2.0, approved, #16372
@@ -22,9 +19,9 @@ maven/mavencentral/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.16
 maven/mavencentral/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.21.0, Apache-2.0, approved, #25589
 maven/mavencentral/com.fasterxml.jackson.datatype/jackson-datatype-jakarta-jsonp/2.20.1, , restricted, clearlydefined
 maven/mavencentral/com.fasterxml.jackson.datatype/jackson-datatype-jakarta-jsonp/2.21.0, , restricted, clearlydefined
-maven/mavencentral/com.fasterxml.jackson.datatype/jackson-datatype-jdk8/2.14.2, Apache-2.0, approved, #8597
+maven/mavencentral/com.fasterxml.jackson.datatype/jackson-datatype-jdk8/2.15.4, Apache-2.0, approved, #15281
 maven/mavencentral/com.fasterxml.jackson.datatype/jackson-datatype-jdk8/2.21.0, , restricted, clearlydefined
-maven/mavencentral/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/2.14.2, Apache-2.0, approved, #4699
+maven/mavencentral/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/2.15.4, Apache-2.0, approved, #15189
 maven/mavencentral/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/2.16.2, Apache-2.0, approved, #11853
 maven/mavencentral/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/2.20.1, Apache-2.0, approved, #24684
 maven/mavencentral/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/2.21.0, , restricted, clearlydefined
@@ -51,8 +48,8 @@ maven/mavencentral/com.google.guava/listenablefuture/9999.0-empty-to-avoid-confl
 maven/mavencentral/com.google.j2objc/j2objc-annotations/3.0.0, Apache-2.0, approved, #13676
 maven/mavencentral/com.google.protobuf/protobuf-java/4.33.0, BSD-3-Clause, approved, clearlydefined
 maven/mavencentral/com.huaweicloud.dws/huaweicloud-dws-jdbc/8.5.1.200-200, Apache-2.0, approved, #17265
-maven/mavencentral/com.huaweicloud.sdk/huaweicloud-sdk-core/3.1.158, Apache-2.0, approved, #11922
-maven/mavencentral/com.huaweicloud.sdk/huaweicloud-sdk-iam/3.1.158, Apache-2.0, approved, #12598
+maven/mavencentral/com.huaweicloud.sdk/huaweicloud-sdk-core/3.1.182, Apache-2.0, approved, #11922
+maven/mavencentral/com.huaweicloud.sdk/huaweicloud-sdk-iam/3.1.182, Apache-2.0, approved, #12598
 maven/mavencentral/com.huaweicloud/esdk-obs-java/3.24.12, Apache-2.0, approved, #16679
 maven/mavencentral/com.nimbusds/nimbus-jose-jwt/10.7, , restricted, clearlydefined
 maven/mavencentral/com.puppycrawl.tools/checkstyle/11.0.0, LGPL-2.1-or-later, approved, #23559
@@ -149,7 +146,7 @@ maven/mavencentral/org.assertj/assertj-core/3.27.4, Apache-2.0, approved, #17980
 maven/mavencentral/org.assertj/assertj-core/3.27.6, Apache-2.0, approved, #17980
 maven/mavencentral/org.awaitility/awaitility/4.2.2, Apache-2.0, approved, #14178
 maven/mavencentral/org.bouncycastle/bcpkix-jdk18on/1.83, MIT, approved, #25011
-maven/mavencentral/org.bouncycastle/bcprov-jdk18on/1.75, MIT AND CC0-1.0, approved, #9167
+maven/mavencentral/org.bouncycastle/bcprov-jdk18on/1.78.1, MIT AND CC0-1.0, approved, #14433
 maven/mavencentral/org.bouncycastle/bcprov-jdk18on/1.83, MIT AND CC0-1.0, approved, #25008
 maven/mavencentral/org.bouncycastle/bcutil-jdk18on/1.83, MIT, approved, #25009
 maven/mavencentral/org.ccil.cowan.tagsoup/tagsoup/1.2.1, Apache-2.0, approved, clearlydefined
@@ -376,9 +373,10 @@ maven/mavencentral/org.mockito/mockito-core/5.19.0, MIT AND (Apache-2.0 AND MIT)
 maven/mavencentral/org.mockito/mockito-core/5.2.0, MIT AND (Apache-2.0 AND MIT) AND Apache-2.0, approved, #7401
 maven/mavencentral/org.mockito/mockito-core/5.21.0, MIT AND (Apache-2.0 AND MIT) AND Apache-2.0, approved, #25203
 maven/mavencentral/org.objenesis/objenesis/3.3, Apache-2.0, approved, #19727
-maven/mavencentral/org.openeuler/bgmprovider/1.1.2, GPL-2.0-only WITH Classpath-exception-2.0, approved, #15914
-maven/mavencentral/org.openeuler/jca/1.1.2, GPL-2.0-only WITH Classpath-exception-2.0, approved, #15911
-maven/mavencentral/org.openeuler/jsse/1.1.2, GPL-2.0-only WITH Classpath-exception-2.0, approved, #15894
+maven/mavencentral/org.openeuler/bgmprovider/1.1.4, GPL-2.0-only WITH Classpath-exception-2.0, approved, #15914
+maven/mavencentral/org.openeuler/commons/1.1.4, , restricted, clearlydefined
+maven/mavencentral/org.openeuler/jca/1.1.4, GPL-2.0-only WITH Classpath-exception-2.0, approved, #15911
+maven/mavencentral/org.openeuler/jsse/1.1.4, GPL-2.0-only WITH Classpath-exception-2.0, approved, #15894
 maven/mavencentral/org.opentest4j/opentest4j/1.3.0, Apache-2.0, approved, #9713
 maven/mavencentral/org.postgresql/postgresql/42.7.8, BSD-2-Clause AND Apache-2.0, approved, #11681
 maven/mavencentral/org.reflections/reflections/0.10.2, Apache-2.0 AND WTFPL, approved, clearlydefined
