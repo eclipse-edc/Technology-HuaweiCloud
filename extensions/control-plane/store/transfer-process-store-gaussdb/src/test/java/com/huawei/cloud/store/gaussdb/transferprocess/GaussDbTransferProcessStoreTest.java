@@ -383,7 +383,7 @@ class GaussDbTransferProcessStoreTest {
         // acquire lease
         leaseEntity(t1.getId(), CONNECTOR_NAME);
 
-        t1.transitionProvisioningRequested(); //modify
+        t1.transitionPreparationRequested(); //modify
         getTransferProcessStore().save(t1);
 
         // lease should be broken
