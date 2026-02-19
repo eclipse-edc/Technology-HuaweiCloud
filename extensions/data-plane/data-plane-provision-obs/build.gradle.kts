@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "org.eclipse.edc.huawei"
-version = "0.16.0-SNAPSHOT"
+version = "0.17.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
