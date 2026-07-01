@@ -39,7 +39,6 @@ allprojects {
         pom {
             scmUrl.set(hcScmUrl)
             scmConnection.set(hcScmConnection)
-            groupId = project.group.toString()
         }
     }
 

@@ -23,10 +23,7 @@ pluginManagement {
 }
 
 rootProject.name = "technology-huaweicloud"
-include(":extensions")
-include(":extensions:control-plane:provision-obs")
 
-// GaussDB
 include(":extensions:control-plane:store:asset-index-gaussdb")
 include(":extensions:control-plane:store:contract-definition-store-gaussdb")
 include(":extensions:control-plane:store:contract-negotiation-store-gaussdb")
