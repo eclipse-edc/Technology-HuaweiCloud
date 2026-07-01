@@ -158,26 +158,6 @@ class GaussDbAssetIndexTest {
     }
 
     @Test
-    void update_exists_updateDataAddress() {
-        var id = "id1";
-        var asset = getAsset(id);
-        var assetIndex = getAssetIndex();
-        assetIndex.create(asset);
-
-        assertThat(assetIndex.countAssets(List.of())).isEqualTo(1);
-
-        asset.getDataAddress().getProperties().put("newKey", "newValue");
-        var updated = assetIndex.updateAsset(asset);
-
-        Assertions.assertThat(updated).isNotNull();
-
-        var assetFound = getAssetIndex().findById("id1");
-
-        assertThat(assetFound).isNotNull();
-        assertThat(assetFound).usingRecursiveComparison().isEqualTo(asset);
-    }
-
-    @Test
     void create_shouldStoreAsset() {
         var assetExpected = getAsset("id1");
         getAssetIndex().create(assetExpected);
@@ -371,9 +351,7 @@ class GaussDbAssetIndexTest {
     @DisplayName("Verify an asset query based on an Asset property, where the property value is actually a complex object")
     void query_assetPropertyAsObject() {
         var nested = Map.of("text", "test123", "number", 42, "bool", false);
-        var dataAddress = createDataAddress();
         var asset = createAssetBuilder("id1")
-                .dataAddress(dataAddress)
                 .property("testobj", nested)
                 .build();
         getAssetIndex().create(asset);
@@ -393,7 +371,7 @@ class GaussDbAssetIndexTest {
         getAssetIndex().create(testAsset1);
         getAssetIndex().create(testAsset2);
         getAssetIndex().create(testAsset3);
-        var criterion = new Criterion(Asset.PROPERTY_NAME, "=", "barbaz");
+        var criterion = new Criterion("name", "=", "barbaz");
 
         var assets = getAssetIndex().queryAssets(filter(criterion));
 
@@ -543,20 +521,9 @@ class GaussDbAssetIndexTest {
 
     @NotNull
     protected Asset createAsset(String name, String id) {
-        return createAsset(name, id, "contentType");
-    }
-
-    @NotNull
-    protected Asset createAsset(String name, String id, String contentType) {
         return Asset.Builder.newInstance()
                 .id(id)
-                .name(name)
-                .version("1")
-                .contentType(contentType)
-                .dataAddress(DataAddress.Builder.newInstance()
-                        .keyName("test-keyname")
-                        .type(contentType)
-                        .build())
+                .property("name", name)
                 .build();
     }
 
@@ -571,9 +538,7 @@ class GaussDbAssetIndexTest {
         return Asset.Builder.newInstance()
                 .id(id)
                 .createdAt(Clock.systemUTC().millis())
-                .property("key" + id, "value" + id)
-                .contentType("type")
-                .dataAddress(getDataAddress());
+                .property("key" + id, "value" + id);
     }
 
     protected AssetIndex getAssetIndex() {

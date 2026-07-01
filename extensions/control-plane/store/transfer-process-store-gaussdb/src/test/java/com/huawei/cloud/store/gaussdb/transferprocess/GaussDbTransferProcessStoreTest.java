@@ -61,7 +61,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.eclipse.edc.connector.controlplane.transfer.spi.testfixtures.store.TestFunctions.createTransferProcess;
 import static org.eclipse.edc.connector.controlplane.transfer.spi.testfixtures.store.TestFunctions.createTransferProcessBuilder;
 import static org.eclipse.edc.connector.controlplane.transfer.spi.types.TransferProcessStates.INITIAL;
-import static org.eclipse.edc.connector.controlplane.transfer.spi.types.TransferProcessStates.PROVISIONING;
+import static org.eclipse.edc.connector.controlplane.transfer.spi.types.TransferProcessStates.REQUESTING;
 import static org.eclipse.edc.connector.controlplane.transfer.spi.types.TransferProcessStates.STARTED;
 import static org.eclipse.edc.connector.controlplane.transfer.spi.types.TransferProcessStates.TERMINATED;
 import static org.eclipse.edc.spi.persistence.StateEntityStore.hasState;
@@ -149,7 +149,7 @@ class GaussDbTransferProcessStoreTest {
         var t = createTransferProcess("id1", INITIAL);
         getTransferProcessStore().save(t);
 
-        var t2 = createTransferProcess("id1", PROVISIONING);
+        var t2 = createTransferProcess("id1", REQUESTING);
         getTransferProcessStore().save(t2);
 
         assertThat(getTransferProcessStore().findAll(QuerySpec.none())).hasSize(1).containsExactly(t2);
@@ -299,7 +299,7 @@ class GaussDbTransferProcessStoreTest {
 
     @Test
     void nextNotLeased_avoidsStarvation() throws InterruptedException {
-        for (int i = 0; i < 10; i++) {
+        for (var i = 0; i < 10; i++) {
             var process = createTransferProcess("test-process-" + i);
             getTransferProcessStore().save(process);
         }
@@ -383,11 +383,11 @@ class GaussDbTransferProcessStoreTest {
         // acquire lease
         leaseEntity(t1.getId(), CONNECTOR_NAME);
 
-        t1.transitionProvisioningRequested(); //modify
+        t1.transitionRequesting(); //modify
         getTransferProcessStore().save(t1);
 
         // lease should be broken
-        var notLeased = getTransferProcessStore().nextNotLeased(10, hasState(PROVISIONING.code()));
+        var notLeased = getTransferProcessStore().nextNotLeased(10, hasState(REQUESTING.code()));
 
         assertThat(notLeased).usingRecursiveFieldByFieldElementComparator().containsExactly(t1);
     }
