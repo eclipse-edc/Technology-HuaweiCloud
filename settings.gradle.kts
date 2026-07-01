@@ -23,13 +23,8 @@ pluginManagement {
 }
 
 rootProject.name = "technology-huaweicloud"
-include(":launchers:e2e-test")
-include(":launchers:huawei-cloud-runtime")
 include(":extensions")
-include(":extensions:common:obs:obs-core")
 include(":extensions:control-plane:provision-obs")
-include(":extensions:data-plane:data-plane-obs")
-include(":extensions:data-plane:data-plane-provision-obs")
 
 // GaussDB
 include(":extensions:control-plane:store:asset-index-gaussdb")
@@ -40,4 +35,3 @@ include(":extensions:control-plane:store:data-plane-instance-store-gaussdb")
 include(":extensions:control-plane:store:policy-monitor-store-gaussdb")
 include(":extensions:common:gaussdb:gaussdb-core")
 include(":extensions:control-plane:store:policy-definition-store-gaussdb")
-include(":e2e-tests")
