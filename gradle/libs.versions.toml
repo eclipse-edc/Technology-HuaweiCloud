@@ -2,7 +2,7 @@
 format.version = "1.1"
 
 [versions]
-edc = "v1.0.0-SNAPSHOT"
+edc = "1.0.0-SNAPSHOT"
 failsafe = "3.3.2"
 testcontainers = "1.21.0"
 huawei-dws = "8.5.1.200-200"
